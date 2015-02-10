@@ -7,6 +7,13 @@ import javax.sound.sampled.spi.FormatConversionProvider;
 public class Record {
 
 	public static final long RECORD_TIME = 5000;
+	
+	private boolean stopCapture = false;
+	private ByteArrayOutputStream audioStream;
+	private AudioFormat audioFormat;
+	private TargetDataLine targetDataLine;
+	private AudioInputStream audioInputStream;
+	private SourceDataLine sourceDataLine;
 
 	File wavFile = new File("testaudio.wav");
 

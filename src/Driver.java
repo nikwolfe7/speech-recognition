@@ -5,7 +5,11 @@ public class Driver {
    * Entry to run the program
    */
   public static void main(String[] args) {
-      final Record recorder = new Record();
+      
+	  Microphone mic = new Microphone();
+	  
+	  /*
+	  final Record recorder = new Record();
 
       // creates a new thread that waits for a specified
       // of time before stopping
@@ -24,5 +28,6 @@ public class Driver {
 
       // start recording
       recorder.start();
+  	*/
   }
 }
