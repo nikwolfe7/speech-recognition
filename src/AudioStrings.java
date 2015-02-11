@@ -1,6 +1,6 @@
 public enum AudioStrings {
 
-  PREFERRED_MICROPHONE("ATR USB Microphone"), 
+  ATR_USB_MICROPHONE("ATR USB Microphone"), 
   MFCC("Mel Frequency Cepstral Coefficients");
 
   private final String value; // Whatever the constant is

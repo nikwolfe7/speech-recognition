@@ -4,7 +4,7 @@ import javax.sound.sampled.Mixer.Info;
 
 public class Microphone {
 
-	private String preferredMicrophone = AudioStrings.PREFERRED_MICROPHONE.getValue();
+	private String preferredMicrophone = AudioStrings.ATR_USB_MICROPHONE.getValue();
 	private Mixer.Info foundMicrophone;
 
 	public Microphone() {
@@ -14,7 +14,7 @@ public class Microphone {
 				System.out.println("Looking for "+preferredMicrophone+"...");
 				while(!Thread.currentThread().isInterrupted()) {
 					for (Mixer.Info mixer : AudioSystem.getMixerInfo()) {
-						//System.out.println("Attached mixer: " + mixer.toString());
+						System.out.println("Attached mixer: " + mixer.getDescription());
 						if (mixer.toString().toLowerCase()
 								.contains(preferredMicrophone.toLowerCase())) {
 							found = true;
