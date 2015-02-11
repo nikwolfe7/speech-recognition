@@ -8,7 +8,9 @@ public class Driver {
   public static void main(String[] args) {
 	  
 	  Microphone mic = new ATRUSBMicrophone();
-	  TargetDataLine targetDataLine = mic.getOpenMicrophone();
+	  Recorder recorder = new Recorder(mic);
+	  recorder.start();
+	  
 	  
 	  /*
 	  final Record recorder = new Record();
