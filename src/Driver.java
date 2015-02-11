@@ -1,4 +1,5 @@
-import javax.sound.sampled.Mixer;
+import javax.sound.sampled.TargetDataLine;
+
 
 public class Driver {
   /**
@@ -6,10 +7,8 @@ public class Driver {
    */
   public static void main(String[] args) {
 	  
-	  
-	  
-      
-	  Microphone mic = new Microphone();
+	  Microphone mic = new ATRUSBMicrophone();
+	  TargetDataLine targetDataLine = mic.getOpenMicrophone();
 	  
 	  /*
 	  final Record recorder = new Record();

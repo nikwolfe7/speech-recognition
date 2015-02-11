@@ -21,21 +21,11 @@ public class Record {
 
 	private TargetDataLine line;
 
-	public AudioFormat getAudioFormat() {
-		Float sampleRate = new Float(AudioConstants.KHZ16.getValue());
-		Integer sampleSizeInBits = 16;
-		Integer channels = AudioConstants.MONO.getValue();
-		Boolean signed = true;
-		Boolean bigEndian = (java.nio.ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN);
-		AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits,
-				channels, signed, bigEndian);
-		return format;
-	}
+	
 
 	public void start() {
 		try {
-			AudioFormat format = getAudioFormat();
-			DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+			DataLine.Info info = new DataLine.Info(TargetDataLine.class, null);
 
 			if (!AudioSystem.isLineSupported(info)) {
 				System.out.println("Line not supported!");
