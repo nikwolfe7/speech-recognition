@@ -80,7 +80,7 @@ public class ATRUSBMicrophone implements Microphone {
           }
           if (!found) {
             count += 1;
-            if (count % 5000 == 0)
+            if (count % 100000 == 0)
               System.out.println(preferredMicrophone
                       + " not found! Please find it... Don't worry, we'll wait.");
           }

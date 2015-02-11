@@ -1,18 +1,18 @@
 public enum AudioConstants {
 
-  MONO(1), STEREO(2), KHZ16(16000), KHZ441(44100);
+	MONO(1), STEREO(2), KHZ16(16000), KHZ441(44100), KHZ16BUFFER(16000);
 
-  private final Integer value; // Whatever the constant is
+	private final Integer value; // Whatever the constant is
 
-  AudioConstants(Integer val) {
-    this.value = val;
-  }
+	AudioConstants(Integer val) {
+		this.value = val;
+	}
 
-  /**
-   * @return the value
-   */
-  public Integer getValue() {
-    return value;
-  }
+	/**
+	 * @return the value
+	 */
+	public Integer getValue() {
+		return value;
+	}
 
 }
