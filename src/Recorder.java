@@ -40,9 +40,7 @@ public class Recorder extends Thread {
 			Integer count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
 			if(count > 0) {
 				audioOutput.write(audioBuffer, 0, count);
-				for(byte b : audioBuffer) {
-					System.out.println(b);
-				}
+				System.out.println("Audio Buffer size: " + audioOutput.size());
 			}
 		}
 		// We're done...
@@ -54,6 +52,8 @@ public class Recorder extends Thread {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	
 	
