@@ -67,7 +67,7 @@ public class ATRUSBMicrophone implements Microphone {
                   e1.printStackTrace();
 
                   System.out.println("Could not connect to " + preferredMicrophone + "!");
-                  System.out.println("Try plugging the microphone in before running the program.");
+                  System.out.println("Try unplugging/replugging in the microphone again before running the program.");
                   System.exit(0);
                 }
               }
