@@ -1,9 +1,6 @@
-import java.nio.ByteOrder;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 
@@ -53,6 +50,7 @@ public class ATRUSBMicrophone implements Microphone {
 
                 // Couldn't get our preferred microphone
               } catch (Exception e) {
+                e.printStackTrace();
 
                 // try 441, if not, give up.
                 System.out
@@ -66,13 +64,13 @@ public class ATRUSBMicrophone implements Microphone {
                   tdl.start();
 
                 } catch (Exception e1) {
+                  e1.printStackTrace();
 
                   System.out.println("Could not connect to " + preferredMicrophone + "!");
                   System.out.println("Try plugging the microphone in before running the program.");
                   System.exit(0);
                 }
               }
-
               // get out of here!
               Thread.currentThread().interrupt();
               break;
@@ -91,7 +89,7 @@ public class ATRUSBMicrophone implements Microphone {
         Integer sampleSizeInBits = 16;
         Integer channels = AudioConstants.MONO.getValue();
         Boolean signed = true;
-        Boolean bigEndian = (java.nio.ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN);
+        Boolean bigEndian = true; //(java.nio.ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN);
         AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed,
                 bigEndian);
         return format;
