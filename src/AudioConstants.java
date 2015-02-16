@@ -1,6 +1,6 @@
 public enum AudioConstants {
 
-	MONO(1), STEREO(2), KHZ16(16000), KHZ441(44100), KHZ16BUFFER(16000);
+	MONO(1), STEREO(2), KHZ16(16000), KHZ441(44100), KHZ16BUFFER(16);
 
 	private final Integer value; // Whatever the constant is
 

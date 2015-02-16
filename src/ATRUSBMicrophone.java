@@ -1,3 +1,5 @@
+import java.nio.ByteOrder;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
@@ -14,7 +16,8 @@ public class ATRUSBMicrophone implements Microphone {
    * Holy Shit. The amount of code it takes in Java just to open a connection to a goddamn
    * microphone. Fuck me.
    */
-  public ATRUSBMicrophone() {
+  public ATRUSBMicrophone(Integer intSampleRate) {
+    Float sampleRate = intSampleRate.floatValue();
 
     new Runnable() {
       boolean found = false;
@@ -37,7 +40,7 @@ public class ATRUSBMicrophone implements Microphone {
               System.out.println("Connected to " + mixer + "...");
 
               // Audio Format... if this doesn't work we try 441Khz...
-              AudioFormat audioFormat = getAudioFormat(AudioConstants.KHZ16.getValue().floatValue());
+              AudioFormat audioFormat = getAudioFormat(sampleRate);
 
               // Get the Dataline...
               DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
@@ -53,23 +56,9 @@ public class ATRUSBMicrophone implements Microphone {
                 e.printStackTrace();
 
                 // try 441, if not, give up.
-                System.out
-                        .println("Failed to open microphone with 16khz sample rate... Trying 441khz...");
-                audioFormat = getAudioFormat(AudioConstants.KHZ441.getValue().floatValue());
-                dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
-
-                try {
-                  tdl = (TargetDataLine) mixer.getLine(dataLineInfo);
-                  tdl.open(audioFormat);
-                  tdl.start();
-
-                } catch (Exception e1) {
-                  e1.printStackTrace();
-
-                  System.out.println("Could not connect to " + preferredMicrophone + "!");
-                  System.out.println("Try unplugging/replugging in the microphone again before running the program.");
-                  System.exit(0);
-                }
+                System.out.println("Failed to open microphone with "+intSampleRate+" sample rate... Try a different sample rate!");
+                System.out.println("Try unplugging/replugging in the microphone again before running the program.");
+                System.exit(0);
               }
               // get out of here!
               Thread.currentThread().interrupt();
@@ -89,7 +78,7 @@ public class ATRUSBMicrophone implements Microphone {
         Integer sampleSizeInBits = 16;
         Integer channels = AudioConstants.MONO.getValue();
         Boolean signed = true;
-        Boolean bigEndian = true; //(java.nio.ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN);
+        Boolean bigEndian = (java.nio.ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN);
         AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed,
                 bigEndian);
         return format;

@@ -1,35 +1,35 @@
+import java.io.IOException;
+
+import javax.sound.sampled.AudioInputStream;
 
 public class Driver {
   /**
    * Entry to run the program
+   * @throws InterruptedException 
+   * @throws IOException 
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException, IOException {
 	  
-	  Microphone mic = new ATRUSBMicrophone();
-	  Recorder recorder = new Recorder(mic);
+	  Microphone mic = new ATRUSBMicrophone(AudioConstants.KHZ16.getValue());
+	  Recorder recorder = new Recorder(mic, AudioConstants.KHZ16BUFFER.getValue());
+	  WAVWriter wavWriter = new WAVWriter();
 	  recorder.start();
 	  
+	  sleep(5);
 	  
-	  /*
-	  final Record recorder = new Record();
-
-      // creates a new thread that waits for a specified
-      // of time before stopping
-      Thread stopper = new Thread(new Runnable() {
-          public void run() {
-              try {
-                  Thread.sleep(Record.RECORD_TIME);
-              } catch (InterruptedException ex) {
-                  ex.printStackTrace();
-              }
-              recorder.finish();
-          }
-      });
-
-      stopper.start();
-
-      // start recording
-      recorder.start();
-  	*/
+	  AudioInputStream ais = recorder.sample();
+	  System.out.println("Frame length: " + ais.getFrameLength());
+	  wavWriter.writeWholeWav(ais);
+    
+    recorder.stopRecording();
   }
+  
+  public static void sleep(int seconds) {
+    long i;
+    seconds = seconds * 3;
+    while(seconds-- > 0) {
+      i = 0; while(i < 1000000000) { i++; }
+    }
+  }
+  
 }
