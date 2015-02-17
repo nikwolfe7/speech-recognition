@@ -11,7 +11,7 @@ public class Driver {
   public static void main(String[] args) throws InterruptedException, IOException {
 	  
 	  Microphone mic = new ATRUSBMicrophone(AudioConstants.KHZ16.getValue());
-	  Recorder recorder = new Recorder(mic, AudioConstants.KHZ16BUFFER.getValue());
+	  Recorder recorder = new Recorder(mic);
 	  WAVWriter wavWriter = new WAVWriter();
 	  recorder.start();
 	  
