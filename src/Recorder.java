@@ -17,7 +17,7 @@ public class Recorder extends Thread {
 	private AudioFormat audioFormat;
 	private byte[] audioBuffer;
 	
-	public Recorder(Microphone mic, Integer buffersize) {
+	public Recorder(Microphone mic) {
 	  this.audioOutput = new ByteArrayOutputStream();
 		this.targetDataLine = mic.getOpenMicrophone();
 		this.audioFormat = targetDataLine.getFormat();
@@ -52,6 +52,13 @@ public class Recorder extends Thread {
   				/*for(byte b : audioBuffer) {
   				  System.out.println("Byte: " + b);
   				}*/
+  				try {
+  				  notifyAll();
+            audioOutput.wait();
+          } catch (InterruptedException e) {
+            // move on to check the loop and exit gracefully. 
+            Thread.currentThread().interrupt();
+          }
 			  }
 			}
 		}
