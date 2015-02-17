@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import javax.sound.sampled.AudioInputStream;
 
@@ -8,6 +9,7 @@ public class Sampler extends Thread {
   private Sampleable recorder;
   private WAVWriter wavWriter;
   
+  
   public Sampler(Sampleable sampleable) {
     this.recorder = sampleable;
     this.wavWriter = new WAVWriter();
@@ -16,7 +18,11 @@ public class Sampler extends Thread {
   public void run() {
     while(!Thread.currentThread().isInterrupted()) {
       try {
+        byte[] twoBytes;
         AudioInputStream audioInputStream = recorder.sample();
+        
+        
+        
         
         System.out.println("Frame length: "+audioInputStream.getFrameLength());
         wavWriter.writeWavSegment(audioInputStream);
@@ -29,6 +35,12 @@ public class Sampler extends Thread {
   
   public void stopSampling(){
     this.interrupt();
+  }
+  
+  private short getShort(byte[] twoBytes) {
+    ByteBuffer byteBuff = ByteBuffer.wrap(twoBytes);
+    byteBuff.order(java.nio.ByteOrder.nativeOrder());
+    return byteBuff.getShort();
   }
   
 }
