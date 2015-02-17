@@ -52,17 +52,10 @@ public class Recorder extends Thread {
     System.out.println("Recording started!");
     while(!stopCapture && !Thread.currentThread().isInterrupted()) {
       synchronized (audioOutput) {
-        //System.out.println("Producer producing...");
         Integer count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
         if (count > 0) {
           audioOutput.write(audioBuffer, 0, count);
-          //System.out.println("Audio output: " + audioOutput.size());
-          /*
-           * for(byte b : audioBuffer) { System.out.println("Byte: " + b); }
-           */
-          //System.out.println("Producer notifying...");
           audioOutput.notify();
-          //System.out.println("Producer sleeping...");
           try {
             audioOutput.wait();
           } catch (InterruptedException e) {
@@ -71,7 +64,6 @@ public class Recorder extends Thread {
         }
       }
     }
-    //System.out.println("Thanks for terminating me correctly...");
     // We're done...
     try {
       audioOutput.close();
@@ -85,13 +77,10 @@ public class Recorder extends Thread {
   public AudioInputStream sample() throws IOException {
     byte[] audioSample = new byte[] { 0 };
     synchronized (audioOutput) {
-      //System.out.println("Consumer consuming...");
       audioSample = audioOutput.toByteArray();
       audioOutput.reset();
-      //System.out.println("Consumer notifying...");
       audioOutput.notify();
       try {
-        //System.out.println("Consumer Sleeping...");
         audioOutput.wait();
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();

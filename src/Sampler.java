@@ -24,7 +24,6 @@ public class Sampler extends Thread {
         System.out.println("Failed to get audio!");
       }
     }
-    //System.out.println("Thanks for terminating me correctly...");
   }
   
   public void stopSampling(){
