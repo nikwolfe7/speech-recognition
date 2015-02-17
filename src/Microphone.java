@@ -1,7 +1,14 @@
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.TargetDataLine;
 
-public interface Microphone {
+public abstract class Microphone {
   
-  public TargetDataLine getOpenMicrophone();
+  protected AudioFormat audioFormat;
+  
+  public Microphone(AudioFormatFactory audioFormatFactory) {
+    this.audioFormat = audioFormatFactory.getAudioFormat();
+  }
+  
+  public abstract TargetDataLine getOpenMicrophone();
 
 }

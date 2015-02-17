@@ -5,11 +5,11 @@ import javax.sound.sampled.AudioInputStream;
 
 public class Sampler extends Thread {
   
-  private Recorder recorder;
+  private Sampleable recorder;
   private WAVWriter wavWriter;
   
-  public Sampler(Recorder rec) {
-    this.recorder = rec;
+  public Sampler(Sampleable sampleable) {
+    this.recorder = sampleable;
     this.wavWriter = new WAVWriter();
   }
   

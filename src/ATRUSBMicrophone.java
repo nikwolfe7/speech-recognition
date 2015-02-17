@@ -4,7 +4,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 
-public class ATRUSBMicrophone implements Microphone {
+public class ATRUSBMicrophone extends Microphone {
 
   private String preferredMicrophone = AudioStrings.ATR_USB_MICROPHONE.getValue();
 
@@ -14,8 +14,8 @@ public class ATRUSBMicrophone implements Microphone {
    * Holy Shit. The amount of code it takes in Java just to open a connection to a goddamn
    * microphone. Fuck me.
    */
-  public ATRUSBMicrophone(Integer intSampleRate) {
-    Float sampleRate = intSampleRate.floatValue();
+  public ATRUSBMicrophone(AudioFormatFactory audioFormatFactory) {
+    super(audioFormatFactory);
 
     new Runnable() {
       boolean found = false;
@@ -38,7 +38,7 @@ public class ATRUSBMicrophone implements Microphone {
               System.out.println("Connected to " + mixer + "...");
 
               // Audio Format... if this doesn't work we try 441Khz...
-              AudioFormat audioFormat = AudioFormatFactory.getMono16BitPCMAudioFormat(sampleRate);
+              AudioFormat audioFormat = audioFormatFactory.getAudioFormat();
 
               // Get the Dataline...
               DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
@@ -54,7 +54,7 @@ public class ATRUSBMicrophone implements Microphone {
                 e.printStackTrace();
 
                 // try 441, if not, give up.
-                System.out.println("Failed to open microphone with "+intSampleRate+" sample rate... Try a different sample rate!");
+                System.out.println("Failed to open microphone with "+audioFormat.getSampleRate()+" sample rate... Try a different sample rate!");
                 System.out.println("Try unplugging/replugging in the microphone again before running the program.");
                 System.exit(0);
               }

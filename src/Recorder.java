@@ -8,7 +8,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
-public class Recorder extends Thread {
+public class Recorder extends Thread implements Sampleable {
 
   private ByteArrayOutputStream audioOutput;
 

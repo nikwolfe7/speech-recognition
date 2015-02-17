@@ -41,7 +41,7 @@ public class WAVWriter {
   }
   
   public void writeWholeWav(AudioInputStream audioInputStream) {
-    File wavFile = new File(wavDir + AudioStrings.COMPLETE_RECORDING.getValue() + "-" + count++ + wavExt);
+    File wavFile = new File(wavDir + AudioStrings.COMPLETE_RECORDING.getValue() + wavExt);
     writeWav(audioInputStream, wavFile);
   }
 
