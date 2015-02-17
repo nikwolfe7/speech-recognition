@@ -12,16 +12,15 @@ public class Driver {
 	  
 	  Microphone mic = new ATRUSBMicrophone(AudioConstants.KHZ16.getValue());
 	  Recorder recorder = new Recorder(mic, AudioConstants.KHZ16BUFFER.getValue());
-	  WAVWriter wavWriter = new WAVWriter();
+	  Sampler sampler = new Sampler(recorder);
 	  recorder.start();
+	  sampler.start();
 	  
-	  sleep(5);
+	  sleep(1);
 	  
-	  AudioInputStream ais = recorder.sample();
-	  System.out.println("Frame length: " + ais.getFrameLength());
-	  wavWriter.writeWholeWav(ais);
+	  recorder.stopRecording();
+	  sampler.stopSampling();
     
-    recorder.stopRecording();
   }
   
   public static void sleep(int seconds) {
