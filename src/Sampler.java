@@ -7,6 +7,12 @@ public class Sampler extends Thread {
     this.recorder = r;
   }
   
+  public void run() {
+    while(!Thread.currentThread().isInterrupted()) {
+      
+    }
+  }
+  
   
   
   
