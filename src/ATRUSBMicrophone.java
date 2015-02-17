@@ -1,5 +1,3 @@
-import java.nio.ByteOrder;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
@@ -40,7 +38,7 @@ public class ATRUSBMicrophone implements Microphone {
               System.out.println("Connected to " + mixer + "...");
 
               // Audio Format... if this doesn't work we try 441Khz...
-              AudioFormat audioFormat = getAudioFormat(sampleRate);
+              AudioFormat audioFormat = AudioFormatFactory.getMono16BitPCMAudioFormat(sampleRate);
 
               // Get the Dataline...
               DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
@@ -73,17 +71,6 @@ public class ATRUSBMicrophone implements Microphone {
           }
         } // end thread while loop
       } // end run method
-
-      private AudioFormat getAudioFormat(Float sampleRate) {
-        Integer sampleSizeInBits = 16;
-        Integer channels = AudioConstants.MONO.getValue();
-        Boolean signed = true;
-        Boolean bigEndian = (java.nio.ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN);
-        AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed,
-                bigEndian);
-        return format;
-      }
-
     }.run();
   }
 

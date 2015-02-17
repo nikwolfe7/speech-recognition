@@ -17,6 +17,7 @@ public class Sampler extends Thread {
     while(!Thread.currentThread().isInterrupted()) {
       try {
         AudioInputStream audioInputStream = recorder.sample();
+        
         System.out.println("Frame length: "+audioInputStream.getFrameLength());
         wavWriter.writeWavSegment(audioInputStream);
       
