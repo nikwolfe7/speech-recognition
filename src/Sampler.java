@@ -28,10 +28,12 @@ public class Sampler extends Thread implements FrameSequence {
       try {
         byte[] twoBytes = new byte[2];
         AudioInputStream audioInputStream = recorder.sample();
-        while (audioInputStream.read(twoBytes) > 0) {
-          Short frame = getShort(twoBytes);
-          // System.out.println(frame);
-          waveform.put(frame);
+        if (audioInputStream != null) {
+          while (audioInputStream.read(twoBytes) > 0) {
+            Short frame = getShort(twoBytes);
+            // System.out.println(frame);
+            waveform.put(frame);
+          }
         }
       } catch (IOException | InterruptedException e) {
         System.out.println("Sampling interrupted! Terminating...");

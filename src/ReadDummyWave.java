@@ -20,7 +20,10 @@ public class ReadDummyWave implements Sampleable {
   private AudioFormat format = new AudioFormatMono16BitPCM16kHz().getAudioFormat();
   private File wavFile = new File(filename);
 
-  public ReadDummyWave() {
+  public ReadDummyWave(String file) {
+    if(file != null) {
+      this.wavFile = new File(file);
+    }
     try {
       this.stream = new BufferedInputStream(new FileInputStream(wavFile));
     } catch (FileNotFoundException e) {
