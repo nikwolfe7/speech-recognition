@@ -1,4 +1,4 @@
-package mlsp.cs.cmu.edu.recording;
+package mlsp.cs.cmu.edu.sampling;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
 import mlsp.cs.cmu.edu.microphone.Microphone;
-import mlsp.cs.cmu.edu.sampling.Sampleable;
 
 /**
  * This class is to interface with a hardware device and poll data

@@ -5,7 +5,7 @@ import mlsp.cs.cmu.edu.audio.AudioFormatFactory;
 import mlsp.cs.cmu.edu.audio.AudioFormatMono16BitPCM16kHz;
 import mlsp.cs.cmu.edu.microphone.ATRUSBMicrophone;
 import mlsp.cs.cmu.edu.microphone.Microphone;
-import mlsp.cs.cmu.edu.recording.Recorder;
+import mlsp.cs.cmu.edu.sampling.Recorder;
 import mlsp.cs.cmu.edu.sampling.Sampler;
 import mlsp.cs.cmu.edu.segmentation.Segmenter;
 import mlsp.cs.cmu.edu.segmentation.SimpleSegmenter;
