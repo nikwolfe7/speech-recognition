@@ -8,6 +8,15 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
+/**
+ * This class is to interface with a hardware device and poll data
+ * from it as it becomes available, while avoiding overflows. This
+ * is mostly to ensure that we can get an AudioInputStream from a
+ * Mixer attached to a microphone... 
+ * 
+ * @author nwolfe
+ *
+ */
 public class Recorder extends Thread implements Sampleable {
 
   private ByteArrayOutputStream audioOutput;

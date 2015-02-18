@@ -10,28 +10,32 @@ public class Driver {
 	  
     
     /*Audio Format Factory vends proper audio format*/
-//    AudioFormatFactory audioFormatFactory = new AudioFormatMono16BitPCM16kHz();
+    AudioFormatFactory audioFormatFactory = new AudioFormatMono16BitPCM16kHz();
     
     /*Microphone implementation takes an AudioFormatFactory */
-//    Microphone microphone = new ATRUSBMicrophone(audioFormatFactory);
+    Microphone microphone = new ATRUSBMicrophone(audioFormatFactory);
     
     /*Recording module takes a microphone and a buffersize to read from the sound card*/
-//	  Recorder recorder = new Recorder(microphone, AudioConstants.KHZ16BUFFER.getValue());
+	  Recorder recorder = new Recorder(microphone, AudioConstants.KHZ16BUFFER.getValue());
 	  
 	  /*Sampler takes a Sampleable object, such as a recording device or stored WAV file*/
-//	  Sampler sampler = new Sampler(recorder);
-	  
     /* For testing only */
-	  Sampleable storedWavFile = new ReadDummyWave();
-    Sampler sampler = new Sampler(storedWavFile);
+//	Sampleable storedWavFile = new ReadDummyWave();
+//	Sampler sampler = new Sampler(storedWavFile);
+	  Sampler sampler = new Sampler(recorder);
 	  
-//    recorder.start(); // extends Thread
+	  /*Segmenter finds speech segments using a sampler*/
+	  Segmenter segmenter = new Segmenter(sampler, audioFormatFactory);
+	  
+    recorder.start(); // extends Thread
 	  sampler.start(); // extends Thread
+	  segmenter.start(); // extends Thread
 	  
-//	  sleep(5);
-	  
-//	  recorder.stopRecording();
-//	  sampler.stopSampling();
+	  sleep(2);
+	 
+	  recorder.stopRecording();
+	  sampler.stopSampling();
+	  segmenter.stopSegmenting();
     
   }
   
