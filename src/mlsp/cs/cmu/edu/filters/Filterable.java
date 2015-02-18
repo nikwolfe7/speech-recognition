@@ -1,4 +1,4 @@
-package mlsp.cs.cmu.edu.segmentation;
+package mlsp.cs.cmu.edu.filters;
 
 public interface Filterable {
   

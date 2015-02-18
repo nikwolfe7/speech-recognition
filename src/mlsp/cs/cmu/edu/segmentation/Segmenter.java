@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import javax.sound.sampled.AudioFormat;
 
 import mlsp.cs.cmu.edu.audio.AudioFormatFactory;
+import mlsp.cs.cmu.edu.filters.Filterable;
+import mlsp.cs.cmu.edu.filters.FrameFilter;
 import mlsp.cs.cmu.edu.sampling.FrameSequence;
 import mslp.cs.cmu.edu.wavutils.WAVWriter;
 
