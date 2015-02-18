@@ -8,28 +8,30 @@ public class Driver {
    */
   public static void main(String[] args) throws InterruptedException, IOException {
 	  
+    
     /*Audio Format Factory vends proper audio format*/
-    AudioFormatFactory audioFormatFactory = new AudioFormatMono16BitPCM16kHz();
+//    AudioFormatFactory audioFormatFactory = new AudioFormatMono16BitPCM16kHz();
     
     /*Microphone implementation takes an AudioFormatFactory */
-    Microphone microphone = new ATRUSBMicrophone(audioFormatFactory);
+//    Microphone microphone = new ATRUSBMicrophone(audioFormatFactory);
     
     /*Recording module takes a microphone and a buffersize to read from the sound card*/
-	  Recorder recorder = new Recorder(microphone, AudioConstants.KHZ16BUFFER.getValue());
+//	  Recorder recorder = new Recorder(microphone, AudioConstants.KHZ16BUFFER.getValue());
 	  
 	  /*Sampler takes a Sampleable object, such as a recording device or stored WAV file*/
-	  Sampler sampler = new Sampler(recorder);
+//	  Sampler sampler = new Sampler(recorder);
 	  
-    //Sampleable storedWavFile = new ReadDummyWave();
-    //Sampler sampler = new Sampler(storedWavFile);
+    /* For testing only */
+	  Sampleable storedWavFile = new ReadDummyWave();
+    Sampler sampler = new Sampler(storedWavFile);
 	  
-    recorder.start(); // extends Thread
+//    recorder.start(); // extends Thread
 	  sampler.start(); // extends Thread
 	  
-	  sleep(1);
+//	  sleep(5);
 	  
-	  recorder.stopRecording();
-	  sampler.stopSampling();
+//	  recorder.stopRecording();
+//	  sampler.stopSampling();
     
   }
   
