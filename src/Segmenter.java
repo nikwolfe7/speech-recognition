@@ -2,6 +2,12 @@ import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFormat;
 
+/**
+ * This class uses the energy waveform to allow different strategies to
+ * do endpointing
+ * @author nwolfe
+ *
+ */
 public class Segmenter extends Thread implements FrameExtractor {
 
   private FrameSequence frameSequence;

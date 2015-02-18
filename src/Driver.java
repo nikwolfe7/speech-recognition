@@ -27,6 +27,10 @@ public class Driver {
 	  /*Segmenter finds speech segments using a sampler*/
 	  Segmenter segmenter = new Segmenter(sampler, audioFormatFactory);
 	  
+	  // Push-to-talk
+	  System.out.println("Press any key to start recording...");
+	  System.in.read();
+	  
     recorder.start(); // extends Thread
 	  sampler.start(); // extends Thread
 	  segmenter.start(); // extends Thread
