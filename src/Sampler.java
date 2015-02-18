@@ -1,7 +1,5 @@
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.sound.sampled.AudioInputStream;
@@ -32,7 +30,7 @@ public class Sampler extends Thread implements FrameSequence {
         AudioInputStream audioInputStream = recorder.sample();
         while (audioInputStream.read(twoBytes) > 0) {
           Short frame = getShort(twoBytes);
-          System.out.println(frame);
+          // System.out.println(frame);
           waveform.put(frame);
         }
       } catch (IOException | InterruptedException e) {

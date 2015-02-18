@@ -18,27 +18,33 @@ public class Segmenter extends Thread implements FrameExtractor {
 
   private Integer sampleRate;
 
-  private Integer sampleindex;
+  private Integer sampleIndex;
   
   private Integer frameSize;
   
-  private Integer frameindex;
+  private Integer frameIndex;
   
-  ArrayList<Short> waveform;
+  private SegmentStrategy segmentStrategy;
+  
+  private ArrayList<Double> decibelWaveform;
+  
+  private ArrayList<Short> waveform;
 
-  ArrayList<Short[]> waveframes;
+  private ArrayList<Short[]> waveframes;
 
   /* We use 10 ms frames */
-  public Segmenter(FrameSequence fs, AudioFormatFactory formatFactory) {
+  public Segmenter(FrameSequence fs, AudioFormatFactory formatFactory, SegmentStrategy strategy) {
     this.frameSequence = fs;
     this.audioFormat = formatFactory.getAudioFormat();
     this.sampleRate = (int) audioFormat.getSampleRate();
     this.frameSize = sampleRate / 100; /* This is 10ms */
-    this.sampleindex = 0;
-    this.frameindex = 0;
+    this.sampleIndex = 0;
+    this.frameIndex = 0;
     this.wavWriter = new WAVWriter();
     this.waveform = new ArrayList<Short>();
     this.waveframes = new ArrayList<Short[]>();
+    this.decibelWaveform = new ArrayList<Double>();
+    this.segmentStrategy = strategy;
   }
 
   /* Expects a continuous stream in general... */
@@ -49,8 +55,14 @@ public class Segmenter extends Thread implements FrameExtractor {
         for (int i = 0; i < frameSize; i++) {
           frame[i] = frameSequence.getFrame();
           waveform.add(frame[i]);
+          sampleIndex++;
         }
         waveframes.add(frame);
+        Double energy = getFrameDecibelLevel(frame);
+        System.out.println(Math.round(energy));
+        decibelWaveform.add(energy);
+        frameIndex++;
+        classifyAndSegmentFrame(energy);
         /*
          * 
          * 
@@ -62,6 +74,24 @@ public class Segmenter extends Thread implements FrameExtractor {
     }
   }
   
+  private void classifyAndSegmentFrame(Double energy) {
+    boolean isSpeech = segmentStrategy.isSpeech(energy);
+    if(isSpeech) {
+      System.out.println("THIS IS SPEECH!!!!");
+    } else {
+      //System.out.println("");
+    }
+    
+  }
+
+  private Double getFrameDecibelLevel(Short[] frame) {
+    Double sigma = 0.0;
+    for(Short s : frame) {
+      sigma += (s * s);
+    }
+    return 10 * Math.log10(sigma) - 30;
+  }
+
   public void stopSegmenting() {
     this.interrupt();
   }
