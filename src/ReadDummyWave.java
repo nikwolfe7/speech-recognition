@@ -9,6 +9,10 @@ import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 
+import mlsp.cs.cmu.edu.audio.AudioConstants;
+import mlsp.cs.cmu.edu.audio.AudioFormatMono16BitPCM16kHz;
+import mlsp.cs.cmu.edu.sampling.Sampleable;
+
 public class ReadDummyWave implements Sampleable {
 
   private final String sep = System.getProperty("file.separator");

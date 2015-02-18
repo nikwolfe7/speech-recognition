@@ -1,3 +1,4 @@
+package mlsp.cs.cmu.edu.audio;
 public enum AudioStrings {
 
   ATR_USB_MICROPHONE("ATR USB Microphone"), SEGMENT("segment"), 

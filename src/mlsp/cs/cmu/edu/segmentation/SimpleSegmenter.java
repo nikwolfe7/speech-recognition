@@ -1,3 +1,7 @@
+package mlsp.cs.cmu.edu.segmentation;
+import mlsp.cs.cmu.edu.audio.AudioFormatMono16BitPCM16kHz;
+import mlsp.cs.cmu.edu.sampling.FrameSequence;
+
 
 /**
  * This class is called a simple segmenter because it uses

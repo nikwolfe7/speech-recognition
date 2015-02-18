@@ -1,6 +1,11 @@
+package mlsp.cs.cmu.edu.segmentation;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFormat;
+
+import mlsp.cs.cmu.edu.audio.AudioFormatFactory;
+import mlsp.cs.cmu.edu.sampling.FrameSequence;
+import mslp.cs.cmu.edu.wavutils.WAVWriter;
 
 /**
  * This class uses the energy waveform to allow different strategies to do endpointing

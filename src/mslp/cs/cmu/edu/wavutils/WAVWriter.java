@@ -1,9 +1,12 @@
+package mslp.cs.cmu.edu.wavutils;
 import java.io.File;
 import java.io.IOException;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+
+import mlsp.cs.cmu.edu.audio.AudioStrings;
 
 
 public class WAVWriter {

@@ -1,3 +1,4 @@
+package mlsp.cs.cmu.edu.audio;
 public enum AudioConstants {
 
 	MONO(1), STEREO(2), KHZ16(16000), KHZ441(44100), KHZ16BUFFER(320);

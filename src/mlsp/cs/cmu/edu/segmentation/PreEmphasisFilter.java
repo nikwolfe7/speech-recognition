@@ -1,3 +1,4 @@
+package mlsp.cs.cmu.edu.segmentation;
 
 public class PreEmphasisFilter implements FrameFilter {
 
