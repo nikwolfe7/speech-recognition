@@ -23,11 +23,8 @@ public class Driver {
 	  //Sampler sampler = new Sampler(storedWavFile);
 	  Sampler sampler = new Sampler(recorder);
 	  
-	  /*Strategy for deciding if a frame is speech or not...*/
-	  SegmentStrategy strategy = new EnergyBasedEndpointing();
-	  
 	  /*Segmenter finds speech segments using a sampler*/
-	  Segmenter segmenter = new Segmenter(sampler, audioFormatFactory, strategy);
+	  Segmenter segmenter = new SimpleSegmenter(sampler);
 	  
 	  // Push-to-talk
 	  System.out.print("Press Enter to start recording...");

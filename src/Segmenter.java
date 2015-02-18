@@ -3,34 +3,36 @@ import java.util.ArrayList;
 import javax.sound.sampled.AudioFormat;
 
 /**
- * This class uses the energy waveform to allow different strategies to
- * do endpointing
+ * This class uses the energy waveform to allow different strategies to do endpointing
+ * 
  * @author nwolfe
  *
  */
-public class Segmenter extends Thread implements FrameExtractor {
+public abstract class Segmenter extends Thread implements Filterable {
 
   private FrameSequence frameSequence;
 
   private WAVWriter wavWriter;
 
-  private AudioFormat audioFormat;
+  protected AudioFormat audioFormat;
 
-  private Integer sampleRate;
+  protected Integer sampleRate;
 
-  private Integer sampleIndex;
-  
-  private Integer frameSize;
-  
-  private Integer frameIndex;
-  
-  private SegmentStrategy segmentStrategy;
-  
-  private ArrayList<Double> decibelWaveform;
-  
-  private ArrayList<Short> waveform;
+  protected Integer sampleIndex;
 
-  private ArrayList<Short[]> waveframes;
+  protected Integer frameSize;
+
+  protected Integer frameIndex;
+
+  protected SegmentStrategy segmentStrategy;
+
+  protected ArrayList<Double> decibelWaveform;
+
+  protected ArrayList<Short> waveform;
+
+  protected ArrayList<Short[]> waveframes;
+  
+  protected ArrayList<FrameFilter> filters;
 
   /* We use 10 ms frames */
   public Segmenter(FrameSequence fs, AudioFormatFactory formatFactory, SegmentStrategy strategy) {
@@ -44,29 +46,44 @@ public class Segmenter extends Thread implements FrameExtractor {
     this.waveform = new ArrayList<Short>();
     this.waveframes = new ArrayList<Short[]>();
     this.decibelWaveform = new ArrayList<Double>();
+    this.filters = new ArrayList<FrameFilter>();
     this.segmentStrategy = strategy;
   }
 
+  @Override
+  public void attachFilter(FrameFilter frameFilter) {
+    filters.add(frameFilter);
+  }
+  
+  @Override
+  public void clearFilters() {
+    filters.clear();
+  }
+  
   /* Expects a continuous stream in general... */
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       try {
         Short[] frame = new Short[frameSize];
         for (int i = 0; i < frameSize; i++) {
+          sampleIndex++;
           frame[i] = frameSequence.getFrame();
           waveform.add(frame[i]);
-          sampleIndex++;
         }
+        /* run the attached filters */
+        for(FrameFilter filter : filters) {
+          frame = filter.doFilter(frame);
+        }
+        frameIndex++;
         waveframes.add(frame);
         Double energy = getFrameDecibelLevel(frame);
-        System.out.println(Math.round(energy));
         decibelWaveform.add(energy);
-        frameIndex++;
-        classifyAndSegmentFrame(energy);
+        classifyAndSegmentFrame(energy, segmentStrategy.isSpeech(energy));
         /*
-         * 
+         * Not sure what else to do here...
          * 
          */
+        System.out.println(Math.round(energy));
       } catch (InterruptedException e) {
         System.out.println("Segmenter interrupted! Terminating...");
         Thread.currentThread().interrupt();
@@ -74,25 +91,25 @@ public class Segmenter extends Thread implements FrameExtractor {
     }
   }
   
-  private void classifyAndSegmentFrame(Double energy) {
-    boolean isSpeech = segmentStrategy.isSpeech(energy);
-    if(isSpeech) {
-      System.out.println("THIS IS SPEECH!!!!");
-    } else {
-      //System.out.println("");
-    }
-    
+  public void stopSegmenting() {
+    this.interrupt();
   }
 
-  private Double getFrameDecibelLevel(Short[] frame) {
+  protected Double getFrameDecibelLevel(Short[] frame) {
     Double sigma = 0.0;
-    for(Short s : frame) {
+    for (Short s : frame) {
       sigma += (s * s);
     }
     return 10 * Math.log10(sigma) - 30;
   }
-
-  public void stopSegmenting() {
-    this.interrupt();
-  }
+  
+  /**
+   * Template method for the algorithm that defines how to do segmentation
+   * Takes the energy of a given frame and the result of the SegmentStrategy
+   * 
+   * @param energy
+   * @param isSpeech
+   */
+  protected abstract void classifyAndSegmentFrame(Double energy, boolean isSpeech); 
+  
 }
