@@ -1,10 +1,10 @@
 import java.io.IOException;
 
+import mlsp.cs.cmu.edu.sampling.ReadDummyWave;
 import mlsp.cs.cmu.edu.sampling.Sampleable;
 import mlsp.cs.cmu.edu.sampling.Sampler;
 import mlsp.cs.cmu.edu.segmentation.Segmenter;
 import mlsp.cs.cmu.edu.segmentation.SimpleSegmenter;
-import mslp.cs.cmu.edu.wavutils.ReadDummyWave;
 
 public class DriverWavInput {
   /**

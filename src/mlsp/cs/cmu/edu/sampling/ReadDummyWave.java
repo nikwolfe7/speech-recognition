@@ -1,4 +1,4 @@
-package mslp.cs.cmu.edu.wavutils;
+package mlsp.cs.cmu.edu.sampling;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -12,7 +12,6 @@ import javax.sound.sampled.AudioInputStream;
 
 import mlsp.cs.cmu.edu.audio.AudioConstants;
 import mlsp.cs.cmu.edu.audio.AudioFormatMono16BitPCM16kHz;
-import mlsp.cs.cmu.edu.sampling.Sampleable;
 
 public class ReadDummyWave implements Sampleable {
 
