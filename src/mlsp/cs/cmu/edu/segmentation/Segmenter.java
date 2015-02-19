@@ -1,4 +1,5 @@
 package mlsp.cs.cmu.edu.segmentation;
+
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFormat;
@@ -19,26 +20,26 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   private FrameSequence frameSequence;
 
+  protected final Integer sampleRate;
+
+  protected final Integer frameSize;
+
   private WAVWriter wavWriter;
+
+  private Integer sampleIndex;
+
+  private Integer frameIndex;
 
   protected AudioFormat audioFormat;
 
-  protected Integer sampleRate;
-
-  protected Integer sampleIndex;
-
-  protected Integer frameSize;
-
-  protected Integer frameIndex;
-
   protected SegmentStrategy segmentStrategy;
-
-  protected ArrayList<Double> decibelWaveform;
 
   protected ArrayList<Short> waveform;
 
-  protected ArrayList<Short[]> waveframes;
-  
+  protected ArrayList<Double> decibelWaveform;
+
+  protected ArrayList<Double[]> waveframes;
+
   protected ArrayList<FrameFilter> filters;
 
   /* We use 10 ms frames */
@@ -51,7 +52,7 @@ public abstract class Segmenter extends Thread implements Filterable {
     this.frameIndex = 0;
     this.wavWriter = new WAVWriter();
     this.waveform = new ArrayList<Short>();
-    this.waveframes = new ArrayList<Short[]>();
+    this.waveframes = new ArrayList<Double[]>();
     this.decibelWaveform = new ArrayList<Double>();
     this.filters = new ArrayList<FrameFilter>();
     this.segmentStrategy = strategy;
@@ -61,24 +62,25 @@ public abstract class Segmenter extends Thread implements Filterable {
   public void attachFilter(FrameFilter frameFilter) {
     filters.add(frameFilter);
   }
-  
+
   @Override
   public void clearFilters() {
     filters.clear();
   }
-  
+
   /* Expects a continuous stream in general... */
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       try {
-        Short[] frame = new Short[frameSize];
+        Double[] frame = new Double[frameSize];
         for (int i = 0; i < frameSize; i++) {
+          Short val = frameSequence.getFrame();
+          waveform.add(val);
+          frame[i] = val.doubleValue();
           sampleIndex++;
-          frame[i] = frameSequence.getFrame();
-          waveform.add(frame[i]);
         }
         /* run the attached filters */
-        for(FrameFilter filter : filters) {
+        for (FrameFilter filter : filters) {
           frame = filter.doFilter(frame);
         }
         frameIndex++;
@@ -88,35 +90,52 @@ public abstract class Segmenter extends Thread implements Filterable {
         classifyAndSegmentFrame(energy, segmentStrategy.isSpeech(energy));
         /*
          * Not sure what else to do here...
-         * 
          */
-        System.out.println(Math.round(energy));
+        printEnergies(energy);
       } catch (InterruptedException e) {
         System.out.println("Segmenter interrupted! Terminating...");
         Thread.currentThread().interrupt();
       }
     }
+    System.out.println("Now writing wav data to file...");
   }
   
+  private void printEnergies(Double energy) {
+    StringBuilder sb = new StringBuilder(Math.round(energy) + " | ");
+    while(energy > 25) { // hack for display purposes...
+      energy += -1;
+      sb.append("]]");
+    }
+    System.out.println(sb);
+  }
+
   public void stopSegmenting() {
     this.interrupt();
   }
 
-  protected Double getFrameDecibelLevel(Short[] frame) {
+  protected Double getFrameDecibelLevel(Double[] frame) {
     Double sigma = 0.0;
-    for (Short s : frame) {
+    for (Double s : frame) {
       sigma += (s * s);
     }
-    return 10 * Math.log10(sigma) - 30;
+    return 10 * Math.log10(sigma);
   }
-  
+
+  protected Integer getSampleIndex() {
+    return sampleIndex;
+  }
+
+  protected Integer getFrameIndex() {
+    return frameIndex;
+  }
+
   /**
-   * Template method for the algorithm that defines how to do segmentation
-   * Takes the energy of a given frame and the result of the SegmentStrategy
+   * Template method for the algorithm that defines how to do segmentation Takes the energy of a
+   * given frame and the result of the SegmentStrategy
    * 
    * @param energy
    * @param isSpeech
    */
-  protected abstract void classifyAndSegmentFrame(Double energy, boolean isSpeech); 
-  
+  protected abstract void classifyAndSegmentFrame(Double energy, boolean isSpeech);
+
 }
