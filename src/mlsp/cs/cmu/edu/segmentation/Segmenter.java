@@ -100,7 +100,7 @@ public abstract class Segmenter extends Thread implements Filterable {
   }
   
   private void printEnergies(Double energy) {
-    StringBuilder sb = new StringBuilder(Math.round(energy) + " | ");
+    StringBuilder sb = new StringBuilder(Math.round(energy) + "\t| ");
     while(energy > 25) { // hack for display purposes...
       energy += -1;
       sb.append("]]");
