@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.sound.sampled.AudioFormat;
 
 import mlsp.cs.cmu.edu.audio.AudioFormatFactory;
+import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.filters.Filterable;
 import mlsp.cs.cmu.edu.filters.FrameFilter;
 import mlsp.cs.cmu.edu.sampling.FrameSequence;
@@ -24,8 +25,6 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   protected final Integer frameSize;
 
-  private WAVWriter wavWriter;
-
   private Integer sampleIndex;
 
   private Integer frameIndex;
@@ -44,13 +43,13 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   /* We use 10 ms frames */
   public Segmenter(FrameSequence fs, AudioFormatFactory formatFactory, SegmentStrategy strategy) {
+    RecordContext.registerSegmenter(this);
     this.frameSequence = fs;
     this.audioFormat = formatFactory.getAudioFormat();
     this.sampleRate = (int) audioFormat.getSampleRate();
     this.frameSize = sampleRate / 100; /* This is 10ms */
     this.sampleIndex = 0;
     this.frameIndex = 0;
-    this.wavWriter = new WAVWriter();
     this.waveform = new ArrayList<Short>();
     this.waveframes = new ArrayList<Double[]>();
     this.decibelWaveform = new ArrayList<Double>();

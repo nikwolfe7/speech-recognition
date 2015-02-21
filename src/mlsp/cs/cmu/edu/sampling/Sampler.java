@@ -3,7 +3,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.imageio.spi.RegisterableService;
 import javax.sound.sampled.AudioInputStream;
+
+import mlsp.cs.cmu.edu.audio.RecordContext;
 
 /**
  * The purpose of this class is to collect the waveform buffer that the Recorder retrieves from the
@@ -20,6 +23,7 @@ public class Sampler extends Thread implements FrameSequence {
   private LinkedBlockingQueue<Short> waveform;
 
   public Sampler(Sampleable sampleable) {
+    RecordContext.registerSampler(this);
     this.recorder = sampleable;
     this.waveform = new LinkedBlockingQueue<Short>();
   }

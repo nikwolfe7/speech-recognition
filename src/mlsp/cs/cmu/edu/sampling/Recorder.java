@@ -9,8 +9,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
+import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.microphone.Microphone;
-
 /**
  * This class is to interface with a hardware device and poll data
  * from it as it becomes available, while avoiding overflows. This
@@ -33,6 +33,7 @@ public class Recorder extends Thread implements Sampleable {
   private byte[] audioBuffer;
 
   public Recorder(Microphone mic, Integer buffersize) {
+    RecordContext.registerRecorder(this);
     this.audioOutput = new ByteArrayOutputStream();
     this.targetDataLine = mic.getOpenMicrophone();
     this.audioFormat = targetDataLine.getFormat();

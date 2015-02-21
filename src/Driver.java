@@ -3,6 +3,7 @@ import java.io.IOException;
 import mlsp.cs.cmu.edu.audio.AudioConstants;
 import mlsp.cs.cmu.edu.audio.AudioFormatFactory;
 import mlsp.cs.cmu.edu.audio.AudioFormatMono16BitPCM16kHz;
+import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.microphone.ATRUSBMicrophone;
 import mlsp.cs.cmu.edu.microphone.Microphone;
 import mlsp.cs.cmu.edu.sampling.Recorder;
@@ -40,17 +41,15 @@ public class Driver {
 	  System.out.print("Press Enter to start recording...");
 	  System.in.read();
 	  
-    recorder.start(); // extends Thread
-	  sampler.start(); // extends Thread
-	  segmenter.start(); // extends Thread
+    RecordContext.startAll();
 	  
 	  sleep(10);
 	 
-	  recorder.stopRecording();
-	  sampler.stopSampling();
-	  segmenter.stopSegmenting();
+	  RecordContext.stopAll();
     
   }
+  
+  
   
   public static void sleep(int seconds) {
     long i;
@@ -59,5 +58,7 @@ public class Driver {
       i = 0; while(i < 1000000000) { i++; }
     }
   }
+  
+
   
 }

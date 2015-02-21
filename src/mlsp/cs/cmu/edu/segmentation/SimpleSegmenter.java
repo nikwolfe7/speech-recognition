@@ -14,6 +14,12 @@ import mlsp.cs.cmu.edu.sampling.FrameSequence;
  */
 public class SimpleSegmenter extends Segmenter {
   
+  private boolean SOUND_STARTED = false;
+  private Integer SILENCE_STRING_CUTOFF;
+  private Double SILENCE_THRESHOLD;
+  private Double BACKGROUND_ENERGY;
+  private Integer frameCount = 0;
+  
   public SimpleSegmenter(FrameSequence fs) {
     super(fs, new AudioFormatMono16BitPCM16kHz(), new EnergyBasedEndpointing());
     attachFilter(new RemoveDCOffsetFilter());
