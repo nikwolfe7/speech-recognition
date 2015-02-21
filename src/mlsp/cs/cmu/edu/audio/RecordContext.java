@@ -31,6 +31,7 @@ public class RecordContext {
     recorder.stopRecording();
     sampler.stopSampling();
     segmenter.stopSegmenting();
+    
   }
 
 }
