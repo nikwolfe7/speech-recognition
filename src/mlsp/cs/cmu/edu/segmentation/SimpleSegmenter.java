@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.segmentation;
 import mlsp.cs.cmu.edu.audio.AudioFormatMono16BitPCM16kHz;
+import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.filters.PreEmphasisFilter;
 import mlsp.cs.cmu.edu.filters.RemoveDCOffsetFilter;
 import mlsp.cs.cmu.edu.sampling.FrameSequence;
@@ -29,7 +30,8 @@ public class SimpleSegmenter extends Segmenter {
   @Override
   protected void classifyAndSegmentFrame(Double energy, boolean isSpeech) {
     if(isSpeech) {
-      //System.out.println("You're talking!!!");
+      System.out.println("You're talking!!!");
+      RecordContext.stopAll();
     }
     // TODO Auto-generated method stub
     

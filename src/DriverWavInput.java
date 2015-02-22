@@ -1,5 +1,6 @@
 import java.io.IOException;
 
+import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.sampling.ReadDummyWave;
 import mlsp.cs.cmu.edu.sampling.Sampleable;
 import mlsp.cs.cmu.edu.sampling.Sampler;
@@ -26,8 +27,7 @@ public class DriverWavInput {
     System.out.print("Press Enter to start recording...");
     System.in.read();
     
-    sampler.start(); // extends Thread
-    segmenter.start(); // extends Thread
+    RecordContext.startAll();
     
   }
   
