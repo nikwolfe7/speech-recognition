@@ -15,7 +15,7 @@ public class PreEmphasisFilter implements FrameFilter {
   */
   @Override
   public Double[] doFilter(Double[] frame) {
-    if (callCount++ > frameDrops) {
+    if (callCount++ >= frameDrops) {
       for (int i = 1; i < frame.length; i++) {
         frame[i] = frame[i] - frame[i - 1];
       }
