@@ -17,15 +17,11 @@ public class SimpleSegmenter extends Segmenter {
 
   private boolean SOUND_STARTED = false;
 
-  private Integer SILENCE_STRING_CUTOFF = 250; // assumes 10ms frame
-  
-  private Integer SPEECH_SEGMENT_CUTOFF = 35;
+  private Integer SILENCE_STRING_CUTOFF = 300; // assumes 10ms frame
 
-  private Double BACKGROUND_ENERGY = 0.0;
+  private Integer SPEECH_SEGMENT_CUTOFF = 50;
 
   private Integer frameBackoff = 25;
-
-  private Integer frameCount = 0;
 
   private Integer speechStart = 0;
 
@@ -33,20 +29,23 @@ public class SimpleSegmenter extends Segmenter {
 
   private Integer speechDuration = 0;
 
-  private Double totalEnergy = 0.0;
-
   private Integer silenceCount = 0;
 
   public SimpleSegmenter(FrameSequence fs) {
-    super(fs, new AudioFormatMono16BitPCM16kHz(), new EnergyBasedEndpointing());
-    attachFilter(new RemoveDCOffsetFilter());
-    attachFilter(new PreEmphasisFilter());
+    super(fs, new AudioFormatMono16BitPCM16kHz(), new AdaptiveEndpointing());
+    // attachFilter(new RemoveDCOffsetFilter());
+    //attachFilter(new PreEmphasisFilter());
   }
 
   private Integer getBackoff(Integer index) {
-    return index - frameBackoff;
+    Integer backoff = index - frameBackoff;
+    if (backoff > 0) {
+      return backoff;
+    } else {
+      return 0;
+    }
   }
-  
+
   private Integer getLookahead(Integer index) {
     return index + frameBackoff;
   }
@@ -54,47 +53,47 @@ public class SimpleSegmenter extends Segmenter {
   @Override
   // 1 frame is 10ms, so we want
   protected void classifyAndSegmentFrame(Double energy, boolean isSpeech) {
-    frameCount++;
     if (energy > 0) {
-      totalEnergy += energy;
-      BACKGROUND_ENERGY = frameCount / totalEnergy;
-      //System.out.println("Energy: " + energy + " Average Energy: " + averageEnergy);
+
       if (isSpeech) {
-        
+
         if (!SOUND_STARTED) {
           System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Sound started!\n");
           SOUND_STARTED = true;
           speechEnd = 0;
           speechDuration = 0;
-          
+
         } else {
           silenceCount = 0; // reset
-          
+
           if (speechDuration > 0) {
             speechDuration++; // count the duration
-            speechEnd = 0;
+            speechEnd = 0; // reset
           }
-          
+
           // condition for new segment...
           if (speechEnd == 0 && speechDuration == 0) {
             speechStart = getBackoff(getFrameIndex());
             speechDuration++;
-            System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Speech started at " + speechStart + "\n");
+            System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Speech started at " + speechStart
+                    + "\n");
           }
         }
       } else { // not speech
-        
+
         if (SOUND_STARTED) {
           silenceCount++;
-          
-          //System.out.println("S I L E N C E... " + silenceCount);
+
+          // System.out.println("S I L E N C E... " + silenceCount);
           if (speechDuration > 0) { // in the middle of a segment
             speechEnd++;
           }
-          
-          if(speechEnd >= SPEECH_SEGMENT_CUTOFF) {
+
+          if (speechEnd >= SPEECH_SEGMENT_CUTOFF) {
             Integer endMarker = getFrameIndex();
-            System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Speech ENDED at: " + endMarker + " and started at " + speechStart + " with duration: " + speechDuration + "\n");
+            System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Speech ENDED at: " + endMarker
+                    + " and started at " + speechStart + " with " + speechDuration
+                    + " speech frames\n");
             speechEnd = 0; // reset
             speechDuration = 0;
           }
@@ -104,7 +103,6 @@ public class SimpleSegmenter extends Segmenter {
         System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Looks like we're done!\n");
         RecordContext.stopAll();
       }
-
     }
   }
 

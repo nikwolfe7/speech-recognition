@@ -78,15 +78,17 @@ public abstract class Segmenter extends Thread implements Filterable {
           frame[i] = val.doubleValue();
           sampleIndex++;
         }
+        /* get energy, do classification */
+        frameIndex++;
+        Double energy = getFrameDecibelLevel(frame);
+        decibelWaveform.add(energy);
+        classifyAndSegmentFrame(energy, segmentStrategy.isSpeech(energy));
+
         /* run the attached filters */
         for (FrameFilter filter : filters) {
           frame = filter.doFilter(frame);
         }
-        frameIndex++;
         waveframes.add(frame);
-        Double energy = getFrameDecibelLevel(frame);
-        decibelWaveform.add(energy);
-        classifyAndSegmentFrame(energy, segmentStrategy.isSpeech(energy));
         /*
          * Not sure what else to do here...
          */
@@ -98,10 +100,10 @@ public abstract class Segmenter extends Thread implements Filterable {
     }
     System.out.println("Now writing wav data to file...");
   }
-  
+
   private void printEnergies(Double energy) {
-    StringBuilder sb = new StringBuilder(Math.round(energy) + "\t| ");
-    while(energy > 25) { // hack for display purposes...
+    StringBuilder sb = new StringBuilder(frameIndex+": "+Math.round(energy) + "\t| ");
+    while (energy > 25) { // hack for display purposes...
       energy += -1;
       sb.append("]]");
     }
