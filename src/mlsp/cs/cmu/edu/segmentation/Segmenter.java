@@ -1,6 +1,10 @@
 package mlsp.cs.cmu.edu.segmentation;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -9,6 +13,7 @@ import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.filters.Filterable;
 import mlsp.cs.cmu.edu.filters.FrameFilter;
 import mlsp.cs.cmu.edu.sampling.FrameSequence;
+import mslp.cs.cmu.edu.wavutils.LabelMaker;
 import mslp.cs.cmu.edu.wavutils.WAVWriter;
 
 /**
@@ -20,6 +25,8 @@ import mslp.cs.cmu.edu.wavutils.WAVWriter;
 public abstract class Segmenter extends Thread implements Filterable {
 
   private FrameSequence frameSequence;
+  
+  private WAVWriter wavWriter;
 
   protected final Integer sampleRate;
 
@@ -41,6 +48,8 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   protected ArrayList<FrameFilter> filters;
 
+  protected ArrayList<Segment> segments;
+
   /* We use 10 ms frames */
   public Segmenter(FrameSequence fs, AudioFormatFactory formatFactory, SegmentStrategy strategy) {
     RecordContext.registerSegmenter(this);
@@ -54,6 +63,8 @@ public abstract class Segmenter extends Thread implements Filterable {
     this.waveframes = new ArrayList<Double[]>();
     this.decibelWaveform = new ArrayList<Double>();
     this.filters = new ArrayList<FrameFilter>();
+    this.segments = new ArrayList<Segment>();
+    this.wavWriter = new WAVWriter();
     this.segmentStrategy = strategy;
   }
 
@@ -99,10 +110,25 @@ public abstract class Segmenter extends Thread implements Filterable {
       }
     }
     System.out.println("Now writing wav data to file...");
+    Segment entireWav = getNewSegment();
+    wavWriter.writeWholeWav(entireWav.getAudioStream());
+    writeAllToFile();
+    writeLabelFile();
+  }
+
+  private void writeLabelFile() {
+    LabelMaker lm = new LabelMaker();
+    lm.writeLabelFile(segments);
+  }
+
+  private void writeAllToFile() {
+    for(Segment s : segments) {
+      wavWriter.writeWavSegment(s.getAudioStream());
+    }
   }
 
   private void printEnergies(Double energy) {
-    StringBuilder sb = new StringBuilder(frameIndex+": "+Math.round(energy) + "\t| ");
+    StringBuilder sb = new StringBuilder(frameIndex + ": " + Math.round(energy) + "  \t| ");
     while (energy > 25) { // hack for display purposes...
       energy += -1;
       sb.append("]]");
@@ -128,6 +154,20 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   protected Integer getFrameIndex() {
     return frameIndex;
+  }
+
+  protected void registerSegment(Integer startFrame, Integer endFrame) {
+    Segment seg = getNewSegment();
+    seg.setEndpoints(startFrame, endFrame);
+    segments.add(seg);
+  }
+
+  private Segment getNewSegment() {
+      return new Segment(this.audioFormat, this.waveform, this.decibelWaveform, this.waveframes);
+  }
+
+  public List<Segment> getSegments() {
+    return this.segments;
   }
 
   /**

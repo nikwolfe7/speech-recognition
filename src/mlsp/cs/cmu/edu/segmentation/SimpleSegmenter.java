@@ -32,9 +32,9 @@ public class SimpleSegmenter extends Segmenter {
   private Integer silenceCount = 0;
 
   public SimpleSegmenter(FrameSequence fs) {
-    super(fs, new AudioFormatMono16BitPCM16kHz(), new AdaptiveEndpointing());
-    // attachFilter(new RemoveDCOffsetFilter());
-    //attachFilter(new PreEmphasisFilter());
+    super(fs, new AudioFormatMono16BitPCM16kHz(), new DoubleThresholdEndpointing());
+    attachFilter(new RemoveDCOffsetFilter());
+    attachFilter(new PreEmphasisFilter());
   }
 
   private Integer getBackoff(Integer index) {
@@ -44,10 +44,6 @@ public class SimpleSegmenter extends Segmenter {
     } else {
       return 0;
     }
-  }
-
-  private Integer getLookahead(Integer index) {
-    return index + frameBackoff;
   }
 
   @Override
@@ -94,6 +90,7 @@ public class SimpleSegmenter extends Segmenter {
             System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Speech ENDED at: " + endMarker
                     + " and started at " + speechStart + " with " + speechDuration
                     + " speech frames\n");
+            registerSegment(speechStart, endMarker);
             speechEnd = 0; // reset
             speechDuration = 0;
           }

@@ -12,7 +12,7 @@ public class AdaptiveEndpointing implements SegmentStrategy {
 
   private Double forgetFactor = 1.5;
 
-  private Double adjustment = 0.05;
+  private Double adjustment = 0.1;
   
   private Double level = 0.0;
   
@@ -20,9 +20,6 @@ public class AdaptiveEndpointing implements SegmentStrategy {
 
   @Override
   public boolean isSpeech(Double energy) {
-    if(frameCount == 0) { // first frame
-      level = energy;
-    }
     frameCount++;
     if (frameCount >= 25) { // only start after 25 frames have elapsed...
       inSpeech = false;
@@ -41,6 +38,7 @@ public class AdaptiveEndpointing implements SegmentStrategy {
     } else { // get average energy
       totalEnergy += energy;
       BACKGROUND_ENERGY = totalEnergy / frameCount;
+      level = BACKGROUND_ENERGY;
     }
     // System.out.println("Energy: " + energy + " Average Energy: " + BACKGROUND_ENERGY);
     return inSpeech;
