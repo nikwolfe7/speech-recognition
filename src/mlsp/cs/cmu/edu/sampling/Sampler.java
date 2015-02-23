@@ -2,6 +2,7 @@ package mlsp.cs.cmu.edu.sampling;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.spi.RegisterableService;
 import javax.sound.sampled.AudioInputStream;
@@ -48,12 +49,19 @@ public class Sampler extends Thread implements FrameSequence {
   }
 
   public Short getFrame() throws InterruptedException {
-    return waveform.take();
+    Short result = waveform.poll(3,TimeUnit.SECONDS); 
+    if(result == null) {
+      RecordContext.stopAll();
+      return 0;
+    } else {
+      return result;
+    }
   }
 
   public void stopSampling() {
     this.interrupt();
   }
+  
 
   private Short getShort(byte[] twoBytes) {
     ByteBuffer byteBuff = ByteBuffer.wrap(twoBytes);

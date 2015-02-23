@@ -32,7 +32,7 @@ public class SimpleSegmenter extends Segmenter {
   private Integer silenceCount = 0;
 
   public SimpleSegmenter(FrameSequence fs) {
-    super(fs, new AudioFormatMono16BitPCM16kHz(), new DoubleThresholdEndpointing());
+    super(fs, new AudioFormatMono16BitPCM16kHz(), new EnergyBasedEndpointing());
     attachFilter(new RemoveDCOffsetFilter());
     attachFilter(new PreEmphasisFilter());
   }
