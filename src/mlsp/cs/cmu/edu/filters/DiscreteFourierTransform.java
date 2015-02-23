@@ -1,0 +1,43 @@
+package mlsp.cs.cmu.edu.filters;
+
+import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
+
+public class DiscreteFourierTransform implements FrameFilter {
+
+  FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
+
+  /**
+   * returns the FFT power spectrum
+   */
+  @Override
+  public Double[] doFilter(Double[] frame) {
+    Integer padding = 2;
+    while(padding < frame.length) {
+      padding = padding * 2;
+    }
+    double[] signal = new double[padding];
+    for (int i = 0; i < padding; i++) {
+      if(i < frame.length) {
+        signal[i] = frame[i];
+      } else {
+        signal[i] = 0;
+      }
+    }
+    Complex[] complex = fft.transform(signal, TransformType.FORWARD);
+    for (int i = 0; i < frame.length; i++) {
+      // compute magnitude spectrum
+      frame[i] =  complex[i].getReal() * complex[i].getReal() + 
+                  complex[i].getImaginary() * complex[i].getImaginary();
+    }
+    return frame;
+  }
+
+  @Override
+  public String getName() {
+    return "Discrete Fourier Transform";
+  }
+
+}

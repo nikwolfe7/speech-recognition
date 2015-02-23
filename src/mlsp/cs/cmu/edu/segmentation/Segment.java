@@ -31,7 +31,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
   
   private ArrayList<Short> flattenedWavFrames;
   
-  private LinkedBlockingQueue<Short[]> iterableWaveform;
+  private ArrayList<Short[]> iterableWaveform;
   
   private boolean startedIteration = false;
   
@@ -44,7 +44,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     this.startFrame = 0;
     this.endFrame = waveframes.size()-1; // defaults to size of array
     this.frameSize = waveframes.get(0).length;
-    this.iterableWaveform = new LinkedBlockingQueue<Short[]>();
+    this.iterableWaveform = new ArrayList<Short[]>();
   }
   
   // make a clone of this thing!
@@ -58,18 +58,20 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return null;
   }
   
-  private LinkedBlockingQueue<Short[]> buildIterableWaveform() throws InterruptedException {
+  private ArrayList<Short[]> buildIterableWaveform() {
     ArrayList<Short> wav = getProcessedWaveform();
-    LinkedBlockingQueue<Short[]> queue = new LinkedBlockingQueue<Short[]>();
+    ArrayList<Short[]> queue = new ArrayList<Short[]>();
     Integer samplesPerMillisecond = (int) audioFormat.getSampleRate() / 1000;
     Integer windowSize = AudioConstants.FRAMESIZE.getValue() * samplesPerMillisecond;
     Integer frameShift = AudioConstants.FRAMESHIFT.getValue() * samplesPerMillisecond;
-    for(int i = 0; i < (wav.size()-windowSize-frameShift); i += frameShift) {
-      Short[] frame = new Short[windowSize];
-      for(int j = i; j < frame.length; j++) {
-        frame[j-i] = wav.get(i);
+    for(int i = 0; i < (wav.size()-windowSize-1); i += frameShift) {
+      List<Short> frame = new ArrayList<Short>();
+      frame = wav.subList(i, (i+windowSize));
+      Short[] sFrame = new Short[windowSize];
+      for(int j = 0; j < frame.size(); j++) {
+        sFrame[j] = frame.get(j);
       }
-      queue.put(frame);
+      queue.add(sFrame);
     }
     return queue;
   }
@@ -89,26 +91,6 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return decibelWaveform.get(frameIndex);
   }
   
-  @Override
-  public boolean hasNext() {
-    return iterableWaveform.isEmpty();
-  }
-
-  @Override
-  public Short[] next() {
-    try {
-      if(!startedIteration) {
-        iterableWaveform = buildIterableWaveform();
-        startedIteration = true;
-      }
-      return iterableWaveform.take();
-    } catch (InterruptedException e) {
-      System.out.println("Unable to retrieve next frame!");
-      e.printStackTrace();
-    }
-    return null;
-  }
-  
   public ArrayList<Short> getWaveform() {
     return getWaveformSegmentSubset(waveform);
   }
@@ -116,8 +98,6 @@ public class Segment implements Iterator<Short[]>, Cloneable {
   public ArrayList<Short> getProcessedWaveform() {
     return getWaveformSegmentSubset(getFlattenedWavFrames());
   }
-  
- 
   
   private ArrayList<Short> getFlattenedWavFrames() {
     flattenedWavFrames = new ArrayList<Short>();
@@ -164,5 +144,23 @@ public class Segment implements Iterator<Short[]>, Cloneable {
   public Double getEndFrameTimestamp() {
     return getEndSample().doubleValue() / audioFormat.getSampleRate();
   }
-  
+
+  @Override
+  public boolean hasNext() {
+    if(!startedIteration) {
+      iterableWaveform = buildIterableWaveform();
+      startedIteration = true;
+    }
+    return !iterableWaveform.isEmpty();
+  }
+
+  @Override
+  public Short[] next() {
+    if(!startedIteration) {
+      iterableWaveform = buildIterableWaveform();
+      startedIteration = true;
+    }
+    return iterableWaveform.remove(0);
+  }
+
 }

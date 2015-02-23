@@ -1,4 +1,4 @@
-package mslp.cs.cmu.edu.wavutils;
+package mlsp.cs.cmu.edu.wavutils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +13,7 @@ public class LabelMaker {
 
   private String wavDir = "." + sep + "wav" + sep;
 
-  public void writeLabelFile(List<Segment> segments) {
+  public void writeLabelFile(Iterable<Segment> segments) {
     File file = new File(wavDir + "labels.txt");
     try {
       int count = 1;

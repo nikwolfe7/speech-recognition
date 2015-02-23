@@ -1,4 +1,4 @@
-package mslp.cs.cmu.edu.wavutils;
+package mlsp.cs.cmu.edu.wavutils;
 import java.io.File;
 import java.io.IOException;
 

@@ -5,19 +5,14 @@ public class PreEmphasisFilter implements FrameFilter {
   private Integer callCount = 0;
 
   private Integer frameDrops = 10;
-
   
-  /*
-  @Override
-  public Double[] doFilter(Double[] frame) {
-    return frame;
-  }
-  */
+  private Double alpha = 0.95;
+  
   @Override
   public Double[] doFilter(Double[] frame) {
     if (callCount++ >= frameDrops) {
       for (int i = 1; i < frame.length; i++) {
-        frame[i] = frame[i] - frame[i - 1];
+        frame[i] = frame[i] - alpha * frame[i - 1];
       }
     } else {
       for (int i = 0; i < frame.length; i++) {
@@ -26,6 +21,11 @@ public class PreEmphasisFilter implements FrameFilter {
       }
     }
     return frame;
+  }
+
+  @Override
+  public String getName() {
+    return "Pre-Emphasis Filter";
   }
 
 }

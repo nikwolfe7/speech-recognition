@@ -15,4 +15,9 @@ public class RemoveDCOffsetFilter implements FrameFilter {
     return frame;
   }
 
+  @Override
+  public String getName() {
+    return "DC Offset Filter";
+  }
+
 }

@@ -2,7 +2,8 @@ package mlsp.cs.cmu.edu.segmentation;
 
 import mlsp.cs.cmu.edu.audio.AudioFormatMono16BitPCM16kHz;
 import mlsp.cs.cmu.edu.audio.RecordContext;
-import mlsp.cs.cmu.edu.filters.PreEmphasisFilter;
+import mlsp.cs.cmu.edu.features.AudioFeatureExtractor;
+import mlsp.cs.cmu.edu.features.FeatureExtractor;
 import mlsp.cs.cmu.edu.filters.RemoveDCOffsetFilter;
 import mlsp.cs.cmu.edu.sampling.FrameSequence;
 
@@ -34,7 +35,7 @@ public class SimpleSegmenter extends Segmenter {
   public SimpleSegmenter(FrameSequence fs) {
     super(fs, new AudioFormatMono16BitPCM16kHz(), new EnergyBasedEndpointing());
     attachFilter(new RemoveDCOffsetFilter());
-    attachFilter(new PreEmphasisFilter());
+    // attachFilter(new PreEmphasisFilter());
   }
 
   private Integer getBackoff(Integer index) {
@@ -101,6 +102,12 @@ public class SimpleSegmenter extends Segmenter {
         RecordContext.stopAll();
       }
     }
+  }
+
+  @Override
+  protected void runFeatureExtraction() {
+    FeatureExtractor extractor = new AudioFeatureExtractor(this);
+    extractor.start();
   }
 
 }

@@ -1,10 +1,7 @@
 package mlsp.cs.cmu.edu.segmentation;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -13,8 +10,8 @@ import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.filters.Filterable;
 import mlsp.cs.cmu.edu.filters.FrameFilter;
 import mlsp.cs.cmu.edu.sampling.FrameSequence;
-import mslp.cs.cmu.edu.wavutils.LabelMaker;
-import mslp.cs.cmu.edu.wavutils.WAVWriter;
+import mlsp.cs.cmu.edu.wavutils.LabelMaker;
+import mlsp.cs.cmu.edu.wavutils.WAVWriter;
 
 /**
  * This class uses the energy waveform to allow different strategies to do endpointing
@@ -63,8 +60,8 @@ public abstract class Segmenter extends Thread implements Filterable {
     this.waveframes = new ArrayList<Double[]>();
     this.decibelWaveform = new ArrayList<Double>();
     this.filters = new ArrayList<FrameFilter>();
-    this.segments = new ArrayList<Segment>();
     this.wavWriter = new WAVWriter();
+    this.segments = new ArrayList<Segment>();
     this.segmentStrategy = strategy;
   }
 
@@ -114,6 +111,12 @@ public abstract class Segmenter extends Thread implements Filterable {
     wavWriter.writeWholeWav(entireWav.getAudioStream());
     writeAllToFile();
     writeLabelFile();
+    System.out.println("Done writing data to file!");
+    /**
+     *  last hook before thread terminates...
+     *  implemented by subclasses
+     */
+    runFeatureExtraction(); 
   }
 
   private void writeLabelFile() {
@@ -166,8 +169,9 @@ public abstract class Segmenter extends Thread implements Filterable {
       return new Segment(this.audioFormat, this.waveform, this.decibelWaveform, this.waveframes);
   }
 
-  public List<Segment> getSegments() {
-    return this.segments;
+  @SuppressWarnings("unchecked")
+  public ArrayList<Segment> getSegments() {
+    return (ArrayList<Segment>) this.segments.clone();
   }
 
   /**
@@ -178,5 +182,10 @@ public abstract class Segmenter extends Thread implements Filterable {
    * @param isSpeech
    */
   protected abstract void classifyAndSegmentFrame(Double energy, boolean isSpeech);
+  
+  /**
+   * Defines how to run feature extraction...
+   */
+  protected abstract void runFeatureExtraction();
 
 }
