@@ -49,7 +49,7 @@ public class Sampler extends Thread implements FrameSequence {
   }
 
   public Short getFrame() throws InterruptedException {
-    Short result = waveform.poll(3,TimeUnit.SECONDS); 
+    Short result = waveform.poll(1,TimeUnit.SECONDS); 
     if(result == null) {
       RecordContext.stopAll();
       return 0;
