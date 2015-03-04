@@ -4,6 +4,7 @@ import mlsp.cs.cmu.edu.filters.DiscreteFourierTransform;
 import mlsp.cs.cmu.edu.filters.HammingWindow;
 import mlsp.cs.cmu.edu.filters.DiscreteCosineTransform;
 import mlsp.cs.cmu.edu.filters.LogMelSpectrum;
+import mlsp.cs.cmu.edu.filters.MFCC;
 import mlsp.cs.cmu.edu.filters.MelSpectrum;
 import mlsp.cs.cmu.edu.filters.PreEmphasis;
 import mlsp.cs.cmu.edu.segmentation.Segment;
@@ -24,6 +25,7 @@ public class AudioFeatureExtractor extends FeatureExtractor {
     attachFilter(new MelSpectrum());
     attachFilter(new LogMelSpectrum());
     attachFilter(new DiscreteCosineTransform());
+    attachFilter(new MFCC());
   }
 
 }

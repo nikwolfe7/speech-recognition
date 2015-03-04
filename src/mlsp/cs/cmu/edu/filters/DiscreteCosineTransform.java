@@ -6,12 +6,12 @@ import org.apache.commons.math3.transform.TransformType;
 
 public class DiscreteCosineTransform implements FrameFilter {
 
-  private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.STANDARD_DCT_I);
+  private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
   
   @Override
   public double[] doFilter(double[] frame) {
     frame = getPowerOfTwoArrayPlusOne(frame);
-    frame = dct.transform(frame, TransformType.INVERSE);
+    frame = dct.transform(frame, TransformType.FORWARD);
     return frame;
   }
 
