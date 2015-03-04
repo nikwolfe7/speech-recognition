@@ -11,8 +11,6 @@ import mlsp.cs.cmu.edu.audio.AudioStrings;
 
 public class WAVWriter {
   
-  private int count = 1;
-  
   private final String sep = System.getProperty("file.separator");
   
   private AudioFileFormat.Type wavType = AudioFileFormat.Type.WAVE;
@@ -37,8 +35,8 @@ public class WAVWriter {
     }
   }
   
-  public void writeWavSegment(AudioInputStream audioInputStream) {
-    File wavFile = new File(wavDir + AudioStrings.SEGMENT.getValue() + "-" + count++ + wavExt);
+  public void writeWavSegment(AudioInputStream audioInputStream, String segmentName) {
+    File wavFile = new File(wavDir + segmentName + wavExt);
     writeWav(audioInputStream, wavFile);
     
   }

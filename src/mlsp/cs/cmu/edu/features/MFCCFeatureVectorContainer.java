@@ -2,41 +2,49 @@ package mlsp.cs.cmu.edu.features;
 
 import java.util.ArrayList;
 
+import mlsp.cs.cmu.edu.segmentation.Segment;
+
 public class MFCCFeatureVectorContainer {
+
+  private ArrayList<double[]> logMelSpectrum = new ArrayList<double[]>();
   
-  ArrayList<double[]> features = new ArrayList<double[]>();
-  ArrayList<double[]> melSpectrum = new ArrayList<double[]>();
-  ArrayList<double[]> logMelSpectrum = new ArrayList<double[]>();
-  ArrayList<double[]> cepstrum = new ArrayList<double[]>();
-  
-  public void addFeatureFrame(double[] frame){
-    this.features.add(frame);
+  private ArrayList<double[]> MFCCs = new ArrayList<double[]>();
+
+  private ArrayList<double[]> recoveredLogMelSpectrum = new ArrayList<double[]>();
+
+  private final Segment seg;
+
+  public MFCCFeatureVectorContainer(Segment seg) {
+    this.seg = seg;
   }
 
   // should only be called after all feature frames have been added
   public void expand() {
     // TODO Auto-generated method stub
   }
-  
+
   public void accept(FeatureVisitor visitor) {
     visitor.visit(this);
   }
-  
-  public void addMelSpectrumFeatureFrame(double[] frame) {
-    this.melSpectrum.add(frame);
-  }
-  
+
   public void addLogMelSpectrumFeatureFrame(double[] frame) {
     this.logMelSpectrum.add(frame);
   }
-  
-  public void addCepstralFeatureFrame(double[] frame) {
-    this.cepstrum.add(frame);
+
+  public void addMFCCFeatureFrame(double[] frame) {
+    this.MFCCs.add(frame);
   }
-  
+
+  public void addRecoveredLogMelSpectrumFeatureFrame(double[] frame) {
+    this.recoveredLogMelSpectrum.add(frame);
+  }
+
   public void printMatlabScripts() {
-    
+
   }
-  
+
+  public Segment getSeg() {
+    return seg;
+  }
 
 }

@@ -1,6 +1,7 @@
 package mlsp.cs.cmu.edu.filters;
 
 import mlsp.cs.cmu.edu.audio.AudioConstants;
+import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
 /**
  * Assumes 16kHz sample rate...
@@ -8,12 +9,12 @@ import mlsp.cs.cmu.edu.audio.AudioConstants;
  * @author nwolfe
  *
  */
-public class MelSpectrum implements FrameFilter {
+public class MelSpectrum extends FrameFilter {
   
   private TriangularFilter[] filterBank = null;
 
   @Override
-  public double[] doFilter(double[] frame) {
+  protected double[] doFilterImplementation(double[] frame) {
     // assumes we aren't changing the framesize throughout
     // the use of this object
     if(filterBank == null) {
@@ -102,6 +103,11 @@ public class MelSpectrum implements FrameFilter {
   @Override
   public String getName() {
     return "Mel Spectrum Filter Bank";
+  }
+
+  @Override
+  public void visit(MFCCFeatureVectorContainer container) {
+    // do nothing...
   }
 
 }

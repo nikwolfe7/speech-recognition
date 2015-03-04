@@ -26,6 +26,7 @@ public class AudioFeatureExtractor extends FeatureExtractor {
     attachFilter(new LogMelSpectrum());
     attachFilter(new DiscreteCosineTransform());
     attachFilter(new MFCC());
+    attachFilter(new InverseDiscreteCosineTransform());
   }
 
 }

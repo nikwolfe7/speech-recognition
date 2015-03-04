@@ -3,10 +3,10 @@ package mlsp.cs.cmu.edu.filters;
 import mlsp.cs.cmu.edu.audio.AudioConstants;
 import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
-public class MFCC implements FrameFilter {
+public class MFCC extends FrameFilter {
 
   @Override
-  public double[] doFilter(double[] frame) {
+  protected double[] doFilterImplementation(double[] frame) {
     // Grab top 12
     double[] MFCC = new double[AudioConstants.MFCC_SIZE.getValue()];
     System.arraycopy(frame, 0, MFCC, 0, MFCC.length);
@@ -20,7 +20,7 @@ public class MFCC implements FrameFilter {
 
   @Override
   public void visit(MFCCFeatureVectorContainer container) {
-    // do nothing
+    container.addMFCCFeatureFrame(getLastProcessedFrame());
   }
 
 }

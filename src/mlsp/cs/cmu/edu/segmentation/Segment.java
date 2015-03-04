@@ -15,6 +15,8 @@ import mlsp.cs.cmu.edu.audio.AudioConstants;
 /* Iterator behavior is for feature extraction. Yields frames of 25 ms each*/
 public class Segment implements Iterator<short[]>, Cloneable {
   
+  private final String segmentName;
+  
   private AudioFormat audioFormat;
 
   private ArrayList<Short> waveform;
@@ -35,8 +37,9 @@ public class Segment implements Iterator<short[]>, Cloneable {
   
   private boolean startedIteration = false;
   
-  public Segment(AudioFormat audioFormat, ArrayList<Short> waveform,
+  public Segment(String segmentName, AudioFormat audioFormat, ArrayList<Short> waveform,
           ArrayList<Double> decibelWaveform, ArrayList<double[]> waveframes) {
+    this.segmentName = segmentName;
     this.audioFormat = audioFormat;
     this.waveform = waveform;
     this.decibelWaveform = decibelWaveform;
@@ -161,6 +164,10 @@ public class Segment implements Iterator<short[]>, Cloneable {
       startedIteration = true;
     }
     return iterableWaveform.remove(0);
+  }
+
+  public String getSegmentName() {
+    return segmentName;
   }
 
 }

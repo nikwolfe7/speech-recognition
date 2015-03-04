@@ -6,6 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.sound.sampled.AudioFormat;
 
 import mlsp.cs.cmu.edu.audio.AudioFormatFactory;
+import mlsp.cs.cmu.edu.audio.AudioStrings;
 import mlsp.cs.cmu.edu.audio.RecordContext;
 import mlsp.cs.cmu.edu.filters.Filterable;
 import mlsp.cs.cmu.edu.filters.FrameFilter;
@@ -21,6 +22,10 @@ import mlsp.cs.cmu.edu.wavutils.WAVWriter;
  */
 public abstract class Segmenter extends Thread implements Filterable {
 
+  private static Integer classSegID = 0;
+  
+  private Integer segID = ++classSegID;
+  
   private FrameSequence frameSequence;
   
   private WAVWriter wavWriter;
@@ -126,7 +131,7 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   private void writeAllToFile() {
     for(Segment s : segments) {
-      wavWriter.writeWavSegment(s.getAudioStream());
+      wavWriter.writeWavSegment(s.getAudioStream(), s.getSegmentName());
     }
   }
 
@@ -166,7 +171,11 @@ public abstract class Segmenter extends Thread implements Filterable {
   }
 
   private Segment getNewSegment() {
-      return new Segment(this.audioFormat, this.waveform, this.decibelWaveform, this.waveframes);
+      return new Segment(AudioStrings.SEGMENT.getValue() + "-" + segID, 
+              this.audioFormat, 
+              this.waveform, 
+              this.decibelWaveform, 
+              this.waveframes);
   }
 
   @SuppressWarnings("unchecked")

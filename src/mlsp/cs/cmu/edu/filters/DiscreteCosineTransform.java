@@ -1,15 +1,17 @@
 package mlsp.cs.cmu.edu.filters;
 
+import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
+
 import org.apache.commons.math3.transform.DctNormalization;
 import org.apache.commons.math3.transform.FastCosineTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
-public class DiscreteCosineTransform implements FrameFilter {
+public class DiscreteCosineTransform extends FrameFilter {
 
   private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
   
   @Override
-  public double[] doFilter(double[] frame) {
+  protected double[] doFilterImplementation(double[] frame) {
     frame = getPowerOfTwoArrayPlusOne(frame);
     frame = dct.transform(frame, TransformType.FORWARD);
     return frame;
@@ -27,7 +29,12 @@ public class DiscreteCosineTransform implements FrameFilter {
   
   @Override
   public String getName() {
-    return "Inverse Discrete Fourier Transform";
+    return "Discrete Cosine Transform";
+  }
+
+  @Override
+  public void visit(MFCCFeatureVectorContainer container) {
+    // do nothing
   }
 
 }

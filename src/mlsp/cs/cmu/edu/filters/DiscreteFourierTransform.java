@@ -1,11 +1,13 @@
 package mlsp.cs.cmu.edu.filters;
 
+import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
+
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
-public class DiscreteFourierTransform implements FrameFilter {
+public class DiscreteFourierTransform extends FrameFilter {
 
   FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
 
@@ -13,7 +15,7 @@ public class DiscreteFourierTransform implements FrameFilter {
    * returns the FFT power spectrum
    */
   @Override
-  public double[] doFilter(double[] frame) {
+  protected double[] doFilterImplementation(double[] frame) {
     double[] signal = getPowerOfTwoArray(frame);
     System.arraycopy(frame, 0, signal, 0, frame.length);
     Complex[] complex = fft.transform(signal, TransformType.FORWARD);
@@ -39,6 +41,11 @@ public class DiscreteFourierTransform implements FrameFilter {
   @Override
   public String getName() {
     return "Discrete Fourier Transform";
+  }
+
+  @Override
+  public void visit(MFCCFeatureVectorContainer container) {
+    // do nothing...
   }
 
 }

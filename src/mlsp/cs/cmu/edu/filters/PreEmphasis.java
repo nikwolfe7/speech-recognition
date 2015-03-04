@@ -1,9 +1,9 @@
 package mlsp.cs.cmu.edu.filters;
 
-public class PreEmphasis implements FrameFilter {
+import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
-  
-  
+public class PreEmphasis extends FrameFilter {
+
   private int callCount = 0;
 
   private int frameDrops = 10;
@@ -11,7 +11,7 @@ public class PreEmphasis implements FrameFilter {
   private double alpha = 0.95;
   
   @Override
-  public double[] doFilter(double[] frame) {
+  protected double[] doFilterImplementation(double[] frame) {
     if (callCount++ >= frameDrops) {
       for (int i = 1; i < frame.length; i++) {
         frame[i] = frame[i] - alpha * frame[i - 1];
@@ -28,6 +28,11 @@ public class PreEmphasis implements FrameFilter {
   @Override
   public String getName() {
     return "Pre-Emphasis";
+  }
+
+  @Override
+  public void visit(MFCCFeatureVectorContainer container) {
+    // do nothing...
   }
 
 }
