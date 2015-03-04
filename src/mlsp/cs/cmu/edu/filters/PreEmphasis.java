@@ -8,10 +8,10 @@ public class PreEmphasis implements FrameFilter {
 
   private Integer frameDrops = 10;
   
-  private Double alpha = 0.95;
+  private double alpha = 0.95;
   
   @Override
-  public Double[] doFilter(Double[] frame) {
+  public double[] doFilter(double[] frame) {
     if (callCount++ >= frameDrops) {
       for (int i = 1; i < frame.length; i++) {
         frame[i] = frame[i] - alpha * frame[i - 1];

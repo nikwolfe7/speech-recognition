@@ -3,9 +3,9 @@ package mlsp.cs.cmu.edu.filters;
 public class HammingWindow implements FrameFilter {
 
   @Override
-  public Double[] doFilter(Double[] frame) {
+  public double[] doFilter(double[] frame) {
     for(int n = 0; n < frame.length; n++) {
-      Double window = 0.54 - 0.46*Math.cos((2 * Math.PI * n)/frame.length); 
+      double window = 0.54 - 0.46*Math.cos((2 * Math.PI * n)/frame.length); 
       frame[n] = frame[n] * window;
     }
     return frame;

@@ -2,7 +2,7 @@ package mlsp.cs.cmu.edu.features;
 
 import mlsp.cs.cmu.edu.filters.DiscreteFourierTransform;
 import mlsp.cs.cmu.edu.filters.HammingWindow;
-import mlsp.cs.cmu.edu.filters.InverseDiscreteFourierTransform;
+import mlsp.cs.cmu.edu.filters.DiscreteCosineTransform;
 import mlsp.cs.cmu.edu.filters.LogMelSpectrum;
 import mlsp.cs.cmu.edu.filters.MelSpectrum;
 import mlsp.cs.cmu.edu.filters.PreEmphasis;
@@ -23,7 +23,7 @@ public class AudioFeatureExtractor extends FeatureExtractor {
     attachFilter(new DiscreteFourierTransform());
     attachFilter(new MelSpectrum());
     attachFilter(new LogMelSpectrum());
-    attachFilter(new InverseDiscreteFourierTransform());
+    attachFilter(new DiscreteCosineTransform());
   }
 
 }

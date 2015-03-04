@@ -49,7 +49,7 @@ public class SimpleSegmenter extends Segmenter {
 
   @Override
   // 1 frame is 10ms, so we want
-  protected void classifyAndSegmentFrame(Double energy, boolean isSpeech) {
+  protected void classifyAndSegmentFrame(double energy, boolean isSpeech) {
     if (energy > 0) {
 
       if (isSpeech) {

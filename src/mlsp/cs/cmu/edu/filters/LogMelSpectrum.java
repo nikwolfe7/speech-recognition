@@ -3,9 +3,11 @@ package mlsp.cs.cmu.edu.filters;
 public class LogMelSpectrum implements FrameFilter {
 
   @Override
-  public Double[] doFilter(Double[] frame) {
-    // TODO Auto-generated method stub
-    return null;
+  public double[] doFilter(double[] frame) {
+    for(int i = 0; i < frame.length; i++) {
+      frame[i] = Math.log(frame[i]);
+    }
+    return frame;
   }
 
   @Override

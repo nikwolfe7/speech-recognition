@@ -41,7 +41,7 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   protected ArrayList<Double> decibelWaveform;
 
-  protected ArrayList<Double[]> waveframes;
+  protected ArrayList<double[]> waveframes;
 
   protected ArrayList<FrameFilter> filters;
 
@@ -57,7 +57,7 @@ public abstract class Segmenter extends Thread implements Filterable {
     this.sampleIndex = 0;
     this.frameIndex = 0;
     this.waveform = new ArrayList<Short>();
-    this.waveframes = new ArrayList<Double[]>();
+    this.waveframes = new ArrayList<double[]>();
     this.decibelWaveform = new ArrayList<Double>();
     this.filters = new ArrayList<FrameFilter>();
     this.wavWriter = new WAVWriter();
@@ -79,7 +79,7 @@ public abstract class Segmenter extends Thread implements Filterable {
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       try {
-        Double[] frame = new Double[frameSize];
+        double[] frame = new double[frameSize];
         for (int i = 0; i < frameSize; i++) {
           Short val = frameSequence.getFrame();
           waveform.add(val);
@@ -88,8 +88,8 @@ public abstract class Segmenter extends Thread implements Filterable {
         }
         /* get energy, do classification */
         frameIndex++;
-        Double energy = getFrameDecibelLevel(frame);
-        decibelWaveform.add(energy);
+        double energy = getFrameDecibelLevel(frame);
+        decibelWaveform.add(new Double(energy));
         classifyAndSegmentFrame(energy, segmentStrategy.isSpeech(energy));
 
         /* run the attached filters */
@@ -130,7 +130,7 @@ public abstract class Segmenter extends Thread implements Filterable {
     }
   }
 
-  private void printEnergies(Double energy) {
+  private void printEnergies(double energy) {
     StringBuilder sb = new StringBuilder(frameIndex + ": " + Math.round(energy) + "  \t| ");
     while (energy > 25) { // hack for display purposes...
       energy += -1;
@@ -143,9 +143,9 @@ public abstract class Segmenter extends Thread implements Filterable {
     this.interrupt();
   }
 
-  protected Double getFrameDecibelLevel(Double[] frame) {
-    Double sigma = 0.0;
-    for (Double s : frame) {
+  protected double getFrameDecibelLevel(double[] frame) {
+    double sigma = 0.0;
+    for (double s : frame) {
       sigma += (s * s);
     }
     return 10 * Math.log10(sigma);
@@ -181,7 +181,7 @@ public abstract class Segmenter extends Thread implements Filterable {
    * @param energy
    * @param isSpeech
    */
-  protected abstract void classifyAndSegmentFrame(Double energy, boolean isSpeech);
+  protected abstract void classifyAndSegmentFrame(double energy, boolean isSpeech);
   
   /**
    * Defines how to run feature extraction...

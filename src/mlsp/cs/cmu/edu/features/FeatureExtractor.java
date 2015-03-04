@@ -13,12 +13,12 @@ public abstract class FeatureExtractor extends Thread implements Filterable {
 
   private ArrayList<Segment> segments;
   
-  private ArrayList<Double[]> processedFrames;
+  private ArrayList<double[]> processedFrames;
 
   public FeatureExtractor() {
     this.segments = new ArrayList<Segment>();
     this.featureExtractors = new ArrayList<FrameFilter>();
-    this.processedFrames = new ArrayList<Double[]>();
+    this.processedFrames = new ArrayList<double[]>();
   }
 
   public void registerSegment(Segment seg) {
@@ -43,7 +43,7 @@ public abstract class FeatureExtractor extends Thread implements Filterable {
       for (Segment seg : segments) {
         while (seg.hasNext()) {
           Short[] frame = seg.next();
-          Double[] dFrame = new Double[frame.length];
+          double[] dFrame = new double[frame.length];
           for (int i = 0; i < frame.length; i++) {
             dFrame[i] = frame[i].doubleValue();
           }

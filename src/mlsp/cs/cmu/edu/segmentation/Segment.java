@@ -21,7 +21,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
 
   private ArrayList<Double> decibelWaveform;
 
-  private ArrayList<Double[]> waveframes;
+  private ArrayList<double[]> waveframes;
   
   private Integer startFrame = 0;
   
@@ -36,7 +36,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
   private boolean startedIteration = false;
   
   public Segment(AudioFormat audioFormat, ArrayList<Short> waveform,
-          ArrayList<Double> decibelWaveform, ArrayList<Double[]> waveframes) {
+          ArrayList<Double> decibelWaveform, ArrayList<double[]> waveframes) {
     this.audioFormat = audioFormat;
     this.waveform = waveform;
     this.decibelWaveform = decibelWaveform;
@@ -87,7 +87,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return new AudioInputStream(buff, audioFormat, (wav.size()*2));
   }
 
-  public Double getFrameEnergy(Integer frameIndex) {
+  public double getFrameEnergy(Integer frameIndex) {
     return decibelWaveform.get(frameIndex);
   }
   
@@ -101,7 +101,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
   
   private ArrayList<Short> getFlattenedWavFrames() {
     flattenedWavFrames = new ArrayList<Short>();
-    for(Double[] frame : waveframes) {
+    for(double[] frame : waveframes) {
       for(Double sample : frame) {
         flattenedWavFrames.add(sample.shortValue());
       }
@@ -137,11 +137,11 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return new ArrayList<Short>(returnList);
   }
 
-  public Double getStartFrameTimestamp() {
+  public double getStartFrameTimestamp() {
     return getStartSample().doubleValue() / audioFormat.getSampleRate();
   }
 
-  public Double getEndFrameTimestamp() {
+  public double getEndFrameTimestamp() {
     return getEndSample().doubleValue() / audioFormat.getSampleRate();
   }
 

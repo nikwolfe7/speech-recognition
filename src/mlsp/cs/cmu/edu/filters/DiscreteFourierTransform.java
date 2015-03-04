@@ -13,21 +13,15 @@ public class DiscreteFourierTransform implements FrameFilter {
    * returns the FFT power spectrum
    */
   @Override
-  public Double[] doFilter(Double[] frame) {
+  public double[] doFilter(double[] frame) {
     Integer padding = 2;
     while (padding < frame.length) {
       padding = padding * 2;
     }
     double[] signal = new double[padding];
-    for (int i = 0; i < padding; i++) {
-      if (i < frame.length) {
-        signal[i] = frame[i];
-      } else {
-        signal[i] = 0;
-      }
-    }
+    System.arraycopy(frame, 0, signal, 0, frame.length);
     Complex[] complex = fft.transform(signal, TransformType.FORWARD);
-    frame = new Double[complex.length/2+1];
+    frame = new double[complex.length/2+1];
     for (int i = 0; i < frame.length; i++) {
       // compute power spectrum
       frame[i] = complex[i].getReal() * complex[i].getReal() + complex[i].getImaginary()

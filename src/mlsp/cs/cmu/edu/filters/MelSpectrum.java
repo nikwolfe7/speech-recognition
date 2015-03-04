@@ -13,7 +13,7 @@ public class MelSpectrum implements FrameFilter {
   private TriangularFilter[] filterBank = null;
 
   @Override
-  public Double[] doFilter(Double[] frame) {
+  public double[] doFilter(double[] frame) {
     // assumes we aren't changing the framesize throughout
     // the use of this object
     if(filterBank == null) {
@@ -23,19 +23,19 @@ public class MelSpectrum implements FrameFilter {
       Integer min = AudioConstants.MELFREQUENCY_MIN_16KHZ.getValue();
       this.filterBank = getFilterBank(max, min, frame);
     }
-    Double[] melSpectrum = new Double[filterBank.length];
+    double[] melSpectrum = new double[filterBank.length];
     for(int i = 0; i < melSpectrum.length; i++) {
       melSpectrum[i] = filterBank[i].getEnergy(frame);
     }
     return melSpectrum;
   }
   
-  private TriangularFilter[] getFilterBank(Integer maxFrequency, Integer minFrequency, Double[] frame) {
-    Double maxMel = MelConverter.getMelFrequency(maxFrequency.doubleValue());
-    Double minMel = MelConverter.getMelFrequency(minFrequency.doubleValue());
-    Double melScale = maxMel - minMel;
-    Double[] melFrequencies = new Double[AudioConstants.MELFREQUENCY_BINS.getValue() + 2];
-    Double melGradient = melScale / (AudioConstants.MELFREQUENCY_BINS.getValue() + 1);
+  private TriangularFilter[] getFilterBank(Integer maxFrequency, Integer minFrequency, double[] frame) {
+    double maxMel = MelConverter.getMelFrequency(maxFrequency.doubleValue());
+    double minMel = MelConverter.getMelFrequency(minFrequency.doubleValue());
+    double melScale = maxMel - minMel;
+    double[] melFrequencies = new double[AudioConstants.MELFREQUENCY_BINS.getValue() + 2];
+    double melGradient = melScale / (AudioConstants.MELFREQUENCY_BINS.getValue() + 1);
     for (int i = 0; i < melFrequencies.length; i++) {
       melFrequencies[i] = (i) * melGradient + minMel;
     }
@@ -52,9 +52,9 @@ public class MelSpectrum implements FrameFilter {
     private Integer startIndex;
     private Integer peakIndex;
     private Integer endIndex;
-    private Double gradient;
+    private double gradient;
 
-    public TriangularFilter(Double melStart, Double melPeak, Double melEnd, Double[] frame) {
+    public TriangularFilter(double melStart, double melPeak, double melEnd, double[] frame) {
       this.sampleRate = AudioConstants.KHZ16.getValue();
       this.gradient = (sampleRate/2.0)/frame.length;
       // convert to FFT bins...
@@ -63,9 +63,9 @@ public class MelSpectrum implements FrameFilter {
       this.endIndex = getFFTBinFromFrequency(MelConverter.getFrequencyFromMel(melEnd));
     }
     
-    private Integer getFFTBinFromFrequency(Double frequency) {
+    private Integer getFFTBinFromFrequency(double frequency) {
       Integer testIndex = 0;
-      Double testFrequency = 0.0;
+      double testFrequency = 0.0;
       while(Math.abs(testFrequency - frequency) >= gradient/2) {
         testIndex++;
         testFrequency = testIndex * gradient;
@@ -73,25 +73,25 @@ public class MelSpectrum implements FrameFilter {
       return testIndex;
     }
     
-    private Double getFreqFromIndex(Integer index) {
-      Double frequency = index * gradient;
+    private double getFreqFromIndex(Integer index) {
+      double frequency = index * gradient;
       return frequency;
     }
     
     // assuming a height of 1 for all triangles...
-    public Double getEnergy(Double[] frame) {
-      Double triangleHeight = 2/(getFreqFromIndex(endIndex) - getFreqFromIndex(startIndex));
-      Double slope1 = triangleHeight/(getFreqFromIndex(peakIndex) - getFreqFromIndex(startIndex));
-      Double slope2 = triangleHeight/(getFreqFromIndex(peakIndex) - getFreqFromIndex(endIndex));
-      Double integral = 0.0;
+    public double getEnergy(double[] frame) {
+      double triangleHeight = 2/(getFreqFromIndex(endIndex) - getFreqFromIndex(startIndex));
+      double slope1 = triangleHeight/(getFreqFromIndex(peakIndex) - getFreqFromIndex(startIndex));
+      double slope2 = triangleHeight/(getFreqFromIndex(peakIndex) - getFreqFromIndex(endIndex));
+      double integral = 0.0;
       for(int i = startIndex; i <= peakIndex; i++) {
-        Double height = (getFreqFromIndex(i) - getFreqFromIndex(startIndex)) * slope1;
-        Double energy = (height * frame[i]);
+        double height = (getFreqFromIndex(i) - getFreqFromIndex(startIndex)) * slope1;
+        double energy = (height * frame[i]);
         integral += energy;
       }
       for(int i = peakIndex + 1; i <= endIndex; i++) {
-        Double height = (getFreqFromIndex(i) - getFreqFromIndex(endIndex)) * slope2;
-        Double energy = (height * frame[i]);
+        double height = (getFreqFromIndex(i) - getFreqFromIndex(endIndex)) * slope2;
+        double energy = (height * frame[i]);
         integral += energy;
       }
       return integral;
