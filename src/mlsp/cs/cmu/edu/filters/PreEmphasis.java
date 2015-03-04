@@ -4,9 +4,9 @@ public class PreEmphasis implements FrameFilter {
 
   
   
-  private Integer callCount = 0;
+  private int callCount = 0;
 
-  private Integer frameDrops = 10;
+  private int frameDrops = 10;
   
   private double alpha = 0.95;
   

@@ -3,7 +3,7 @@ package mlsp.cs.cmu.edu.segmentation;
 /* Tuned for the ATR Usb microphone ... */
 public class DoubleThresholdEndpointing implements SegmentStrategy {
 
-  private Integer frameCount = 0;
+  private int frameCount = 0;
 
   private Double totalEnergy = 0.0;
 

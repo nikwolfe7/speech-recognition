@@ -18,19 +18,19 @@ public class SimpleSegmenter extends Segmenter {
 
   private boolean SOUND_STARTED = false;
 
-  private Integer SILENCE_STRING_CUTOFF = 300; // assumes 10ms frame
+  private int SILENCE_STRING_CUTOFF = 300; // assumes 10ms frame
 
-  private Integer SPEECH_SEGMENT_CUTOFF = 50;
+  private int SPEECH_SEGMENT_CUTOFF = 50;
 
-  private Integer frameBackoff = 25;
+  private int frameBackoff = 25;
 
-  private Integer speechStart = 0;
+  private int speechStart = 0;
 
-  private Integer speechEnd = 0;
+  private int speechEnd = 0;
 
-  private Integer speechDuration = 0;
+  private int speechDuration = 0;
 
-  private Integer silenceCount = 0;
+  private int silenceCount = 0;
 
   public SimpleSegmenter(FrameSequence fs) {
     super(fs, new AudioFormatMono16BitPCM16kHz(), new EnergyBasedEndpointing());
@@ -38,8 +38,8 @@ public class SimpleSegmenter extends Segmenter {
     // attachFilter(new PreEmphasis());
   }
 
-  private Integer getBackoff(Integer index) {
-    Integer backoff = index - frameBackoff;
+  private int getBackoff(int index) {
+    int backoff = index - frameBackoff;
     if (backoff > 0) {
       return backoff;
     } else {
@@ -87,7 +87,7 @@ public class SimpleSegmenter extends Segmenter {
           }
 
           if (speechEnd >= SPEECH_SEGMENT_CUTOFF) {
-            Integer endMarker = getFrameIndex();
+            int endMarker = getFrameIndex();
             System.out.println("\n[SEGMENTER] >>>>>>>>>>>>>>>> Speech ENDED at: " + endMarker
                     + " and started at " + speechStart + " with " + speechDuration
                     + " speech frames\n");

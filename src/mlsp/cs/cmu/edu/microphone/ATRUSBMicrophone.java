@@ -27,7 +27,7 @@ public class ATRUSBMicrophone extends Microphone {
       public void run() {
         System.out.println("Looking for " + preferredMicrophone + "...");
 
-        Integer count = 0;
+        int count = 0;
         while (!Thread.currentThread().isInterrupted()) {
           for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
             if (mixerInfo.getDescription().toLowerCase()

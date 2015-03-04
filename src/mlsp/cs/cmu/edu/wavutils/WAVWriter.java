@@ -11,7 +11,7 @@ import mlsp.cs.cmu.edu.audio.AudioStrings;
 
 public class WAVWriter {
   
-  private Integer count = 1;
+  private int count = 1;
   
   private final String sep = System.getProperty("file.separator");
   

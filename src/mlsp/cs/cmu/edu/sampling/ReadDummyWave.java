@@ -17,10 +17,10 @@ public class ReadDummyWave implements Sampleable {
 
   private final String sep = System.getProperty("file.separator");
   private String filename = "." + sep + "testwav" + sep + "omgwav.wav";
-  private Integer bufferSize = AudioConstants.KHZ16BUFFER.getValue();
+  private int bufferSize = AudioConstants.KHZ16BUFFER.getValue();
   private byte[] buffer = new byte[bufferSize];
   private BufferedInputStream stream = null;
-  private Integer offset = 0;
+  private int offset = 0;
   private AudioFormat format = new AudioFormatMono16BitPCM16kHz().getAudioFormat();
   private File wavFile = new File(filename);
 

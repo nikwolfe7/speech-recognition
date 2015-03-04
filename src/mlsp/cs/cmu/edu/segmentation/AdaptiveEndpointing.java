@@ -2,7 +2,7 @@ package mlsp.cs.cmu.edu.segmentation;
 
 public class AdaptiveEndpointing implements SegmentStrategy {
 
-  private Integer frameCount = 0;
+  private int frameCount = 0;
 
   private Double totalEnergy = 0.0;
 

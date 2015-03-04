@@ -25,13 +25,13 @@ public abstract class Segmenter extends Thread implements Filterable {
   
   private WAVWriter wavWriter;
 
-  protected final Integer sampleRate;
+  protected final int sampleRate;
 
-  protected final Integer frameSize;
+  protected final int frameSize;
 
-  private Integer sampleIndex;
+  private int sampleIndex;
 
-  private Integer frameIndex;
+  private int frameIndex;
 
   protected AudioFormat audioFormat;
 
@@ -81,9 +81,9 @@ public abstract class Segmenter extends Thread implements Filterable {
       try {
         double[] frame = new double[frameSize];
         for (int i = 0; i < frameSize; i++) {
-          Short val = frameSequence.getFrame();
+          short val = frameSequence.getFrame();
           waveform.add(val);
-          frame[i] = val.doubleValue();
+          frame[i] = (double) val;
           sampleIndex++;
         }
         /* get energy, do classification */
@@ -151,15 +151,15 @@ public abstract class Segmenter extends Thread implements Filterable {
     return 10 * Math.log10(sigma);
   }
 
-  protected Integer getSampleIndex() {
+  protected int getSampleIndex() {
     return sampleIndex;
   }
 
-  protected Integer getFrameIndex() {
+  protected int getFrameIndex() {
     return frameIndex;
   }
 
-  protected void registerSegment(Integer startFrame, Integer endFrame) {
+  protected void registerSegment(int startFrame, int endFrame) {
     Segment seg = getNewSegment();
     seg.setEndpoints(startFrame, endFrame);
     segments.add(seg);

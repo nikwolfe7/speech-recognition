@@ -32,7 +32,7 @@ public class Recorder extends Thread implements Sampleable {
 
   private byte[] audioBuffer;
 
-  public Recorder(Microphone mic, Integer buffersize) {
+  public Recorder(Microphone mic, int buffersize) {
     RecordContext.registerRecorder(this);
     this.audioOutput = new ByteArrayOutputStream();
     this.targetDataLine = mic.getOpenMicrophone();
@@ -65,7 +65,7 @@ public class Recorder extends Thread implements Sampleable {
     System.out.println("Recording started!");
     while(!stopCapture && !Thread.currentThread().isInterrupted()) {
       synchronized (audioOutput) {
-        Integer count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
+        int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
         if (count > 0) {
           audioOutput.write(audioBuffer, 0, count);
           audioOutput.notify();

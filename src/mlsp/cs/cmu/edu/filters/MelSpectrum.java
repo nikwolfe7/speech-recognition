@@ -19,8 +19,8 @@ public class MelSpectrum implements FrameFilter {
     if(filterBank == null) {
       // can be changed for different sample rates... but Triangular Filter class will 
       // have to change as well. 
-      Integer max = AudioConstants.MELFREQUENCY_MAX_16KHZ.getValue();
-      Integer min = AudioConstants.MELFREQUENCY_MIN_16KHZ.getValue();
+      int max = AudioConstants.MELFREQUENCY_MAX_16KHZ.getValue();
+      int min = AudioConstants.MELFREQUENCY_MIN_16KHZ.getValue();
       this.filterBank = getFilterBank(max, min, frame);
     }
     double[] melSpectrum = new double[filterBank.length];
@@ -30,9 +30,9 @@ public class MelSpectrum implements FrameFilter {
     return melSpectrum;
   }
   
-  private TriangularFilter[] getFilterBank(Integer maxFrequency, Integer minFrequency, double[] frame) {
-    double maxMel = MelConverter.getMelFrequency(maxFrequency.doubleValue());
-    double minMel = MelConverter.getMelFrequency(minFrequency.doubleValue());
+  private TriangularFilter[] getFilterBank(int maxFrequency, int minFrequency, double[] frame) {
+    double maxMel = MelConverter.getMelFrequency((double) maxFrequency);
+    double minMel = MelConverter.getMelFrequency((double) minFrequency);
     double melScale = maxMel - minMel;
     double[] melFrequencies = new double[AudioConstants.MELFREQUENCY_BINS.getValue() + 2];
     double melGradient = melScale / (AudioConstants.MELFREQUENCY_BINS.getValue() + 1);
@@ -48,10 +48,10 @@ public class MelSpectrum implements FrameFilter {
 
   // assumes 16 khz sample rate
   private class TriangularFilter {
-    private Integer sampleRate;
-    private Integer startIndex;
-    private Integer peakIndex;
-    private Integer endIndex;
+    private int sampleRate;
+    private int startIndex;
+    private int peakIndex;
+    private int endIndex;
     private double gradient;
 
     public TriangularFilter(double melStart, double melPeak, double melEnd, double[] frame) {
@@ -63,8 +63,8 @@ public class MelSpectrum implements FrameFilter {
       this.endIndex = getFFTBinFromFrequency(MelConverter.getFrequencyFromMel(melEnd));
     }
     
-    private Integer getFFTBinFromFrequency(double frequency) {
-      Integer testIndex = 0;
+    private int getFFTBinFromFrequency(double frequency) {
+      int testIndex = 0;
       double testFrequency = 0.0;
       while(Math.abs(testFrequency - frequency) >= gradient/2) {
         testIndex++;
@@ -73,7 +73,7 @@ public class MelSpectrum implements FrameFilter {
       return testIndex;
     }
     
-    private double getFreqFromIndex(Integer index) {
+    private double getFreqFromIndex(int index) {
       double frequency = index * gradient;
       return frequency;
     }

@@ -14,11 +14,7 @@ public class DiscreteFourierTransform implements FrameFilter {
    */
   @Override
   public double[] doFilter(double[] frame) {
-    Integer padding = 2;
-    while (padding < frame.length) {
-      padding = padding * 2;
-    }
-    double[] signal = new double[padding];
+    double[] signal = getPowerOfTwoArray(frame);
     System.arraycopy(frame, 0, signal, 0, frame.length);
     Complex[] complex = fft.transform(signal, TransformType.FORWARD);
     frame = new double[complex.length/2+1];
@@ -28,6 +24,16 @@ public class DiscreteFourierTransform implements FrameFilter {
               * complex[i].getImaginary();
     }
     return frame;
+  }
+  
+  private double[] getPowerOfTwoArray(double[] frame) {
+    int padding = 2;
+    while (padding < frame.length) {
+      padding = padding * 2;
+    }
+    double[] signal = new double[padding];
+    System.arraycopy(frame, 0, signal, 0, frame.length);
+    return signal;
   }
 
   @Override

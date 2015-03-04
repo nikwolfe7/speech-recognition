@@ -42,10 +42,10 @@ public abstract class FeatureExtractor extends Thread implements Filterable {
     while (!Thread.currentThread().isInterrupted()) {
       for (Segment seg : segments) {
         while (seg.hasNext()) {
-          Short[] frame = seg.next();
+          short[] frame = seg.next();
           double[] dFrame = new double[frame.length];
           for (int i = 0; i < frame.length; i++) {
-            dFrame[i] = frame[i].doubleValue();
+            dFrame[i] = (double) frame[i];
           }
           for (FrameFilter filter : featureExtractors) {
             System.out.println("Running " + filter.getName() + "...");

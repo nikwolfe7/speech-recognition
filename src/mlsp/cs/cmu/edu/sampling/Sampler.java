@@ -36,7 +36,7 @@ public class Sampler extends Thread implements FrameSequence {
         AudioInputStream audioInputStream = recorder.sample();
         if (audioInputStream != null) {
           while (audioInputStream.read(twoBytes) > 0) {
-            Short frame = getShort(twoBytes);
+            short frame = getshort(twoBytes);
             // System.out.println(frame);
             waveform.put(frame);
           }
@@ -48,7 +48,7 @@ public class Sampler extends Thread implements FrameSequence {
     }
   }
 
-  public Short getFrame() throws InterruptedException {
+  public short getFrame() throws InterruptedException {
     Short result = waveform.poll(1,TimeUnit.SECONDS); 
     if(result == null) {
       RecordContext.stopAll();
@@ -63,7 +63,7 @@ public class Sampler extends Thread implements FrameSequence {
   }
   
 
-  private Short getShort(byte[] twoBytes) {
+  private short getshort(byte[] twoBytes) {
     ByteBuffer byteBuff = ByteBuffer.wrap(twoBytes);
     byteBuff.order(java.nio.ByteOrder.nativeOrder());
     return byteBuff.getShort();

@@ -13,7 +13,7 @@ import javax.sound.sampled.AudioInputStream;
 import mlsp.cs.cmu.edu.audio.AudioConstants;
 
 /* Iterator behavior is for feature extraction. Yields frames of 25 ms each*/
-public class Segment implements Iterator<Short[]>, Cloneable {
+public class Segment implements Iterator<short[]>, Cloneable {
   
   private AudioFormat audioFormat;
 
@@ -23,15 +23,15 @@ public class Segment implements Iterator<Short[]>, Cloneable {
 
   private ArrayList<double[]> waveframes;
   
-  private Integer startFrame = 0;
+  private int startFrame = 0;
   
-  private Integer endFrame = 0;
+  private int endFrame = 0;
   
-  private Integer frameSize = 0;
+  private int frameSize = 0;
   
   private ArrayList<Short> flattenedWavFrames;
   
-  private ArrayList<Short[]> iterableWaveform;
+  private ArrayList<short[]> iterableWaveform;
   
   private boolean startedIteration = false;
   
@@ -44,7 +44,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     this.startFrame = 0;
     this.endFrame = waveframes.size()-1; // defaults to size of array
     this.frameSize = waveframes.get(0).length;
-    this.iterableWaveform = new ArrayList<Short[]>();
+    this.iterableWaveform = new ArrayList<short[]>();
   }
   
   // make a clone of this thing!
@@ -58,16 +58,16 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return null;
   }
   
-  private ArrayList<Short[]> buildIterableWaveform() {
+  private ArrayList<short[]> buildIterableWaveform() {
     ArrayList<Short> wav = getProcessedWaveform();
-    ArrayList<Short[]> queue = new ArrayList<Short[]>();
-    Integer samplesPerMillisecond = (int) audioFormat.getSampleRate() / 1000;
-    Integer windowSize = AudioConstants.FRAMESIZE.getValue() * samplesPerMillisecond;
-    Integer frameShift = AudioConstants.FRAMESHIFT.getValue() * samplesPerMillisecond;
+    ArrayList<short[]> queue = new ArrayList<short[]>();
+    int samplesPerMillisecond = (int) audioFormat.getSampleRate() / 1000;
+    int windowSize = AudioConstants.FRAMESIZE.getValue() * samplesPerMillisecond;
+    int frameShift = AudioConstants.FRAMESHIFT.getValue() * samplesPerMillisecond;
     for(int i = 0; i < (wav.size()-windowSize-1); i += frameShift) {
       List<Short> frame = new ArrayList<Short>();
       frame = wav.subList(i, (i+windowSize));
-      Short[] sFrame = new Short[windowSize];
+      short[] sFrame = new short[windowSize];
       for(int j = 0; j < frame.size(); j++) {
         sFrame[j] = frame.get(j);
       }
@@ -76,7 +76,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return queue;
   }
 
-  public void setEndpoints(Integer start, Integer end) {
+  public void setEndpoints(int start, int end) {
     this.startFrame = start;
     this.endFrame = end;
   }
@@ -87,7 +87,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return new AudioInputStream(buff, audioFormat, (wav.size()*2));
   }
 
-  public double getFrameEnergy(Integer frameIndex) {
+  public double getFrameEnergy(int frameIndex) {
     return decibelWaveform.get(frameIndex);
   }
   
@@ -111,8 +111,8 @@ public class Segment implements Iterator<Short[]>, Cloneable {
   
   private byte[] convertShortsToBytes(ArrayList<Short> arr) {
     byte[] byteArray = new byte[arr.size() * 2];
-    Integer i = 0;
-    for(Short s : arr) {
+    int i = 0;
+    for(short s : arr) {
       ByteBuffer bb = ByteBuffer.allocate(2);
       bb.order(java.nio.ByteOrder.nativeOrder());
       bb.putShort(s);
@@ -122,27 +122,27 @@ public class Segment implements Iterator<Short[]>, Cloneable {
     return byteArray;
   }
   
-  private Integer getStartSample() {
+  private int getStartSample() {
     return Math.max(((startFrame-1) * frameSize), 0);
   }
   
-  private Integer getEndSample() {
+  private int getEndSample() {
     return Math.min(((endFrame-1) * frameSize), waveform.size()-1);
   }
   
   private ArrayList<Short> getWaveformSegmentSubset(ArrayList<Short> arr) {
-    Integer startIndex = getStartSample();
-    Integer endIndex = getEndSample();
+    int startIndex = getStartSample();
+    int endIndex = getEndSample();
     List<Short> returnList = arr.subList(startIndex, endIndex);
     return new ArrayList<Short>(returnList);
   }
 
   public double getStartFrameTimestamp() {
-    return getStartSample().doubleValue() / audioFormat.getSampleRate();
+    return (double) getStartSample() / audioFormat.getSampleRate();
   }
 
   public double getEndFrameTimestamp() {
-    return getEndSample().doubleValue() / audioFormat.getSampleRate();
+    return (double) getEndSample() / audioFormat.getSampleRate();
   }
 
   @Override
@@ -155,7 +155,7 @@ public class Segment implements Iterator<Short[]>, Cloneable {
   }
 
   @Override
-  public Short[] next() {
+  public short[] next() {
     if(!startedIteration) {
       iterableWaveform = buildIterableWaveform();
       startedIteration = true;
