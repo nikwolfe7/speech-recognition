@@ -13,12 +13,12 @@ public abstract class FeatureExtractor extends Thread implements Filterable {
 
   private ArrayList<Segment> segments;
   
-  private ArrayList<double[]> processedFrames;
+  private ArrayList<MFCCFeatureVectorContainer> processedSegments;
 
   public FeatureExtractor() {
     this.segments = new ArrayList<Segment>();
     this.featureExtractors = new ArrayList<FrameFilter>();
-    this.processedFrames = new ArrayList<double[]>();
+    this.processedSegments = new ArrayList<MFCCFeatureVectorContainer>();
   }
 
   public void registerSegment(Segment seg) {
@@ -41,6 +41,7 @@ public abstract class FeatureExtractor extends Thread implements Filterable {
     System.out.println("Now running feature extraction...");
     while (!Thread.currentThread().isInterrupted()) {
       for (Segment seg : segments) {
+        MFCCFeatureVectorContainer segFeatureVectors = new MFCCFeatureVectorContainer();
         while (seg.hasNext()) {
           short[] frame = seg.next();
           double[] dFrame = new double[frame.length];
@@ -51,9 +52,12 @@ public abstract class FeatureExtractor extends Thread implements Filterable {
             System.out.println("Running " + filter.getName() + "...");
             dFrame = filter.doFilter(dFrame);
           }
-          processedFrames.add(dFrame);
+          segFeatureVectors.addFeatureFrame(dFrame);
           System.out.println(dFrame.length);
         }
+        System.out.println("Segment feature extraction completed! Expanding MFCCs...");
+        segFeatureVectors.expand();
+        processedSegments.add(segFeatureVectors);
       }
     }
   }

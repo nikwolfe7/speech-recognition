@@ -1,6 +1,7 @@
 package mlsp.cs.cmu.edu.filters;
 
 import mlsp.cs.cmu.edu.audio.AudioConstants;
+import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
 public class MFCC implements FrameFilter {
 
@@ -15,6 +16,11 @@ public class MFCC implements FrameFilter {
   @Override
   public String getName() {
     return "Mel Frequency Cepstral Coefficients";
+  }
+
+  @Override
+  public void visit(MFCCFeatureVectorContainer container) {
+    // do nothing
   }
 
 }

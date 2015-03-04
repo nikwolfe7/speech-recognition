@@ -1,6 +1,8 @@
 package mlsp.cs.cmu.edu.filters;
 
-public interface FrameFilter {
+import mlsp.cs.cmu.edu.features.FeatureVisitor;
+
+public interface FrameFilter extends FeatureVisitor {
   
   public double[] doFilter(double[] frame);
   
