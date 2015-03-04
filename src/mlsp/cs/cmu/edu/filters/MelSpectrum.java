@@ -101,7 +101,7 @@ public class MelSpectrum implements FrameFilter {
 
   @Override
   public String getName() {
-    return "Mel Filter Bank";
+    return "Mel Spectrum Filter Bank";
   }
 
 }

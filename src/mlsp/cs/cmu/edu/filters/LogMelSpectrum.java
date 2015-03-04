@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.filters;
 
-public class LogMelFilter implements FrameFilter {
+public class LogMelSpectrum implements FrameFilter {
 
   @Override
   public Double[] doFilter(Double[] frame) {
@@ -10,7 +10,7 @@ public class LogMelFilter implements FrameFilter {
 
   @Override
   public String getName() {
-    return "Log Mel Filter";
+    return "Log Mel Spectrum";
   }
 
 }

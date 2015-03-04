@@ -27,7 +27,7 @@ public class PreEmphasis implements FrameFilter {
 
   @Override
   public String getName() {
-    return "Pre-Emphasis Filter";
+    return "Pre-Emphasis";
   }
 
 }
