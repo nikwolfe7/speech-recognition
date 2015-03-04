@@ -8,7 +8,7 @@ import mlsp.cs.cmu.edu.audio.AudioConstants;
  * @author nwolfe
  *
  */
-public class MelFilterBank implements FrameFilter {
+public class MelSpectrum implements FrameFilter {
   
   private TriangularFilter[] filterBank = null;
 

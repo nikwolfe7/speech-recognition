@@ -1,7 +1,9 @@
 package mlsp.cs.cmu.edu.filters;
 
-public class PreEmphasisFilter implements FrameFilter {
+public class PreEmphasis implements FrameFilter {
 
+  
+  
   private Integer callCount = 0;
 
   private Integer frameDrops = 10;

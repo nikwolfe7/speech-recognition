@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.filters;
 
-public class HammingWindowFilter implements FrameFilter {
+public class HammingWindow implements FrameFilter {
 
   @Override
   public Double[] doFilter(Double[] frame) {

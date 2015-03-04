@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.filters;
 
-public class RemoveDCOffsetFilter implements FrameFilter {
+public class RemoveDCOffset implements FrameFilter {
 
   @Override
   public Double[] doFilter(Double[] frame) {
