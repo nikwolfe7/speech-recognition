@@ -1,7 +1,6 @@
 package mlsp.cs.cmu.edu.segmentation;
 
 import java.util.ArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -23,8 +22,6 @@ import mlsp.cs.cmu.edu.wavutils.WAVWriter;
 public abstract class Segmenter extends Thread implements Filterable {
 
   private static Integer classSegID = 0;
-  
-  private Integer segID = ++classSegID;
   
   private FrameSequence frameSequence;
   
@@ -111,11 +108,12 @@ public abstract class Segmenter extends Thread implements Filterable {
         Thread.currentThread().interrupt();
       }
     }
+    System.out.println("Writing label file...");
+    writeLabelFile();
     System.out.println("Now writing wav data to file...");
     Segment entireWav = getNewSegment();
     wavWriter.writeWholeWav(entireWav.getAudioStream());
-    writeAllToFile();
-    writeLabelFile();
+    //writeAllToFile();
     System.out.println("Done writing data to file!");
     /**
      *  last hook before thread terminates...
@@ -131,6 +129,7 @@ public abstract class Segmenter extends Thread implements Filterable {
 
   private void writeAllToFile() {
     for(Segment s : segments) {
+      System.out.println("Writing " + s.getSegmentName() + " to file...");
       wavWriter.writeWavSegment(s.getAudioStream(), s.getSegmentName());
     }
   }
@@ -171,7 +170,7 @@ public abstract class Segmenter extends Thread implements Filterable {
   }
 
   private Segment getNewSegment() {
-      return new Segment(AudioStrings.SEGMENT.getValue() + "-" + segID, 
+      return new Segment(AudioStrings.SEGMENT.getValue() + "-" + classSegID++, 
               this.audioFormat, 
               this.waveform, 
               this.decibelWaveform, 
