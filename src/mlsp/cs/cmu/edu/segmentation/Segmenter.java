@@ -113,7 +113,7 @@ public abstract class Segmenter extends Thread implements Filterable {
     System.out.println("Now writing wav data to file...");
     Segment entireWav = getNewSegment();
     wavWriter.writeWholeWav(entireWav.getAudioStream());
-    //writeAllToFile();
+    writeAllToFile();
     System.out.println("Done writing data to file!");
     /**
      *  last hook before thread terminates...

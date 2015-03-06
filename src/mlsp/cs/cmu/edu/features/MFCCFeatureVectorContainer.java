@@ -11,11 +11,11 @@ public class MFCCFeatureVectorContainer {
   private ArrayList<double[]> MFCCs = new ArrayList<double[]>();
 
   private ArrayList<double[]> recoveredLogMelSpectrum = new ArrayList<double[]>();
-
-  private final Segment seg;
+  
+  private String segmentName;
 
   public MFCCFeatureVectorContainer(Segment seg) {
-    this.seg = seg;
+    this.segmentName = seg.getSegmentName();
   }
 
   // should only be called after all feature frames have been added
@@ -40,11 +40,7 @@ public class MFCCFeatureVectorContainer {
   }
 
   public void printMatlabScripts() {
-
-  }
-
-  public Segment getSeg() {
-    return seg;
+    
   }
 
 }
