@@ -1,7 +1,6 @@
 package mlsp.cs.cmu.edu.features;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import mlsp.cs.cmu.edu.filters.Filterable;
 import mlsp.cs.cmu.edu.filters.FrameFilter;

@@ -8,7 +8,7 @@ import mlsp.cs.cmu.edu.filters.FrameFilter;
 
 public class InverseDiscreteCosineTransform extends FrameFilter {
   
-  FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
+  FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.STANDARD_DCT_I);
   
   @Override
   protected double[] doFilterImplementation(double[] frame) {
