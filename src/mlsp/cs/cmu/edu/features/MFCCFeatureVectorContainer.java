@@ -1,5 +1,8 @@
 package mlsp.cs.cmu.edu.features;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import mlsp.cs.cmu.edu.audio.AudioConstants;
@@ -58,9 +61,27 @@ public class MFCCFeatureVectorContainer {
   public void addRecoveredLogMelSpectrumFeatureFrame(double[] frame) {
     this.recoveredLogMelSpectrum.add(frame);
   }
+  
+  private void printMatrix(ArrayList<double[]> matrix, String filename) {
+    File file = new File(filename);
+    try {
+      FileWriter writer = new FileWriter(file);
+      for(int i = matrix.get(0).length - 1; i >= 0; i--) {
+        StringBuilder row = new StringBuilder();
+        for(int j = 0; j < matrix.size(); j++) {
+          row.append(matrix.get(j)[i] + "\t");
+        }
+        writer.write(row.toString().trim() + "\n");
+      }
+      writer.close();
+    } catch (IOException e) {
+      System.out.println("Woops! couldn't print shit.");
+      e.printStackTrace();
+    }
+  }
 
   public void printMatlabScripts() {
-
+    printMatrix(MFCCs, segmentName + "-MFCCs.csv");
   }
 
 }
