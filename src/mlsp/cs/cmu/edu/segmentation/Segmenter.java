@@ -111,8 +111,8 @@ public abstract class Segmenter extends Thread implements Filterable {
     System.out.println("Writing label file...");
     writeLabelFile();
     System.out.println("Now writing wav data to file...");
-    Segment entireWav = getNewSegment();
-    wavWriter.writeWholeWav(entireWav.getAudioStream());
+    Segment entireWav = getNamedSegment(AudioStrings.COMPLETE_RECORDING.getValue());
+    segments.add(entireWav);
     writeAllToFile();
     System.out.println("Done writing data to file!");
     /**
@@ -170,11 +170,15 @@ public abstract class Segmenter extends Thread implements Filterable {
   }
 
   private Segment getNewSegment() {
-      return new Segment(AudioStrings.SEGMENT.getValue() + "-" + classSegID++, 
+      return new Segment(AudioStrings.SEGMENT.getValue() + "_" + classSegID++, 
               this.audioFormat, 
               this.waveform, 
               this.decibelWaveform, 
               this.waveframes);
+  }
+  
+  private Segment getNamedSegment(String name) {
+    return new Segment(name, this.audioFormat, this.waveform, this.decibelWaveform, this.waveframes);
   }
 
   @SuppressWarnings("unchecked")

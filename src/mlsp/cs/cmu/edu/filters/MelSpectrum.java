@@ -81,7 +81,8 @@ public class MelSpectrum extends FrameFilter {
     
     // assuming a height of 1 for all triangles...
     public double getEnergy(double[] frame) {
-      double triangleHeight = 2/(getFreqFromIndex(endIndex) - getFreqFromIndex(startIndex));
+      //double triangleHeight = 2/(getFreqFromIndex(endIndex) - getFreqFromIndex(startIndex));
+      double triangleHeight = 1;
       double slope1 = triangleHeight/(getFreqFromIndex(peakIndex) - getFreqFromIndex(startIndex));
       double slope2 = triangleHeight/(getFreqFromIndex(peakIndex) - getFreqFromIndex(endIndex));
       double integral = 0.0;

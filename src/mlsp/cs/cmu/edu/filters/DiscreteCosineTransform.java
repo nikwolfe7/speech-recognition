@@ -8,7 +8,7 @@ import org.apache.commons.math3.transform.TransformType;
 
 public class DiscreteCosineTransform extends FrameFilter {
 
-  private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
+  private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.STANDARD_DCT_I);
   
   @Override
   protected double[] doFilterImplementation(double[] frame) {
@@ -34,7 +34,7 @@ public class DiscreteCosineTransform extends FrameFilter {
 
   @Override
   public void visit(MFCCFeatureVectorContainer container) {
-    // do nothing
+    container.addMFCCFeatureFrame(getLastProcessedFrame());
   }
 
 }

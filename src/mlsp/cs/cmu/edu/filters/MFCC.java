@@ -20,7 +20,7 @@ public class MFCC extends FrameFilter {
 
   @Override
   public void visit(MFCCFeatureVectorContainer container) {
-    container.addMFCCFeatureFrame(getLastProcessedFrame());
+    //container.addMFCCFeatureFrame(getLastProcessedFrame());
   }
 
 }
