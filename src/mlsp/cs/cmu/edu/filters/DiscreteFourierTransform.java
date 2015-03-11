@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.filters;
 
+import mlsp.cs.cmu.edu.audio.AudioConstants;
 import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
 import org.apache.commons.math3.complex.Complex;
@@ -17,7 +18,6 @@ public class DiscreteFourierTransform extends FrameFilter {
   @Override
   protected double[] doFilterImplementation(double[] frame) {
     double[] signal = getPowerOfTwoArray(frame);
-    System.arraycopy(frame, 0, signal, 0, frame.length);
     Complex[] complex = fft.transform(signal, TransformType.FORWARD);
     frame = new double[complex.length/2+1];
     for (int i = 0; i < frame.length; i++) {
@@ -28,6 +28,7 @@ public class DiscreteFourierTransform extends FrameFilter {
     return frame;
   }
   
+  /*
   private double[] getPowerOfTwoArray(double[] frame) {
     int padding = 2;
     while (padding < frame.length) {
@@ -36,7 +37,15 @@ public class DiscreteFourierTransform extends FrameFilter {
     double[] signal = new double[padding];
     System.arraycopy(frame, 0, signal, 0, frame.length);
     return signal;
+  }*/
+
+  private double[] getPowerOfTwoArray(double[] frame) {
+    double[] signal = new double[AudioConstants.FFT_BINS.getValue()];
+    System.arraycopy(frame, 0, signal, 0, frame.length);
+    return signal;
   }
+
+
 
   @Override
   public String getName() {

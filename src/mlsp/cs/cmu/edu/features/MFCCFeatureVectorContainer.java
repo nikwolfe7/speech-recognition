@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import mlsp.cs.cmu.edu.audio.AudioConstants;
-import mlsp.cs.cmu.edu.filters.FrameFilter;
-import mlsp.cs.cmu.edu.filters.MFCC;
 import mlsp.cs.cmu.edu.segmentation.Segment;
 
 public class MFCCFeatureVectorContainer {
@@ -18,8 +16,6 @@ public class MFCCFeatureVectorContainer {
 
   private ArrayList<double[]> recoveredLogMelSpectrum = new ArrayList<double[]>();
   
-  private FrameFilter mfccFilter = new MFCC();
-
   private String segmentName;
 
   private final String sep = System.getProperty("file.separator");
@@ -78,7 +74,7 @@ public class MFCCFeatureVectorContainer {
   }
 
   public void addMFCCFeatureFrame(double[] frame) {
-    this.MFCCs.add(mfccFilter.doFilter(frame));
+    this.MFCCs.add(frame);
   }
 
   public void addRecoveredLogMelSpectrumFeatureFrame(double[] frame) {

@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.filters;
 
+import mlsp.cs.cmu.edu.audio.AudioConstants;
 import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
 import org.apache.commons.math3.transform.DctNormalization;
@@ -8,7 +9,7 @@ import org.apache.commons.math3.transform.TransformType;
 
 public class DiscreteCosineTransform extends FrameFilter {
 
-  private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.STANDARD_DCT_I);
+  private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
   
   @Override
   protected double[] doFilterImplementation(double[] frame) {
@@ -17,6 +18,7 @@ public class DiscreteCosineTransform extends FrameFilter {
     return frame;
   }
 
+  /*
   private double[] getPowerOfTwoArrayPlusOne(double[] frame) {
     int padding = 2;
     while (padding < frame.length) {
@@ -26,7 +28,14 @@ public class DiscreteCosineTransform extends FrameFilter {
     System.arraycopy(frame, 0, signal, 0, frame.length);
     return signal;
   }
+  */
   
+  private double[] getPowerOfTwoArrayPlusOne(double[] frame) {
+    double[] newFrame = new double[AudioConstants.DCT_SIZE.getValue() + 1]; 
+    System.arraycopy(frame, 0, newFrame, 0, frame.length);
+    return newFrame;
+  }
+
   @Override
   public String getName() {
     return "Discrete Cosine Transform";
@@ -34,7 +43,7 @@ public class DiscreteCosineTransform extends FrameFilter {
 
   @Override
   public void visit(MFCCFeatureVectorContainer container) {
-    container.addMFCCFeatureFrame(getLastProcessedFrame());
+    // do nothing...
   }
 
 }
