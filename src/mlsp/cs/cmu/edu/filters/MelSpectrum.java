@@ -35,12 +35,12 @@ public class MelSpectrum extends FrameFilter {
     double maxMel = MelConverter.getMelFrequency((double) maxFrequency);
     double minMel = MelConverter.getMelFrequency((double) minFrequency);
     double melScale = maxMel - minMel;
-    double[] melFrequencies = new double[AudioConstants.MELFREQUENCY_BINS.getValue() + 2];
-    double melGradient = melScale / (AudioConstants.MELFREQUENCY_BINS.getValue() + 1);
+    double[] melFrequencies = new double[AudioConstants.MELFREQUENCY_NUM_FILTERS.getValue() + 2];
+    double melGradient = melScale / (AudioConstants.MELFREQUENCY_NUM_FILTERS.getValue() + 1);
     for (int i = 0; i < melFrequencies.length; i++) {
       melFrequencies[i] = (i) * melGradient + minMel;
     }
-    TriangularFilter[] fBank = new TriangularFilter[AudioConstants.MELFREQUENCY_BINS.getValue()];
+    TriangularFilter[] fBank = new TriangularFilter[AudioConstants.MELFREQUENCY_NUM_FILTERS.getValue()];
     for(int i = 1; i < melFrequencies.length-1; i++) {
       fBank[i-1] = new TriangularFilter(melFrequencies[i-1], melFrequencies[i], melFrequencies[i+1], frame); 
     }

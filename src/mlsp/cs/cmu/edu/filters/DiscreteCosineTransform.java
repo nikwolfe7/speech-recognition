@@ -9,15 +9,17 @@ import org.apache.commons.math3.transform.TransformType;
 
 public class DiscreteCosineTransform extends FrameFilter {
 
-  private FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
-  
   @Override
   protected double[] doFilterImplementation(double[] frame) {
-    frame = getPowerOfTwoArrayPlusOne(frame);
-    frame = dct.transform(frame, TransformType.FORWARD);
-    return frame;
+    double[] dct = new double[AudioConstants.DCT_SIZE.getValue()];
+    for(int i  = 1; i <= dct.length; i++) {
+      for(int j = 1; j <= frame.length; j++) {
+        dct[i - 1] += frame[j - 1] * Math.cos(Math.PI * (i - 1) / frame.length * (j - 0.5));
+      }
+    }
+    return dct;
   }
-
+  
   /*
   private double[] getPowerOfTwoArrayPlusOne(double[] frame) {
     int padding = 2;
@@ -28,13 +30,13 @@ public class DiscreteCosineTransform extends FrameFilter {
     System.arraycopy(frame, 0, signal, 0, frame.length);
     return signal;
   }
-  */
   
   private double[] getPowerOfTwoArrayPlusOne(double[] frame) {
     double[] newFrame = new double[AudioConstants.DCT_SIZE.getValue() + 1]; 
     System.arraycopy(frame, 0, newFrame, 0, frame.length);
     return newFrame;
   }
+  */
 
   @Override
   public String getName() {
