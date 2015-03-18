@@ -1,15 +1,9 @@
 package mlsp.cs.cmu.edu.filters;
 
-import org.apache.commons.math3.transform.DctNormalization;
-import org.apache.commons.math3.transform.FastCosineTransformer;
-import org.apache.commons.math3.transform.TransformType;
-
 import mlsp.cs.cmu.edu.audio.AudioConstants;
 import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
 public class InverseDiscreteCosineTransform extends FrameFilter {
-  
-  FastCosineTransformer dct = new FastCosineTransformer(DctNormalization.ORTHOGONAL_DCT_I);
   
   /**
    * From http://developer.download.nvidia.com/assets/cuda/files/dct8x8.pdf, Page 5

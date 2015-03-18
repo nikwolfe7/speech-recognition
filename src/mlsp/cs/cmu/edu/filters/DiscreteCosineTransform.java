@@ -3,10 +3,6 @@ package mlsp.cs.cmu.edu.filters;
 import mlsp.cs.cmu.edu.audio.AudioConstants;
 import mlsp.cs.cmu.edu.features.MFCCFeatureVectorContainer;
 
-import org.apache.commons.math3.transform.DctNormalization;
-import org.apache.commons.math3.transform.FastCosineTransformer;
-import org.apache.commons.math3.transform.TransformType;
-
 public class DiscreteCosineTransform extends FrameFilter {
 
   @Override
