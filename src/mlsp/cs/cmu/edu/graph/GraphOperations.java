@@ -12,7 +12,6 @@ package mlsp.cs.cmu.edu.graph;
  * @author nwolfe
  *
  */
-
 public class GraphOperations {
 
 }
