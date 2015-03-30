@@ -21,6 +21,7 @@ public class DriverWavInput {
     Sampler sampler = new Sampler(storedWavFile);
     
     /*Segmenter finds speech segments using a sampler*/
+    @SuppressWarnings("unused")
     Segmenter segmenter = new SimpleSegmenter(sampler);
     
     // Push-to-talk
