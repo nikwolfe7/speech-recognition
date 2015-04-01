@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class CartesianNode<T> {
+  
+  private int id;
 
   private List<Node<T>> coordinates;
 
@@ -15,6 +17,7 @@ public class CartesianNode<T> {
 
   @SuppressWarnings("unchecked")
   public CartesianNode(Node<T>... nodes) {
+    this.id = hashCode();
     this.coordinates = new ArrayList<Node<T>>();
     this.successors = new ArrayList<Map.Entry<CartesianNode<T>, Double>>();
     for (Node<T> node : nodes) {
@@ -24,6 +27,7 @@ public class CartesianNode<T> {
 
   @SuppressWarnings("unchecked")
   public CartesianNode(Double score, Node<T>... nodes) {
+    this.id = hashCode();
     this.coordinates = new ArrayList<Node<T>>();
     this.successors = new ArrayList<Map.Entry<CartesianNode<T>, Double>>();
     for (Node<T> node : nodes) {
@@ -66,6 +70,14 @@ public class CartesianNode<T> {
 
   public void setScore(Double score) {
     this.score = score;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public List<Node<T>> getCoordinates() {
+    return coordinates;
   }
 
 }

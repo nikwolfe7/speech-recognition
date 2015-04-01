@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 public class Node<T> {
   
   // the node's id is itself.
-  private int id = hashCode();
+  private int id;
   
   // the node's value
   protected T value;
@@ -20,20 +20,16 @@ public class Node<T> {
   protected List<Map.Entry<Node<T>, Double>> successors;
 
   public Node(T value) {
+    this.id = hashCode();
     this.value = value;
     this.successors = new ArrayList<Map.Entry<Node<T>,Double>>();
   }
   
   public Node(T value, Double score) {
+    this.id = hashCode();
     this.value = value;
     this.score = score;
     this.successors = new ArrayList<Map.Entry<Node<T>,Double>>();
-  }
-
-  public Node(T value, Double score, List<Entry<Node<T>, Double>> successors) {
-    this.value = value;
-    this.score = score;
-    this.successors = successors;
   }
 
   public Double getScore() {
