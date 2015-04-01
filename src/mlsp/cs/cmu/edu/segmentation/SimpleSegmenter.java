@@ -19,11 +19,11 @@ public class SimpleSegmenter extends Segmenter {
 
   private boolean SOUND_STARTED = false;
 
-  private int SILENCE_STRING_CUTOFF = 300; // assumes 10ms frame
+  private int SILENCE_STRING_CUTOFF = 3000; // assumes 10ms frame
 
-  private int SPEECH_SEGMENT_CUTOFF = 50;
+  private int SPEECH_SEGMENT_CUTOFF = 25;
 
-  private int frameBackoff = 25;
+  private int frameBackoff = 10;
 
   private int speechStart = 0;
 

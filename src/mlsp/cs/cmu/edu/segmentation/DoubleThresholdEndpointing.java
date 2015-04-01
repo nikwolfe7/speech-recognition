@@ -11,7 +11,7 @@ public class DoubleThresholdEndpointing implements SegmentStrategy {
 
   private Double threshold = 1.3;
 
-  private Double belowThreshold = 0.8;
+  private Double belowThreshold = 0.95;
 
   private boolean inSpeech = false;
 

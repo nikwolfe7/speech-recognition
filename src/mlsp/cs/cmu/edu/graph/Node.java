@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 public class Node<T> {
   
   // the node's id is itself.
-  private Node<T> id = this;
+  private int id = hashCode();
   
   // the node's value
   protected T value;
@@ -25,14 +25,12 @@ public class Node<T> {
   }
   
   public Node(T value, Double score) {
-    super();
     this.value = value;
     this.score = score;
     this.successors = new ArrayList<Map.Entry<Node<T>,Double>>();
   }
 
   public Node(T value, Double score, List<Entry<Node<T>, Double>> successors) {
-    super();
     this.value = value;
     this.score = score;
     this.successors = successors;
@@ -46,18 +44,35 @@ public class Node<T> {
     this.score = score;
   }
 
-  public List<Map.Entry<Node<T>, Double>> getSuccessors() {
+  public List<Map.Entry<Node<T>, Double>> getOutgoingEdges() {
     return successors;
   }
 
-  @SuppressWarnings("unchecked")
-  public void addSuccessors(Map.Entry<Node<T>, Double>... items) {
-    for(Map.Entry<Node<T>, Double> successor : items) {
-      this.successors.add(successor);
-    }
+  public void addDirectedEdgeTo(Node<T> node, Double weight) {
+    Map.Entry<Node<T>, Double> successor = new Entry<Node<T>, Double>() {
+
+      private Node<T> key = node;
+      private Double edgeWeight = weight;
+      
+      @Override
+      public Node<T> getKey() {
+        return key;
+      }
+
+      @Override
+      public Double getValue() {
+        return edgeWeight;
+      }
+
+      @Override
+      public Double setValue(Double value) {
+        return this.edgeWeight = value;
+      }
+    };
+    this.successors.add(successor);
   }
 
-  public Node<T> getId() {
+  public int getId() {
     return id;
   }
 
