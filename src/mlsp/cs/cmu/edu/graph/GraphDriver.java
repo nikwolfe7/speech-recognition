@@ -11,13 +11,14 @@ public class GraphDriver {
   public static void main(String[] args) throws FileNotFoundException {
     
     List<String> dictionary = new ArrayList<String>();
-    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
+    Scanner scn = new Scanner(new File("./dict/dict_80k.txt"));
     while(scn.hasNextLine()) {
       dictionary.add(scn.nextLine());
     }
     
     GraphFactory<Character, String> factory = new StringGraphFactory(dictionary);
     Graph<Character,String> G1 = factory.buildGraph();
+    System.out.println("Done building graph!");
     Node<Character> pointer = G1.getHead();
     printGraph(pointer, pointer);
   }
