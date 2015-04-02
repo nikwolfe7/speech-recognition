@@ -12,8 +12,8 @@ public abstract class Edge<E> {
   }
 
   public Edge(Node<?> nodePointer, double weight) {
-    this.weight = weight;
     this.nodePointer = nodePointer;
+    this.weight = weight;
   }
 
   /**
