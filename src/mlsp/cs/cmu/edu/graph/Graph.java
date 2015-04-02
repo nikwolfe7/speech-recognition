@@ -1,23 +1,15 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class Graph<T> {
+public abstract class Graph<N,E> {
   
-  private Map<T, Node<T>> graphNodes;
+  private Map<N, Node<N>> graphNodes = new HashMap<N, Node<N>>();
+
+  public abstract Iterable<N> getNodes(); 
   
-  public Graph() {
-    this.graphNodes = new HashMap<T, Node<T>>();
-  }
+  public abstract Iterable<Edge<E>> getNodeEdges(N key); 
   
-  public Iterable<Node<T>> getIterable() {
-    return graphNodes;
-  }
   
-  public void addNode(Node<T> node) {
-    graphNodes.add(node);
-  }
 }

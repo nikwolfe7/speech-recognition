@@ -2,78 +2,72 @@ package mlsp.cs.cmu.edu.graph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-public class Node<T> {
+public abstract class Node<N> {
   
-  // the node's id is itself.
-  private int id;
+  private N value;
+  private double cost;
+  private List<Edge<?>> outgoingEdges = new ArrayList<Edge<?>>();
   
-  // the node's value
-  protected T value;
-  
-  // score or cost
-  protected Double score = 0.0;
-  
-  // node and edge weight list
-  protected List<Map.Entry<Node<T>, Double>> successors;
-
-  public Node(T value) {
-    this.id = hashCode();
+  public Node(N value) {
     this.value = value;
-    this.successors = new ArrayList<Map.Entry<Node<T>,Double>>();
+    this.cost = 0.0;
+  }
+
+  public Node(N value, double cost) {
+    this.value = value;
+    this.cost = cost;
   }
   
-  public Node(T value, Double score) {
-    this.id = hashCode();
-    this.value = value;
-    this.score = score;
-    this.successors = new ArrayList<Map.Entry<Node<T>,Double>>();
+  /**
+   * Defines how to compare this node to another node, returning
+   * some double value to represent that difference. 
+   * 
+   * @param node
+   * @return
+   */
+  public abstract double getDifference(Node<N> node);
+  
+  /**
+   * @param edge
+   */
+  public void addEdge(Edge<?> edge) {
+    outgoingEdges.add(edge);
   }
 
-  public Double getScore() {
-    return score;
-  }
-
-  public void setScore(Double score) {
-    this.score = score;
-  }
-
-  public List<Map.Entry<Node<T>, Double>> getOutgoingEdges() {
-    return successors;
-  }
-
-  public void addDirectedEdgeTo(Node<T> node, Double weight) {
-    Map.Entry<Node<T>, Double> successor = new Entry<Node<T>, Double>() {
-
-      private Node<T> key = node;
-      private Double edgeWeight = weight;
-      
-      @Override
-      public Node<T> getKey() {
-        return key;
-      }
-
-      @Override
-      public Double getValue() {
-        return edgeWeight;
-      }
-
-      @Override
-      public Double setValue(Double value) {
-        return this.edgeWeight = value;
-      }
-    };
-    this.successors.add(successor);
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public T getValue() {
+  /**
+   * @return the value
+   */
+  public N getValue() {
     return value;
+  }
+
+  /**
+   * @param value the value to set
+   */
+  public void setValue(N value) {
+    this.value = value;
+  }
+
+  /**
+   * @return the cost
+   */
+  public double getCost() {
+    return cost;
+  }
+
+  /**
+   * @param cost the cost to set
+   */
+  public void setCost(double cost) {
+    this.cost = cost;
+  }
+
+  /**
+   * @return the outgoingEdges
+   */
+  public List<Edge<?>> getOutgoingEdges() {
+    return outgoingEdges;
   }
 
 }
