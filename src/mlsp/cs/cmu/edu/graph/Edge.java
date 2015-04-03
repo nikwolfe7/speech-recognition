@@ -8,11 +8,13 @@ public abstract class Edge<E> {
   
   public Edge(Node<?> nodePointer) {
     this.nodePointer = nodePointer;
+    nodePointer.registerIncomingEdge(this);
     this.weight = 0.0;
   }
 
   public Edge(Node<?> nodePointer, double weight) {
     this.nodePointer = nodePointer;
+    nodePointer.registerIncomingEdge(this);
     this.weight = weight;
   }
 
@@ -56,8 +58,6 @@ public abstract class Edge<E> {
    */
   public void setNodePointer(Node<?> nodePointer) {
     this.nodePointer = nodePointer;
+    nodePointer.registerIncomingEdge(this);
   }
-
-  
-  
 }

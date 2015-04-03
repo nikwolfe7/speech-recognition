@@ -14,18 +14,10 @@ public abstract class Graph<N, E> {
     addNode(headNode);
   }
 
-  public Iterable<N> getNodes() {
-    return graphNodes.keySet();
+  public Iterable<Node<N>> getNodes() {
+    return graphNodes.values();
   }
 
-  public Node<N> getNode(N node) {
-    if (graphNodes.containsKey(node)) {
-      return graphNodes.get(node);
-    } else {
-      return null;
-    }
-  }
-  
   public Node<N> getHead() {
     return headNode;
   }
@@ -34,6 +26,6 @@ public abstract class Graph<N, E> {
     graphNodes.put(node.getValue(), node);
   }
 
-  public abstract Iterable<Edge<E>> getNodeEdges(N key);
+  public abstract Iterable<Edge<E>> getNodeEdges(Node<N> node);
 
 }

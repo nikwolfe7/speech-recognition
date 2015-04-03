@@ -14,7 +14,7 @@ public class StringGraph extends Graph<Character, String> {
   }
 
   @Override
-  public Iterable<Edge<String>> getNodeEdges(Character key) {
+  public Iterable<Edge<String>> getNodeEdges(Node<Character> key) {
     return getNodeEdges(key);
   }
 

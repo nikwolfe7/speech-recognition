@@ -8,6 +8,7 @@ public abstract class Node<N> {
   private N value;
   private double cost;
   private List<Edge<?>> outgoingEdges = new ArrayList<Edge<?>>();
+  private List<Edge<?>> incomingEdges = new ArrayList<Edge<?>>();
   
   public Node(N value) {
     this.value = value;
@@ -33,6 +34,10 @@ public abstract class Node<N> {
    */
   public void addEdge(Edge<?> edge) {
     outgoingEdges.add(edge);
+  }
+  
+  public void registerIncomingEdge(Edge<?> edge) {
+    incomingEdges.add(edge);
   }
 
   /**
@@ -68,6 +73,10 @@ public abstract class Node<N> {
    */
   public List<Edge<?>> getOutgoingEdges() {
     return outgoingEdges;
+  }
+
+  public List<Edge<?>> getIncomingEdges() {
+    return incomingEdges;
   }
 
 }
