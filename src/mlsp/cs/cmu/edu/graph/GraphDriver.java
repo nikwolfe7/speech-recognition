@@ -3,6 +3,7 @@ package mlsp.cs.cmu.edu.graph;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,22 +17,41 @@ public class GraphDriver {
       dictionary.add(scn.nextLine());
     }
     
-    GraphFactory<Character, String> factory = new StringGraphFactory(dictionary);
+    List<String> input = new ArrayList<String>();
+    scn = new Scanner(new File("./text/typos.txt"));
+    while(scn.hasNextLine()) {
+      String[] arr = scn.nextLine().split(" ");
+      input.addAll(Arrays.asList(arr));
+    }
+   
+    GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character,String> G1 = factory.buildGraph();
     System.out.println("Done building graph!");
-    Node<Character> pointer = G1.getHead();
-    printGraph(pointer, pointer);
+    printGraph(G1);
+    
+    List<Graph<Character,String>> words = new ArrayList<Graph<Character,String>>();
+    for(String s : input) {
+      factory = new StringGraphFactory(s);
+      Graph<Character,String> G2 = factory.buildGraph(); 
+      words.add(G2);
+      printGraph(G2);
+    }
   }
   
-  public static void printGraph(Node<?> pointer, Node<?> head) {
-    System.out.println(pointer.getValue());
+  public static void printGraph(Graph<?,?> graph) {
+    Node<?> pointer = graph.getHead();
+    printNodes(pointer, pointer);
+  }
+  
+  private static void printNodes(Node<?> pointer, Node<?> head) {
+    System.out.print(" --> "+pointer.getValue());
     for(Edge<?> edge : pointer.getOutgoingEdges()) {
       if(edge.getValue() != null) {
-        System.out.println(edge.getValue());
+        System.out.println("\n"+edge.getValue());
       }
       Node<?> node = edge.getNodePointer();
       if (node != pointer && node != head) {
-        printGraph(edge.getNodePointer(), head);
+        printNodes(edge.getNodePointer(), head);
       } else if (node.getValue() == null) { // tail
         System.out.println("tail");
       }

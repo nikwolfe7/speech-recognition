@@ -1,12 +1,10 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.List;
-
 public class StringGraphFactory implements GraphFactory<Character, String> {
 
-  private List<String> processList;
+  private String[] processList;
 
-  public StringGraphFactory(List<String> processList) {
+  public StringGraphFactory(String... processList) {
     this.processList = processList;
   }
 
