@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public abstract class PriorTable<S> {
 
-  List<S> states;
+  protected List<S> states;
 
   protected Map<S, Double> priors;
 
@@ -47,5 +47,5 @@ public abstract class PriorTable<S> {
   }
 
   protected abstract void loadPriorFromLine(String nextLine);
-
+  
 }
