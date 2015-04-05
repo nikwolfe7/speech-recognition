@@ -13,6 +13,9 @@ public class HMMDriver {
     cleaner.cleanData("./hw7-data/hmm-train-japanese.txt", false);
     cleaner.cleanData("./hw7-data/hmm-test-japanese.txt", false);
    
+    PriorTable<String> priors = Pi.getInstance("./hw7-data/hmm-priors.txt");
+    priors.printPriors();
+    
     BetaTable<String,Character> beta = Beta.getInstance("./hw7-data/hmm-emit.txt");
     beta.printTrellis();
     System.out.println(beta.getStates());

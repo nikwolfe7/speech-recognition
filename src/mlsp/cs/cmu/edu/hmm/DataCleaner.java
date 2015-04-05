@@ -51,19 +51,15 @@ public class DataCleaner {
       }
 
       /* Output priors */
-      writer = getWriter(folder + "hmm-priors.txt");
       List<Pair<Character, Double>> probs = counter.getProbabilites();
       for (Pair<Character, Double> prob : probs) {
-        writer.write(prob.getKey() + ":" + prob.getValue() + "\n");
         System.out.println(prob.getKey() + ":" + prob.getValue());
       }
-      writer.close();
 
       /* Get individual state probabilities */
       Double vowelsum = 0.0;
       Double consonantsum = 0.0;
-      List<Character> vowels = new ArrayList<Character>(Arrays.asList('A', 'E', 'I', 'O', 'U', 'Y',
-              ' '));
+      List<Character> vowels = new ArrayList<Character>(Arrays.asList('A','E','I','O','U','Y',' '));
       for (Pair<Character, Double> prob : probs) {
         if (vowels.contains(prob.getKey()))
           vowelsum += prob.getValue();

@@ -61,4 +61,7 @@ public abstract class AlphaTable<S> {
     }
 
     protected abstract void loadTrellisFromLine(String nextLine); 
+    
+    
+    
 }
