@@ -41,7 +41,7 @@ public class DataCleaner {
     FileWriter writer = getWriter(filename.split(".txt")[0] + "-cleaned.txt");
     writer.write(doc);
     writer.close();
-    System.out.println("Done!\n");
+    //System.out.println("Done!\n");
 
     if (calcStats) {
       /* Count characters and generate probabilities */
@@ -53,7 +53,7 @@ public class DataCleaner {
       /* Output priors */
       List<Pair<Character, Double>> probs = counter.getProbabilites();
       for (Pair<Character, Double> prob : probs) {
-        System.out.println(prob.getKey() + ":" + prob.getValue());
+        //System.out.println(prob.getKey() + ":" + prob.getValue());
       }
 
       /* Get individual state probabilities */
@@ -76,10 +76,10 @@ public class DataCleaner {
         Double vprob = 0.0;
         Double cprob = 0.0;
         if (vowels.contains(prob.getKey())) {
-          System.out.println("Vowel/Space & " + prob.getKey() + " & " + df.format(prob.getValue() / vowelsum) + " \\\\ \\hline");
+          //System.out.println("Vowel/Space & " + prob.getKey() + " & " + df.format(prob.getValue() / vowelsum) + " \\\\ \\hline");
           vprob = prob.getValue() / vowelsum;
         } else {
-          System.out.println("Consonants & " + prob.getKey() + " & " + df.format(prob.getValue() / vowelsum) + " \\\\ \\hline");
+          //System.out.println("Consonants & " + prob.getKey() + " & " + df.format(prob.getValue() / vowelsum) + " \\\\ \\hline");
           cprob = prob.getValue() / vowelsum;
         }
         V.append(character + ":" + vprob + "\t");

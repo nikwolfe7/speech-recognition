@@ -13,22 +13,15 @@ public class HMMDriver {
     cleaner.cleanData("./hw7-data/hmm-train-japanese.txt", false);
     cleaner.cleanData("./hw7-data/hmm-test-japanese.txt", false);
 
-    PriorTable<String> priors = Pi.getInstance("./hw7-data/hmm-priors.txt");
-    priors.printPriors();
+    HMMFactory<String, Character> hmmFactory = CharacterHMMFactory.getInstance();
+    HiddenMarkovModel<String, Character> HMM = hmmFactory.initializeHMM();
 
-    BetaTable<String, Character> beta = CharacterBeta.getInstance("./hw7-data/hmm-emit.txt");
-    beta.printTrellis();
+    HMM.A.getObservationProbability(HMM.Pi, HMM.B, "./hw7-data/hmm-train-cleaned.txt");
+    HMM.B.getObservationProbability(HMM.Pi, HMM.A, "./hw7-data/hmm-train-cleaned.txt");
 
-    AlphaTable<String, Character> alpha = CharacterAlpha.getInstance("./hw7-data/hmm-trans.txt");
-    alpha.printTrellis();
-
-    alpha.getObservationProbability(priors, beta, "./hw7-data/hmm-train-cleaned.txt");
-    beta.getObservationProbability(priors, alpha, "./hw7-data/hmm-train-cleaned.txt");
-
-    ViterbiTable<String, Character> viterbi = new CharacterViterbi(alpha, beta, priors);
-    viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-decode-cleaned.txt");
-    viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-train-cleaned.txt");
-    viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-test-cleaned.txt");
+    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-decode-cleaned.txt");
+    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-train-cleaned.txt");
+    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-test-cleaned.txt");
   }
 
 }

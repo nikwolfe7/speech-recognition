@@ -3,15 +3,15 @@ package mlsp.cs.cmu.edu.hmm;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pi extends PriorTable<String> {
+public class CharacterPriors extends PriorTable<String> {
 
-  private Pi(String filename, List<String> states) {
+  private CharacterPriors(String filename, List<String> states) {
     super(filename, states);
   }
   
-  public static Pi getInstance(String filename) {
+  public static CharacterPriors getInstance(String filename) {
     List<String> states = new ArrayList<String>();
-    return new Pi(filename, states);
+    return new CharacterPriors(filename, states);
   }
 
   @Override

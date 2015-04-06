@@ -71,6 +71,9 @@ public abstract class ViterbiTable<S, O> {
    */
   protected abstract List<O> parseFileForObservations(Scanner scn);
 
+  /* Defer to subclass... */
+  protected abstract void calculateAccuracy(List<S> bestPath, List<O> observations);
+
   public List<S> getViterbiBestPath(List<O> observations) {
     viterbiTable = new double[states.size()][observations.size()];
     Pair<double[][], List<S>> viterbiResult = viterbi(observations, viterbiTable);
@@ -79,6 +82,7 @@ public abstract class ViterbiTable<S, O> {
     System.out.println("\n==================\nViterbi Algorithm\n==================");
     System.out.println("Most Likely State Sequence: " + bestPath.toString());
     System.out.println(" Actual Character Sequence: " + observations.toString());
+    calculateAccuracy(bestPath, observations);
     return bestPath;
   }
 
@@ -110,18 +114,18 @@ public abstract class ViterbiTable<S, O> {
               maxState = prevState.getKey();
             }
           }
-          trellis[i][t] = maxProb; 
+          trellis[i][t] = maxProb;
         }
         viterbiResult.getSecond().add(maxState);
       }
     }
     /* Get the last state, return */
     S maxState = priors.getStates().get(0);
-    double maxProb = -1.0e100; 
-    for(Map.Entry<S, Integer> state : states.entrySet()) {
+    double maxProb = -1.0e100;
+    for (Map.Entry<S, Integer> state : states.entrySet()) {
       int i = state.getValue();
-      double lastCol = trellis[i][observations.size()-1]; 
-      if(lastCol > maxProb) {
+      double lastCol = trellis[i][observations.size() - 1];
+      if (lastCol > maxProb) {
         maxProb = lastCol;
         maxState = state.getKey();
       }
@@ -161,5 +165,9 @@ public abstract class ViterbiTable<S, O> {
 
   public void setPriors(PriorTable<S> priors) {
     this.priors = priors;
+  }
+
+  public double[][] getViterbiTable() {
+    return viterbiTable;
   }
 }
