@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.lang.model.element.NestingKind;
-
 public abstract class BetaTable<S, O> {
 
   protected Map<S, Integer> states;
@@ -157,7 +155,7 @@ public abstract class BetaTable<S, O> {
       if (t == observation.size() - 1) { // init step
         for (Map.Entry<S, Integer> state : states.entrySet()) {
           int i = state.getValue();
-          trellis[i][t] = LogOperations.log(1);
+          trellis[i][t] = LogOperations.log(1.0);
         }
       } else { // "recurisve" step
         // for each state
