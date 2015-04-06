@@ -12,17 +12,19 @@ public class GraphDriver {
   public static void main(String[] args) throws FileNotFoundException {
     
     List<String> dictionary = new ArrayList<String>();
-    Scanner scn = new Scanner(new File("./dict/dict_80k.txt"));
+    /*Scanner scn = new Scanner(new File("./dict/dict_80k.txt"));
     while(scn.hasNextLine()) {
       dictionary.add(scn.nextLine());
-    }
+    }*/
+    dictionary.add("aaaa");
     
     List<String> input = new ArrayList<String>();
-    scn = new Scanner(new File("./text/typos.txt"));
+    /*scn = new Scanner(new File("./text/typos.txt"));
     while(scn.hasNextLine()) {
       String[] arr = scn.nextLine().split(" ");
       input.addAll(Arrays.asList(arr));
-    }
+    }*/
+    input.add("aabb");
    
     GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character,String> G1 = factory.buildGraph();
@@ -35,6 +37,11 @@ public class GraphDriver {
       Graph<Character,String> G2 = factory.buildGraph(); 
       words.add(G2);
       printGraph(G2);
+    }
+    
+    for(Graph<Character,String> wordGraph : words) {
+      CartesianGraph<Character, String> product = new StringCartesianGraph(G1, wordGraph);
+      printNodes(product.getHeadNode(), product.getHeadNode());
     }
   }
   

@@ -1,10 +1,14 @@
 package mlsp.cs.cmu.edu.graph;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class CartesianGraph<N, E> {
 
   private Map<Coordinate, Node<Coordinate>> graphNodes;
+  
+  private List<Edge<E>> graphEdges;
 
   private Node<Coordinate> headNode;
 
@@ -47,6 +51,7 @@ public abstract class CartesianGraph<N, E> {
   }
 
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
+    graphNodes = new HashMap<Coordinate, Node<Coordinate>>();
     Node<N> headG1 = G1.getHead();
     Node<N> headG2 = G2.getHead();
     Coordinate head = getCoordinate(headG1, headG2);
@@ -82,11 +87,17 @@ public abstract class CartesianGraph<N, E> {
             // connect the dots!
             graphNodes.put(c1, n1n3);
             graphNodes.put(c2, n2n4);
-            n1n3.addEdge(getTypeEdgeImpl(n2n4));
+            Edge<E> edge = getTypeEdgeImpl(n2n4);
+            addEdge(edge);
+            n1n3.addEdge(edge);
           }
         }
       }
     }
+  }
+  
+  private void addEdge(Edge<E> edge) {
+    graphEdges.add(edge);
   }
   
   /* Defer edge type instantiation to subclass */
@@ -97,5 +108,12 @@ public abstract class CartesianGraph<N, E> {
   
   /* Defer node type construction to subclasses */
   protected abstract Node<Coordinate> getCoordinateNodeImpl(Coordinate coordinate);
+
+  /**
+   * @return the graphEdges
+   */
+  public List<Edge<E>> getGraphEdges() {
+    return graphEdges;
+  }
 
 }
