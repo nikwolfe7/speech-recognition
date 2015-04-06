@@ -85,8 +85,16 @@ public abstract class BetaTable<S, O> {
     return Arrays.asList(otSet);
   }
 
-  public double[][] getBackward() {
+  public double[][] getBackwardTable() {
     return backward;
+  }
+
+  public double[][] getBetaTable() {
+    return betaTable;
+  }
+
+  public void setBetaTable(double[][] betaTable) {
+    this.betaTable = betaTable;
   }
 
   protected abstract void loadTrellisFromLine(String line);

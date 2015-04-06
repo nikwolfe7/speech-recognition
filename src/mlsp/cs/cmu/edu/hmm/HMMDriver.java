@@ -24,6 +24,8 @@ public class HMMDriver {
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-test-cleaned.txt");
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-train-japanese-cleaned.txt");
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/hmm-test-japanese-cleaned.txt");
+    
+    HMM.trainHMMFromFile("./hw7-data/ex-hmm-decode-cleaned.txt");
   }
 
 }
