@@ -19,6 +19,8 @@ public abstract class BetaTable<S, O> {
 
   protected double[][] backward;
 
+  private boolean displayOutput = true;
+
   /* Assumes full path */
   public BetaTable(String filename, List<S> states, List<O> outputs) {
     if (states.size() < 1)
@@ -97,6 +99,10 @@ public abstract class BetaTable<S, O> {
     this.betaTable = betaTable;
   }
 
+  public void setDisplayOutput(boolean displayOutput) {
+    this.displayOutput = displayOutput;
+  }
+
   protected abstract void loadTrellisFromLine(String line);
 
   public double getObservationProbability(PriorTable<S> priors, AlphaTable<S, O> alpha,
@@ -130,7 +136,7 @@ public abstract class BetaTable<S, O> {
     backward = new double[states.size()][observation.size()];
     backward = calculateBackward(priors, alpha, observation, backward);
     double betaProbability = 0;
-    for(Map.Entry<S, Integer> state : states.entrySet()) {
+    for (Map.Entry<S, Integer> state : states.entrySet()) {
       int initialIndex = 0;
       double betaZero = backward[state.getValue()][initialIndex]; // initial beta
       double initialProbability = priors.getPrior(state.getKey());
@@ -141,10 +147,12 @@ public abstract class BetaTable<S, O> {
       else
         betaProbability = LogOperations.logAdd(betaProbability, logSum);
     }
-    System.out.println("\n==================\nBackward Algorithm\n==================");
-    System.out.println("Sequence length: " + observation.size());
-    System.out.println("Log Likelihood of sequence: " + betaProbability);
-    System.out.println("Average Log Likelihood: " + betaProbability/observation.size());
+    if (displayOutput) {
+      System.out.println("\n==================\nBackward Algorithm\n==================");
+      System.out.println("Sequence length: " + observation.size());
+      System.out.println("Log Likelihood of sequence: " + betaProbability);
+      System.out.println("Average Log Likelihood: " + betaProbability / observation.size());
+    }
     return betaProbability;
   }
 

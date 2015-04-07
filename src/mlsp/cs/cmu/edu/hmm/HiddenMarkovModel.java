@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.commons.math3.util.Pair;
@@ -30,6 +29,10 @@ public abstract class HiddenMarkovModel<S, O> {
   public ViterbiTable<S, O> Viterbi;
 
   private GammaKsiTable<S, O> Ksi;
+
+  private Integer maxIterations = 100;
+
+  private Double convergenceCriteria = 1.0;
 
   public HiddenMarkovModel(ViterbiTable<S, O> viterbiTable, GammaKsiTable<S, O> ksi) {
     this.A = viterbiTable.getAlpha();
@@ -77,11 +80,49 @@ public abstract class HiddenMarkovModel<S, O> {
   protected abstract List<O> readLineFromFile(String nextLine);
 
   /**
+   * Train HMM by iteratively running Forward-Backward algorithm and checking for convergence
+   * 
+   * @param observations
+   */
+  private void trainHMM(List<List<O>> observations) {
+    double converge = convergenceCriteria + 1;
+    double averageLogLikelihood = 0;
+    double perCharacterLogLikelihood = 0;
+    int numIterations = 0;
+    A.setDisplayOutput(false);
+    B.setDisplayOutput(false);
+    System.out.println("\n==================================");
+    System.out.println("Running Forward-Backward Algorithm");
+    System.out.println("==================================\n");
+
+    while (converge > convergenceCriteria && ++numIterations < maxIterations) {
+      doParameterReestimation(observations);
+      double prevAverageLogLikelihood = averageLogLikelihood;
+      averageLogLikelihood = 0; // reset
+      double numChars = 0;
+      for (List<O> observation : observations) {
+        double forwardProb = A.forwardProbability(Pi, B, observation);
+        double backwardProb = B.backwardProbability(Pi, A, observation);
+        Viterbi.getViterbiBestPath(observation);
+        averageLogLikelihood += Math.min(forwardProb, backwardProb);
+        numChars += observation.size();
+      }
+      perCharacterLogLikelihood = averageLogLikelihood / numChars;
+      averageLogLikelihood = averageLogLikelihood / observations.size();
+      converge = Math.abs(averageLogLikelihood - prevAverageLogLikelihood);
+      System.out.println("Iteration " + numIterations + " Avg LL: " + averageLogLikelihood
+              + ", PC-LL: " + perCharacterLogLikelihood);
+    }
+    System.out.println("Converged after " + numIterations + " iterations. Final Avg LL: "
+            + averageLogLikelihood + " Final PC-LL: " + perCharacterLogLikelihood);
+  }
+
+  /**
    * oh FUCK! Baum Welch Bitches!
    * 
    * @param observation
    */
-  public void trainHMM(List<List<O>> observations) {
+  private void doParameterReestimation(List<List<O>> observations) {
     /* ======================================================= */
     // E-step
     // Calculate Gamma and Ksi values for all observations
@@ -153,24 +194,24 @@ public abstract class HiddenMarkovModel<S, O> {
     // Re-estimate B
     /* ======================================================= */
     double[][] newBeta = new double[B.getBetaTable().length][B.getBetaTable()[0].length];
-    for(Map.Entry<O, Integer> output : outputs.entrySet()) {
+    for (Map.Entry<O, Integer> output : outputs.entrySet()) {
       O Vk = output.getKey();
-      for(Map.Entry<S, Integer> state : states.entrySet()) {
+      for (Map.Entry<S, Integer> state : states.entrySet()) {
         int i = state.getValue();
         double gammaDenominator = 0;
         double gammaNumerator = 0;
-        for(int m = 0; m < M; ++m) {
+        for (int m = 0; m < M; ++m) {
           List<O> observation = observations.get(m);
           double[][] gammaTable = gammaKsiLookup.get(m).getFirst();
-          for(int t = 0; t < observation.size(); ++t) {
+          for (int t = 0; t < observation.size(); ++t) {
             O Ot = observation.get(t);
             double gammaVal = gammaTable[i][t];
-            if(gammaDenominator == 0)
+            if (gammaDenominator == 0)
               gammaDenominator = gammaVal;
             else
               gammaDenominator = LogOperations.logAdd(gammaDenominator, gammaVal);
-            if(Ot.equals(Vk)) { // delta function
-              if(gammaNumerator == 0) 
+            if (Ot.equals(Vk)) { // delta function
+              if (gammaNumerator == 0)
                 gammaNumerator = gammaVal;
               else
                 gammaNumerator = LogOperations.logAdd(gammaNumerator, gammaVal);

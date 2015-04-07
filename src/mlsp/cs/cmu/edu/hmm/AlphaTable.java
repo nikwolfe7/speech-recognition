@@ -17,18 +17,20 @@ public abstract class AlphaTable<S, O> {
 
   protected double[][] forward;
 
+  private boolean displayOutput = true;
+
   public AlphaTable(String filename, List<S> states) {
     if (states.size() < 1)
       throw new IllegalStateException("No states? WTF man!");
     this.alphaTable = new double[states.size()][states.size()];
     this.states = new HashMap<S, Integer>();
     int i = 0;
-    for (S state : states) 
+    for (S state : states)
       this.states.put(state, i++);
     File file = new File(filename);
     try {
       Scanner scn = new Scanner(file);
-      while (scn.hasNextLine()) 
+      while (scn.hasNextLine())
         loadTrellisFromLine(scn.nextLine());
       scn.close();
     } catch (FileNotFoundException e) {
@@ -76,6 +78,10 @@ public abstract class AlphaTable<S, O> {
     return forward;
   }
 
+  public void setDisplayOutput(boolean displayOutput) {
+    this.displayOutput = displayOutput;
+  }
+
   protected abstract void loadTrellisFromLine(String nextLine);
 
   public double getObservationProbability(PriorTable<S> priors, BetaTable<S, O> beta,
@@ -113,10 +119,12 @@ public abstract class AlphaTable<S, O> {
     for (int i = 1; i < forward.length; ++i) {
       obsProb = LogOperations.logAdd(obsProb, forward[i][observation.size() - 1]);
     }
-    System.out.println("\n=================\nForward Algorithm\n=================");
-    System.out.println("Sequence length: " + observation.size());
-    System.out.println("Log Likelihood of sequence: " + obsProb);
-    System.out.println("Average Log Likelihood: " + obsProb/observation.size());
+    if (displayOutput) {
+      System.out.println("\n=================\nForward Algorithm\n=================");
+      System.out.println("Sequence length: " + observation.size());
+      System.out.println("Log Likelihood of sequence: " + obsProb);
+      System.out.println("Average Log Likelihood: " + obsProb / observation.size());
+    }
     return obsProb;
   }
 

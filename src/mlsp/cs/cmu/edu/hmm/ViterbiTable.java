@@ -24,6 +24,8 @@ public abstract class ViterbiTable<S, O> {
 
   protected double[][] viterbiTable;
 
+  private boolean displayOutput = true;
+
   /**
    * @param alpha
    * @param beta
@@ -79,10 +81,12 @@ public abstract class ViterbiTable<S, O> {
     Pair<double[][], List<S>> viterbiResult = viterbi(observation, viterbiTable);
     viterbiTable = viterbiResult.getFirst();
     List<S> bestPath = viterbiResult.getSecond();
-    System.out.println("\n==================\nViterbi Algorithm\n==================");
-    System.out.println("Most Likely State Sequence: " + bestPath.toString());
-    System.out.println(" Actual Character Sequence: " + observation.toString());
-    calculateAccuracy(bestPath, observation);
+    if (displayOutput) {
+      System.out.println("\n==================\nViterbi Algorithm\n==================");
+      System.out.println("Most Likely State Sequence: " + bestPath.toString());
+      System.out.println(" Actual Character Sequence: " + observation.toString());
+      calculateAccuracy(bestPath, observation);
+    }
     return bestPath;
   }
 
@@ -169,5 +173,9 @@ public abstract class ViterbiTable<S, O> {
 
   public double[][] getViterbiTable() {
     return viterbiTable;
+  }
+
+  public void setDisplayOutput(boolean displayOutput) {
+    this.displayOutput = displayOutput;
   }
 }
