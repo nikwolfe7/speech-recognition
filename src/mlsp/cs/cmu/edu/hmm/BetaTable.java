@@ -66,7 +66,7 @@ public abstract class BetaTable<S, O> {
   public void setBetaValue(S state, O output, double prob) {
     int sIndex = states.get(state);
     int oIndex = outputs.get(output);
-    betaTable[sIndex][oIndex] = LogOperations.log(prob);
+    betaTable[sIndex][oIndex] = prob;
   }
 
   public void setBetaValueAtIndex(int s, int o, double prob) {

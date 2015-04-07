@@ -39,7 +39,7 @@ public abstract class PriorTable<S> {
   }
   
   public void setPrior(S state, Double prior) {
-    priors.put(state, LogOperations.log(prior));
+    priors.put(state, prior);
   }
   
   public double getPrior(S state) {

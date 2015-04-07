@@ -20,7 +20,7 @@ public class CharacterPriors extends PriorTable<String> {
     String c = arr[0];
     Double prob = Double.parseDouble(arr[1]);
     states.add(c);
-    priors.put(c, prob);
+    priors.put(c, LogOperations.log(prob));
   }
 
 }

@@ -55,7 +55,7 @@ public abstract class AlphaTable<S, O> {
   public void setAlphaValue(S fromState, S toState, double prob) {
     int fIndex = states.get(fromState);
     int tIndex = states.get(toState);
-    alphaTable[fIndex][tIndex] = LogOperations.log(prob);
+    alphaTable[fIndex][tIndex] = prob;
   }
 
   @SuppressWarnings("unchecked")

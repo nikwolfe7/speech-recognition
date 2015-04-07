@@ -24,7 +24,7 @@ public class CharacterBeta extends BetaTable<String, Character> {
     for (int i = 1; i < arr.length; ++i) {
       Character output = arr[i].split(":")[0].charAt(0);
       double prob = Double.parseDouble(arr[i].split(":")[1]);
-      setBetaValue(state, output, prob);
+      setBetaValue(state, output, LogOperations.log(prob));
     }
   }
 

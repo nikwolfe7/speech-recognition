@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.commons.math3.util.Pair;
@@ -100,8 +101,8 @@ public abstract class HiddenMarkovModel<S, O> {
     for (Map.Entry<S, Integer> state : states.entrySet()) {
       double gammaPiSum = 0;
       int i = state.getValue();
-      for (int j = 0; j < observations.size(); ++j) {
-        double[][] gammaTable = gammaKsiLookup.get(j).getFirst();
+      for (int m = 0; m < M; ++m) {
+        double[][] gammaTable = gammaKsiLookup.get(m).getFirst();
         double gammaValue = gammaTable[i][0];
         if (gammaPiSum == 0) {
           gammaPiSum = gammaValue;
@@ -109,8 +110,9 @@ public abstract class HiddenMarkovModel<S, O> {
           gammaPiSum = LogOperations.logAdd(gammaPiSum, gammaValue);
         }
       }
-      double mTerm = LogOperations.log(1 / M);
-      Pi.setPrior(state.getKey(), (gammaPiSum + mTerm));
+      double mTerm = LogOperations.log(1.0 / M);
+      double priorUpdate = gammaPiSum + mTerm;
+      Pi.setPrior(state.getKey(), priorUpdate);
     }
     /* ======================================================= */
     // Re-estimate A
@@ -124,7 +126,7 @@ public abstract class HiddenMarkovModel<S, O> {
         for (int m = 0; m < M; ++m) {
           double[][][] ksiTable = gammaKsiLookup.get(m).getSecond();
           List<O> observation = observations.get(m);
-          for (int t = 0; t < observation.size()-1; ++t) {
+          for (int t = 0; t < observation.size() - 1; ++t) {
             double ksiVal = ksiTable[t][i][j];
             if (numerator == 0) {
               numerator = ksiVal;
@@ -150,13 +152,37 @@ public abstract class HiddenMarkovModel<S, O> {
     /* ======================================================= */
     // Re-estimate B
     /* ======================================================= */
-    double[][] newBeta = new double[B.getBackwardTable().length][B.getBackwardTable()[0].length];
-    
-    for(int m = 0; m < M; ++m) {
-      List<O> observation = observations.get(m);
-      
-      
-    }
+    double[][] newBeta = new double[B.getBetaTable().length][B.getBetaTable()[0].length];
+    for(Map.Entry<O, Integer> output : outputs.entrySet()) {
+      O Vk = output.getKey();
+      for(Map.Entry<S, Integer> state : states.entrySet()) {
+        int i = state.getValue();
+        double gammaDenominator = 0;
+        double gammaNumerator = 0;
+        for(int m = 0; m < M; ++m) {
+          List<O> observation = observations.get(m);
+          double[][] gammaTable = gammaKsiLookup.get(m).getFirst();
+          for(int t = 0; t < observation.size(); ++t) {
+            O Ot = observation.get(t);
+            double gammaVal = gammaTable[i][t];
+            if(gammaDenominator == 0)
+              gammaDenominator = gammaVal;
+            else
+              gammaDenominator = LogOperations.logAdd(gammaDenominator, gammaVal);
+            if(Ot.equals(Vk)) { // delta function
+              if(gammaNumerator == 0) 
+                gammaNumerator = gammaVal;
+              else
+                gammaNumerator = LogOperations.logAdd(gammaNumerator, gammaVal);
+            }
+          }
+        } // end iteration over data
+        double betaUpdate = gammaNumerator - gammaDenominator; // division
+        newBeta[i][outputs.get(Vk)] = betaUpdate;
+      }
+    } // end beta table update
+    // REPLACE BETA TABLE
+    B.setBetaTable(newBeta);
   }
 
 }

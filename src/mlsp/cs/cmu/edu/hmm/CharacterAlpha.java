@@ -22,7 +22,7 @@ public class CharacterAlpha extends AlphaTable<String, Character> {
     for (int i = 1; i < arr.length; ++i) {
       String toState = arr[i].split(":")[0];
       double prob = Double.parseDouble(arr[i].split(":")[1]);
-      setAlphaValue(fromState, toState, prob);
+      setAlphaValue(fromState, toState, LogOperations.log(prob));
     }
   }
 
