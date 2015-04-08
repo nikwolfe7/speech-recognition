@@ -28,7 +28,8 @@ public class CharacterViterbi extends ViterbiTable<String, Character> {
 
   @Override
   protected void calculateAccuracy(List<String> bestPath, List<Character> observation) {
-    List<Character> vowels = new ArrayList<Character>(Arrays.asList('A','E','I','O','U','Y',' '));
+    //List<Character> vowels = new ArrayList<Character>(Arrays.asList('A','E','I','O','U','Y',' '));
+    List<Character> vowels = new ArrayList<Character>(Arrays.asList('M'));
     int correct = 0;
     double total = observation.size();
     for(int i = 0; i < observation.size(); i++) {

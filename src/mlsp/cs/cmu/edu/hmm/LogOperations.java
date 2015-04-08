@@ -1,6 +1,8 @@
 package mlsp.cs.cmu.edu.hmm;
 
 public class LogOperations {
+  
+  public static double NEG_INF = -1.0e100;
 
   public static double logAdd(double left, double right) {
     if (right < left) {
@@ -8,7 +10,7 @@ public class LogOperations {
     } else if (right > left) {
       return right + Math.log1p(Math.exp(left - right));
     } else {
-      return left + Math.log1p(1);
+      return left + Math.log1p(1.0);
     }
   }
 

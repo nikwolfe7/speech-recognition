@@ -115,7 +115,7 @@ public abstract class AlphaTable<S, O> {
   public double forwardProbability(PriorTable<S> priors, BetaTable<S, O> beta, List<O> observation) {
     forward = new double[states.size()][observation.size()];
     forward = calculateForward(priors, beta, observation, forward);
-    double obsProb = forward[0][observation.size() - 1];
+    double obsProb = forward[0][observation.size() - 1];  
     for (int i = 1; i < forward.length; ++i) {
       obsProb = LogOperations.logAdd(obsProb, forward[i][observation.size() - 1]);
     }
@@ -152,15 +152,12 @@ public abstract class AlphaTable<S, O> {
         }
       } else { // "recursion" step
         for (Map.Entry<S, Integer> state : states.entrySet()) {
-          double prevAlphaSum = 0.0;
+          double prevAlphaSum = LogOperations.NEG_INF;
           for (Map.Entry<S, Integer> prevState : states.entrySet()) {
             double alphaIJ = getAlphaValue(prevState.getKey(), state.getKey());
             double prevAlpha = trellis[prevState.getValue()][t - 1];
             double prevAlpha_alphaIJ = prevAlpha + alphaIJ;
-            if (prevAlphaSum == 0)
-              prevAlphaSum = prevAlpha_alphaIJ;
-            else
-              prevAlphaSum = LogOperations.logAdd(prevAlphaSum, prevAlpha_alphaIJ);
+            prevAlphaSum = LogOperations.logAdd(prevAlphaSum, prevAlpha_alphaIJ);
           }
           // update the trellis
           O currObs = observation.get(t);

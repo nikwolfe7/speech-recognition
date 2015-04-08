@@ -32,7 +32,7 @@ public abstract class HiddenMarkovModel<S, O> {
 
   private Integer maxIterations = 100;
 
-  private Double convergenceCriteria = 1.0;
+  private Double convergenceCriteria = 0.01;
 
   public HiddenMarkovModel(ViterbiTable<S, O> viterbiTable, GammaKsiTable<S, O> ksi) {
     this.A = viterbiTable.getAlpha();
@@ -86,8 +86,8 @@ public abstract class HiddenMarkovModel<S, O> {
    */
   private void trainHMM(List<List<O>> observations) {
     double converge = convergenceCriteria + 1;
-    double averageLogLikelihood = 0;
-    double perCharacterLogLikelihood = 0;
+    double averageLogLikelihood = LogOperations.NEG_INF;
+    double perCharacterLogLikelihood = LogOperations.NEG_INF;
     int numIterations = 0;
     A.setDisplayOutput(false);
     B.setDisplayOutput(false);
@@ -103,7 +103,7 @@ public abstract class HiddenMarkovModel<S, O> {
       for (List<O> observation : observations) {
         double forwardProb = A.forwardProbability(Pi, B, observation);
         double backwardProb = B.backwardProbability(Pi, A, observation);
-        Viterbi.getViterbiBestPath(observation);
+        //Viterbi.getViterbiBestPath(observation);
         averageLogLikelihood += Math.min(forwardProb, backwardProb);
         numChars += observation.size();
       }
@@ -128,31 +128,20 @@ public abstract class HiddenMarkovModel<S, O> {
     // Calculate Gamma and Ksi values for all observations
     /* ======================================================= */
     double M = observations.size();
-    List<Pair<double[][], double[][][]>> gammaKsiLookup = new ArrayList<Pair<double[][], double[][][]>>();
-    for (List<O> observation : observations) {
-      double[][] gamma = Ksi.calculateGammaTable(observation);
-      double[][][] ksi = Ksi.calculateKsiTable(gamma, observation);
-      Pair<double[][], double[][][]> gammaKsi = new Pair<double[][], double[][][]>(gamma, ksi);
-      gammaKsiLookup.add(gammaKsi);
-    }
+    List<Pair<double[][], double[][][]>> gammaKsiLookup = Ksi.getGammaKsiLookupTable(observations);
     /* ======================================================= */
     // M-step
     // Re-estimate Pi
     /* ======================================================= */
     for (Map.Entry<S, Integer> state : states.entrySet()) {
-      double gammaPiSum = 0;
+      double gammaPiSum = LogOperations.NEG_INF;
       int i = state.getValue();
       for (int m = 0; m < M; ++m) {
         double[][] gammaTable = gammaKsiLookup.get(m).getFirst();
         double gammaValue = gammaTable[i][0];
-        if (gammaPiSum == 0) {
-          gammaPiSum = gammaValue;
-        } else {
-          gammaPiSum = LogOperations.logAdd(gammaPiSum, gammaValue);
-        }
+        gammaPiSum = LogOperations.logAdd(gammaPiSum, gammaValue);
       }
-      double mTerm = LogOperations.log(1.0 / M);
-      double priorUpdate = gammaPiSum + mTerm;
+      double priorUpdate = gammaPiSum / M;
       Pi.setPrior(state.getKey(), priorUpdate);
     }
     /* ======================================================= */
@@ -162,26 +151,18 @@ public abstract class HiddenMarkovModel<S, O> {
       for (Map.Entry<S, Integer> jState : states.entrySet()) {
         int i = iState.getValue();
         int j = jState.getValue();
-        double numerator = 0;
-        double denominator = 0;
+        double numerator = LogOperations.NEG_INF;
+        double denominator = LogOperations.NEG_INF;
         for (int m = 0; m < M; ++m) {
           double[][][] ksiTable = gammaKsiLookup.get(m).getSecond();
           List<O> observation = observations.get(m);
           for (int t = 0; t < observation.size() - 1; ++t) {
             double ksiVal = ksiTable[t][i][j];
-            if (numerator == 0) {
-              numerator = ksiVal;
-            } else {
-              numerator = LogOperations.logAdd(numerator, ksiVal);
-            }
+            numerator = LogOperations.logAdd(numerator, ksiVal);
             for (Map.Entry<S, Integer> jSubState : states.entrySet()) {
               int jSub = jSubState.getValue();
               double jSubKsiVal = ksiTable[t][i][jSub];
-              if (denominator == 0) {
-                denominator = jSubKsiVal;
-              } else {
-                denominator = LogOperations.logAdd(denominator, jSubKsiVal);
-              }
+              denominator = LogOperations.logAdd(denominator, jSubKsiVal);
             }
           }
         } // end of M loop
@@ -198,23 +179,17 @@ public abstract class HiddenMarkovModel<S, O> {
       O Vk = output.getKey();
       for (Map.Entry<S, Integer> state : states.entrySet()) {
         int i = state.getValue();
-        double gammaDenominator = 0;
-        double gammaNumerator = 0;
+        double gammaDenominator = LogOperations.NEG_INF;
+        double gammaNumerator = LogOperations.NEG_INF;
         for (int m = 0; m < M; ++m) {
           List<O> observation = observations.get(m);
           double[][] gammaTable = gammaKsiLookup.get(m).getFirst();
           for (int t = 0; t < observation.size(); ++t) {
             O Ot = observation.get(t);
             double gammaVal = gammaTable[i][t];
-            if (gammaDenominator == 0)
-              gammaDenominator = gammaVal;
-            else
-              gammaDenominator = LogOperations.logAdd(gammaDenominator, gammaVal);
+            gammaDenominator = LogOperations.logAdd(gammaDenominator, gammaVal);
             if (Ot.equals(Vk)) { // delta function
-              if (gammaNumerator == 0)
-                gammaNumerator = gammaVal;
-              else
-                gammaNumerator = LogOperations.logAdd(gammaNumerator, gammaVal);
+              gammaNumerator = LogOperations.logAdd(gammaNumerator, gammaVal);
             }
           }
         } // end iteration over data

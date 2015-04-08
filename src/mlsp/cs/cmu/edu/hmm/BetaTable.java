@@ -135,17 +135,14 @@ public abstract class BetaTable<S, O> {
           List<O> observation) {
     backward = new double[states.size()][observation.size()];
     backward = calculateBackward(priors, alpha, observation, backward);
-    double betaProbability = 0;
+    double betaProbability = LogOperations.NEG_INF;
     for (Map.Entry<S, Integer> state : states.entrySet()) {
       int initialIndex = 0;
       double betaZero = backward[state.getValue()][initialIndex]; // initial beta
       double initialProbability = priors.getPrior(state.getKey());
       double emission = getBetaValue(state.getKey(), observation.get(initialIndex));
       double logSum = betaZero + initialProbability + emission;
-      if (betaProbability == 0)
-        betaProbability = logSum;
-      else
-        betaProbability = LogOperations.logAdd(betaProbability, logSum);
+      betaProbability = LogOperations.logAdd(betaProbability, logSum);
     }
     if (displayOutput) {
       System.out.println("\n==================\nBackward Algorithm\n==================");
@@ -177,7 +174,7 @@ public abstract class BetaTable<S, O> {
         // for each state
         for (Map.Entry<S, Integer> state : states.entrySet()) {
           // get sum of next column betas, transitions, emissions
-          double nextSum = 0.0;
+          double nextSum = LogOperations.NEG_INF;
           // loop over next column
           for (Map.Entry<S, Integer> nextState : states.entrySet()) {
             // emission prob of next output
@@ -190,10 +187,7 @@ public abstract class BetaTable<S, O> {
             // log sum (product) of these terms
             double logSum = obsTplusOneBeta + nextBeta + alphaIJ;
             // add to current sum
-            if (nextSum == 0.0)
-              nextSum = logSum;
-            else
-              nextSum = LogOperations.logAdd(nextSum, logSum);
+            nextSum = LogOperations.logAdd(nextSum, logSum);
           }
           // get (state) index
           int i = state.getValue();
