@@ -11,11 +11,11 @@ public class CharacterBeta extends BetaTable<String, Character> {
   }
 
   public static CharacterBeta getInstance(String filename) {
-    List<String> states = Arrays.asList("V", "C");
+    List<String> states = Arrays.asList("V", "C", "D");
     /*List<Character> outputs = Arrays.asList(' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
     */
-    List<Character> outputs = Arrays.asList('M','L');
+    List<Character> outputs = Arrays.asList('M','L','S','P');
     return new CharacterBeta(filename, states, outputs);
   }
 

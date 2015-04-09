@@ -11,9 +11,9 @@ public class CharacterHMMFactory extends HMMFactory<String, Character> {
   }
   
   public static CharacterHMMFactory getInstance() {
-    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "toy-hmm-priors.txt");
-    BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"toy-hmm-emit.txt");
-    AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "toy-hmm-trans.txt");
+    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "bhiksha-hmm-priors.txt");
+    BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"bhiksha-hmm-emit.txt");
+    AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "bhiksha-hmm-trans.txt");
     ViterbiTable<String, Character> viterbi = new CharacterViterbi(alpha, beta, priors);
     GammaKsiTable<String, Character> ksi = new CharacterGammaKsiTable(alpha, beta, priors);
     return new CharacterHMMFactory(alpha, beta, priors, viterbi, ksi);

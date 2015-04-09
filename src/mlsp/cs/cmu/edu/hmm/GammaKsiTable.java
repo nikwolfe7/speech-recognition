@@ -94,24 +94,6 @@ public abstract class GammaKsiTable<S, O> {
     return ksiTrellis;
   }
   
-   
-//  private void computeKsi() {
-//        for(int t=0;t<len_obseq-1;t++) {
-//            double sum = 0.0;
-//            for(int i=0;i<getNumStates();i++) {
-//                for(int j=lambda.getLLimit(i);j<=lambda.getRLimit(i);j++) {
-//                    ksi[t][i][j] = alpha[t][i] * beta[t+1][i] * lambda.getA(i,j) * lambda.getB(j,obSeq[t+1]);
-//                    sum += ksi[t][i][j];
-//                }    
-//            }
-//            for(int i=0;i<getNumStates();i++) {
-//                for(int j=lambda.getLLimit(i);j<=lambda.getRLimit(i);j++) {
-//                    ksi[t][i][j] /= sum;
-//                }    
-//            }
-//        }    
-//    }
-   
 
   private double[][][] populateKsiTrellis(double[][][] trellis, double[][] gamma, double[][] alpha,
           double[][] beta, List<O> observation) {
