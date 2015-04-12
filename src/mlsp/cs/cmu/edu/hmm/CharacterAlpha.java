@@ -11,7 +11,7 @@ public class CharacterAlpha extends AlphaTable<String, Character> {
   }
 
   public static AlphaTable<String, Character> getInstance(String filename) {
-    List<String> states = Arrays.asList("V", "C", "D");
+    List<String> states = Arrays.asList("V", "C");
     return new CharacterAlpha(filename, states);
   }
 
