@@ -48,7 +48,7 @@ public abstract class GammaKsiTable<S, O> {
     for (List<O> observation : observations) {
       calculateForwardBackwardTables(observation);
       double[][] gamma = calculateGammaTable(observation);
-      double[][][] ksi = calculateKsiTable(gamma, observation);
+      double[][][] ksi = calculateKsiTable(observation);
       Pair<double[][], double[][][]> gammaKsi = new Pair<double[][], double[][][]>(gamma, ksi);
       gammaKsiLookup.add(gammaKsi);
     }
@@ -88,41 +88,64 @@ public abstract class GammaKsiTable<S, O> {
     return trellis;
   }
 
-  private double[][][] calculateKsiTable(double[][] gamma, List<O> observation) {
+  private double[][][] calculateKsiTable(List<O> observation) {
     double[][][] ksiTrellis = new double[observation.size()-1][states.size()][states.size()];
-    ksiTrellis = populateKsiTrellis(ksiTrellis, gamma, A.getForwardTable(), B.getBackwardTable(), observation);
+    ksiTrellis = populateKsiTrellis(ksiTrellis, A.getForwardTable(), B.getBackwardTable(), observation);
     return ksiTrellis;
   }
   
 
-  private double[][][] populateKsiTrellis(double[][][] trellis, double[][] gamma, double[][] alpha,
+  private double[][][] populateKsiTrellis(double[][][] trellis, double[][] alpha,
           double[][] beta, List<O> observation) {
+    double alphaBetaSum = LogOperations.NEG_INF;
     for (int t = 0; t < observation.size() - 1; ++t) {
-      double ksiSum = LogOperations.NEG_INF;
-      for(Map.Entry<S, Integer> iState : states.entrySet()) {
-        for(Map.Entry<S, Integer> jState: states.entrySet()) {
-          int i = iState.getValue();
-          int j = jState.getValue();
-          O Otp1 = observation.get(t + 1);
-          double alphaVal = alpha[i][t];
-          double aTableVal = A.getAlphaValue(iState.getKey(), jState.getKey());
-          double betaVal = beta[j][t+1];
-          double bTableVal = B.getBetaValue(jState.getKey(), Otp1);
-          double top = alphaVal + aTableVal + bTableVal + betaVal;
-          ksiSum = LogOperations.logAdd(ksiSum, top);
-          trellis[t][i][j] = top;
-        }
+      for(Map.Entry<S, Integer> kState : states.entrySet()) {
+        int k = kState.getValue();
+        double alphaBeta = alpha[k][t] + beta[k][t];
+        alphaBetaSum = LogOperations.logAdd(alphaBetaSum, alphaBeta);
       }
       for(Map.Entry<S, Integer> iState : states.entrySet()) {
-        for(Map.Entry<S, Integer> jState: states.entrySet()) {
+        for(Map.Entry<S, Integer> jState : states.entrySet()) {
           int i = iState.getValue();
           int j = jState.getValue();
-          double top = trellis[t][i][j];
-          double ksiVal = top - ksiSum; // division
-          trellis[t][i][j] = ksiVal; 
+          double itAlpha = alpha[i][t];
+          double ijA = A.getAlphaValueFromIndex(i, j);
+          double jtp1Beta = beta[j][t + 1];
+          double jtp1B = B.getBetaValueFromIndex(j, (t + 1));
+          double numerator = itAlpha + ijA + jtp1Beta + jtp1B;
+          double ksiTerm = numerator - alphaBetaSum;
+          trellis[t][i][j] = ksiTerm;
         }
       }
     }
     return trellis;
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
