@@ -111,7 +111,8 @@ public abstract class GammaKsiTable<S, O> {
           double itAlpha = alpha[i][t];
           double ijA = A.getAlphaValueFromIndex(i, j);
           double jtp1Beta = beta[j][t + 1];
-          double jtp1B = B.getBetaValueFromIndex(j, (t + 1));
+          int oTp1 = B.getIndexFromOutput(observation.get(t+1));
+          double jtp1B = B.getBValueAtIndex(j, oTp1);
           double numerator = itAlpha + ijA + jtp1Beta + jtp1B;
           double ksiTerm = numerator - alphaBetaSum;
           trellis[t][i][j] = ksiTerm;

@@ -32,7 +32,7 @@ public class StringMatcher {
     
     outputTrellis(trellis);
 
-    // initialize alphaTable...
+    // initialize aTable...
     for (int i = 1; i <= src.length; ++i) {
       trellis[i][0] = i;
     }
@@ -40,11 +40,11 @@ public class StringMatcher {
       trellis[0][i] = i;
     }
 
-    // fill alphaTable...
+    // fill aTable...
     Integer distance = null;
     for (int j = 1; j <= target.length; ++j) {
       for (int i = 1; i <= src.length; ++i) {
-        //alphaTable[i][j] = d.getCost(alphaTable, src, target, i, j);
+        //aTable[i][j] = d.getCost(aTable, src, target, i, j);
         distance = trellis[i][j];
       }
     }

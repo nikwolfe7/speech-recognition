@@ -99,7 +99,7 @@ public abstract class ViterbiTable<S, O> {
           int i = state.getValue();
           O currObs = observation.get(t);
           trellis[i][t] = priors.getPrior(state.getKey())
-                  + beta.getBetaValue(state.getKey(), currObs);
+                  + beta.getBValue(state.getKey(), currObs);
         }
       } else {
         S maxState = priors.getStates().get(0);
@@ -107,7 +107,7 @@ public abstract class ViterbiTable<S, O> {
         double stateProb = LogOperations.NEG_INF;
         for (Map.Entry<S, Integer> state : states.entrySet()) {
           O currObs = observation.get(t);
-          double emissionProb = beta.getBetaValue(state.getKey(), currObs);
+          double emissionProb = beta.getBValue(state.getKey(), currObs);
           int i = state.getValue();
           for (Map.Entry<S, Integer> prevState : states.entrySet()) {
             int j = prevState.getValue();

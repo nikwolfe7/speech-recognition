@@ -15,7 +15,7 @@ public abstract class BetaTable<S, O> {
 
   protected Map<O, Integer> outputs;
 
-  protected double[][] betaTable;
+  protected double[][] bTable;
 
   protected double[][] backward;
 
@@ -25,7 +25,7 @@ public abstract class BetaTable<S, O> {
   public BetaTable(String filename, List<S> states, List<O> outputs) {
     if (states.size() < 1)
       throw new IllegalStateException("No states? WTF man!");
-    this.betaTable = new double[states.size()][outputs.size()];
+    this.bTable = new double[states.size()][outputs.size()];
     this.states = new HashMap<S, Integer>();
     this.outputs = new HashMap<O, Integer>();
     int i = 0;
@@ -47,32 +47,36 @@ public abstract class BetaTable<S, O> {
 
   public void printTrellis() {
     DecimalFormat df = new DecimalFormat("#.###");
-    for (int i = 0; i < betaTable.length; ++i) {
-      for (int j = 0; j < betaTable[0].length; ++j) {
-        System.out.print(df.format(betaTable[i][j]) + "\t");
+    for (int i = 0; i < bTable.length; ++i) {
+      for (int j = 0; j < bTable[0].length; ++j) {
+        System.out.print(df.format(bTable[i][j]) + "\t");
       }
       System.out.println("\n");
     }
   }
 
-  public double getBetaValue(S state, O output) {
+  public double getBValue(S state, O output) {
     int sIndex = states.get(state);
     int oIndex = outputs.get(output);
-    return betaTable[sIndex][oIndex];
+    return bTable[sIndex][oIndex];
   }
 
-  public double getBetaValueFromIndex(int s, int o) {
-    return betaTable[s][o];
+  public double getBValueAtIndex(int s, int o) {
+    return bTable[s][o];
+  }
+  
+  public int getIndexFromOutput(O obs) {
+    return outputs.get(obs);
   }
 
-  public void setBetaValue(S state, O output, double prob) {
+  public void setBValue(S state, O output, double prob) {
     int sIndex = states.get(state);
     int oIndex = outputs.get(output);
-    betaTable[sIndex][oIndex] = prob;
+    bTable[sIndex][oIndex] = prob;
   }
 
-  public void setBetaValueAtIndex(int s, int o, double prob) {
-    betaTable[s][o] = prob;
+  public void setBValueAtIndex(int s, int o, double prob) {
+    bTable[s][o] = prob;
   }
 
   @SuppressWarnings("unchecked")
@@ -91,12 +95,12 @@ public abstract class BetaTable<S, O> {
     return backward;
   }
 
-  public double[][] getBetaTable() {
-    return betaTable;
+  public double[][] getBTable() {
+    return bTable;
   }
 
   public void setBetaTable(double[][] betaTable) {
-    this.betaTable = betaTable;
+    this.bTable = betaTable;
   }
 
   public void setDisplayOutput(boolean displayOutput) {
@@ -140,7 +144,7 @@ public abstract class BetaTable<S, O> {
       int initialIndex = 0;
       double betaZero = backward[state.getValue()][initialIndex]; // initial beta
       double initialProbability = priors.getPrior(state.getKey());
-      double emission = getBetaValue(state.getKey(), observation.get(initialIndex));
+      double emission = getBValue(state.getKey(), observation.get(initialIndex));
       double logSum = betaZero + initialProbability + emission;
       betaProbability = LogOperations.logAdd(betaProbability, logSum);
     }
@@ -179,7 +183,7 @@ public abstract class BetaTable<S, O> {
           for (Map.Entry<S, Integer> nextState : states.entrySet()) {
             // emission prob of next output
             O obsTplusOne = observation.get(t + 1);
-            double obsTplusOneBeta = getBetaValue(nextState.getKey(), obsTplusOne);
+            double obsTplusOneBeta = getBValue(nextState.getKey(), obsTplusOne);
             // get beta trellis value of j index item in next column
             double nextBeta = trellis[nextState.getValue()][t + 1];
             // get a_ij transition probability

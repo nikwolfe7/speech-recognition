@@ -42,6 +42,10 @@ public abstract class PriorTable<S> {
     priors.put(state, prior);
   }
   
+  public void setPriorAtIndex(int i, Double prior) {
+    priors.put(states.get(i), prior);
+  }
+  
   public double getPrior(S state) {
     return priors.get(state);
   }

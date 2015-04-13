@@ -13,7 +13,7 @@ public abstract class AlphaTable<S, O> {
 
   protected Map<S, Integer> states;
 
-  protected double[][] alphaTable;
+  protected double[][] aTable;
 
   protected double[][] forward;
 
@@ -22,7 +22,7 @@ public abstract class AlphaTable<S, O> {
   public AlphaTable(String filename, List<S> states) {
     if (states.size() < 1)
       throw new IllegalStateException("No states? WTF man!");
-    this.alphaTable = new double[states.size()][states.size()];
+    this.aTable = new double[states.size()][states.size()];
     this.states = new HashMap<S, Integer>();
     int i = 0;
     for (S state : states)
@@ -40,9 +40,9 @@ public abstract class AlphaTable<S, O> {
 
   public void printTrellis() {
     DecimalFormat df = new DecimalFormat("#.###");
-    for (int i = 0; i < alphaTable.length; ++i) {
-      for (int j = 0; j < alphaTable[0].length; ++j) {
-        System.out.print(df.format(alphaTable[i][j]) + "\t");
+    for (int i = 0; i < aTable.length; ++i) {
+      for (int j = 0; j < aTable[0].length; ++j) {
+        System.out.print(df.format(aTable[i][j]) + "\t");
       }
       System.out.println("\n");
     }
@@ -51,13 +51,13 @@ public abstract class AlphaTable<S, O> {
   public double getAlphaValue(S fromState, S toState) {
     int fIndex = states.get(fromState);
     int tIndex = states.get(toState);
-    return alphaTable[fIndex][tIndex];
+    return aTable[fIndex][tIndex];
   }
 
   public void setAlphaValue(S fromState, S toState, double prob) {
     int fIndex = states.get(fromState);
     int tIndex = states.get(toState);
-    alphaTable[fIndex][tIndex] = prob;
+    aTable[fIndex][tIndex] = prob;
   }
 
   @SuppressWarnings("unchecked")
@@ -67,11 +67,11 @@ public abstract class AlphaTable<S, O> {
   }
 
   public double getAlphaValueFromIndex(int from, int to) {
-    return alphaTable[from][to];
+    return aTable[from][to];
   }
 
   public void setAlphaValueAtIndex(int from, int to, double prob) {
-    alphaTable[from][to] = prob;
+    aTable[from][to] = prob;
   }
 
   public double[][] getForwardTable() {
@@ -148,7 +148,7 @@ public abstract class AlphaTable<S, O> {
           int i = state.getValue();
           O currObs = observation.get(t);
           trellis[i][t] = priors.getPrior(state.getKey())
-                  + beta.getBetaValue(state.getKey(), currObs);
+                  + beta.getBValue(state.getKey(), currObs);
         }
       } else { // "recursion" step
         for (Map.Entry<S, Integer> state : states.entrySet()) {
@@ -161,7 +161,7 @@ public abstract class AlphaTable<S, O> {
           }
           // update the trellis
           O currObs = observation.get(t);
-          double betaValue = beta.getBetaValue(state.getKey(), currObs);
+          double betaValue = beta.getBValue(state.getKey(), currObs);
           double alphaJ = prevAlphaSum + betaValue;
           int j = state.getValue();
           trellis[j][t] = alphaJ;

@@ -32,7 +32,7 @@ public abstract class HiddenMarkovModel<S, O> {
 
   private Integer maxIterations = 100;
 
-  private Double convergenceCriteria = 0.01;
+  private Double convergenceCriteria = 0.0001;
 
   public HiddenMarkovModel(ViterbiTable<S, O> viterbiTable, GammaKsiTable<S, O> ksi) {
     this.A = viterbiTable.getAlpha();
@@ -142,7 +142,7 @@ public abstract class HiddenMarkovModel<S, O> {
         gammaPiSum = LogOperations.logAdd(gammaPiSum, gammaValue);
       }
       double priorUpdate = gammaPiSum / M;
-      Pi.setPrior(state.getKey(), priorUpdate);
+      Pi.setPriorAtIndex(i, priorUpdate);
     }
     /* ======================================================= */
     // Re-estimate A
@@ -168,15 +168,16 @@ public abstract class HiddenMarkovModel<S, O> {
         } // end of M loop
         double newAlphaIJ = numerator - denominator; // division
         // UPDATE A table
-        A.setAlphaValue(iState.getKey(), jState.getKey(), newAlphaIJ);
+        A.setAlphaValueAtIndex(i, j, newAlphaIJ);
       }
     }
     /* ======================================================= */
     // Re-estimate B
     /* ======================================================= */
-    double[][] newBeta = new double[B.getBetaTable().length][B.getBetaTable()[0].length];
+    double[][] newBeta = new double[B.getBTable().length][B.getBTable()[0].length];
     for (Map.Entry<O, Integer> output : outputs.entrySet()) {
       O Vk = output.getKey();
+      int j = B.getIndexFromOutput(Vk);
       for (Map.Entry<S, Integer> state : states.entrySet()) {
         int i = state.getValue();
         double gammaDenominator = LogOperations.NEG_INF;
@@ -194,7 +195,7 @@ public abstract class HiddenMarkovModel<S, O> {
           }
         } // end iteration over data
         double betaUpdate = gammaNumerator - gammaDenominator; // division
-        newBeta[i][outputs.get(Vk)] = betaUpdate;
+        newBeta[i][j] = betaUpdate;
       }
     } // end beta table update
     // REPLACE BETA TABLE

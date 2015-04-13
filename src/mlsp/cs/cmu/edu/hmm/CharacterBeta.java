@@ -12,10 +12,9 @@ public class CharacterBeta extends BetaTable<String, Character> {
 
   public static CharacterBeta getInstance(String filename) {
     List<String> states = Arrays.asList("V", "C");
-    /*List<Character> outputs = Arrays.asList(' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+    List<Character> outputs = Arrays.asList(' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
-    */
-    List<Character> outputs = Arrays.asList('M','L');
+//    List<Character> outputs = Arrays.asList('M','L');
     return new CharacterBeta(filename, states, outputs);
   }
 
@@ -26,7 +25,7 @@ public class CharacterBeta extends BetaTable<String, Character> {
     for (int i = 1; i < arr.length; ++i) {
       Character output = arr[i].split(":")[0].charAt(0);
       double prob = Double.parseDouble(arr[i].split(":")[1]);
-      setBetaValue(state, output, LogOperations.log(prob));
+      setBValue(state, output, LogOperations.log(prob));
     }
   }
 
