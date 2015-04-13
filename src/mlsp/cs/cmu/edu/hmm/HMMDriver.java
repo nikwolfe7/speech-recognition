@@ -6,10 +6,10 @@ public class HMMDriver {
 
   public static void main(String[] args) throws IOException {
     DataCleaner cleaner = new DataCleaner();
-    cleaner.cleanData("./hw7-data/hmm-train.txt", false);
+    cleaner.cleanData("./hw7-data/hmm-train.txt", true);
     cleaner.cleanData("./hw7-data/hmm-test.txt", false);
     cleaner.cleanData("./hw7-data/hmm-decode.txt", false);
-    cleaner.cleanData("./hw7-data/hmm-train-japanese.txt", true);
+    cleaner.cleanData("./hw7-data/hmm-train-japanese.txt", false);
     cleaner.cleanData("./hw7-data/hmm-test-japanese.txt", false);
     HMMFactory<String, Character> hmmFactory = CharacterHMMFactory.getInstance();
     HiddenMarkovModel<String, Character> HMM = hmmFactory.initializeHMM();
@@ -24,7 +24,7 @@ public class HMMDriver {
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/ex-hmm-decode-cleaned.txt");
   
     HMM.trainHMMFromFile("./hw7-data/hmm-train-cleaned.txt");
-      //HMM.trainHMMFromFile("./hw7-data/hmm-train-japanese-cleaned.txt");
+    //HMM.trainHMMFromFile("./hw7-data/hmm-train-japanese-cleaned.txt");
     
 //    HMM.trainHMMFromFile("./hw7-data/toy-hmm-decode.txt");
 //    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/toy-hmm-decode.txt");
