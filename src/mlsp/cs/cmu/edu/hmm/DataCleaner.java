@@ -38,7 +38,7 @@ public class DataCleaner {
     scn.close();
     String doc = builder.toString();
 
-    FileWriter writer = getWriter(filename.split(".txt")[0] + "-cleaned.txt");
+    FileWriter writer = getWriter(folder + "cleaned-" + filename.replace(folder,""));
     writer.write(doc);
     writer.close();
     //System.out.println("Done!\n");
