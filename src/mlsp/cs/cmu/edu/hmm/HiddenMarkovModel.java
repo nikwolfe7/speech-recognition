@@ -2,6 +2,7 @@ package mlsp.cs.cmu.edu.hmm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public abstract class HiddenMarkovModel<S, O> {
 
   private GammaKsiTable<S, O> Ksi;
 
-  private Integer maxIterations = 100;
+  private Integer maxIterations = 250;
 
   private Double convergenceCriteria = 0.0001;
 
@@ -81,13 +82,14 @@ public abstract class HiddenMarkovModel<S, O> {
 
   /**
    * Train HMM by iteratively running Forward-Backward algorithm and checking for convergence
+   * Public in case someone wants to use it directly...
    * 
    * @param observations
    */
-  private void trainHMM(List<List<O>> observations) {
+  public void trainHMM(List<List<O>> observations) {
     double converge = convergenceCriteria + 1;
-    double averageLogLikelihood = LogOperations.NEG_INF;
-    double perCharacterLogLikelihood = LogOperations.NEG_INF;
+    double avgLL = LogOperations.NEG_INF;
+    double perCharLL = LogOperations.NEG_INF;
     int numIterations = 0;
     A.setDisplayOutput(false);
     B.setDisplayOutput(false);
@@ -97,24 +99,32 @@ public abstract class HiddenMarkovModel<S, O> {
 
     while (converge > convergenceCriteria && ++numIterations < maxIterations) {
       doParameterReestimation(observations);
-      double prevAverageLogLikelihood = averageLogLikelihood;
-      averageLogLikelihood = 0; // reset
+      double prevPerCharLL = perCharLL;
+      avgLL = LogOperations.NEG_INF; // reset
       double numChars = 0;
       for (List<O> observation : observations) {
         double forwardProb = A.forwardProbability(Pi, B, observation);
         double backwardProb = B.backwardProbability(Pi, A, observation);
         //Viterbi.getViterbiBestPath(observation);
-        averageLogLikelihood += Math.min(forwardProb, backwardProb);
+        avgLL = LogOperations.logAdd(avgLL, Math.max(forwardProb, backwardProb));
         numChars += observation.size();
       }
-      perCharacterLogLikelihood = averageLogLikelihood / numChars;
-      averageLogLikelihood = averageLogLikelihood / observations.size();
-      converge = Math.abs(averageLogLikelihood - prevAverageLogLikelihood);
-      System.out.println("Iteration " + numIterations + " Avg LL: " + averageLogLikelihood
-              + ", PC-LL: " + perCharacterLogLikelihood);
+      perCharLL = avgLL / numChars;
+      avgLL = avgLL / observations.size();
+      converge = Math.abs(perCharLL - prevPerCharLL);
+      System.out.println("Iteration " + numIterations + " Avg LL: " + avgLL
+              + ", PC-LL: " + perCharLL);
     }
     System.out.println("Converged after " + numIterations + " iterations. Final Avg LL: "
-            + averageLogLikelihood + " Final PC-LL: " + perCharacterLogLikelihood);
+            + avgLL + " Final PC-LL: " + perCharLL);
+    System.out.println("Printing final Prior, Transition and Emission Probabilities...");
+    try {
+      Pi.printPriors();
+      A.printTrellis();
+      B.printTrellis();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -168,7 +178,7 @@ public abstract class HiddenMarkovModel<S, O> {
         } // end of M loop
         double newAlphaIJ = numerator - denominator; // division
         // UPDATE A table
-        A.setAlphaValueAtIndex(i, j, newAlphaIJ);
+        A.setAValueAtIndex(i, j, newAlphaIJ);
       }
     }
     /* ======================================================= */

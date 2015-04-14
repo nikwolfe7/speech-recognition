@@ -42,7 +42,7 @@ public abstract class GammaKsiTable<S, O> {
     for (O output : oList)
       outputs.put(output, j++);
   }
-  
+
   public List<Pair<double[][], double[][][]>> getGammaKsiLookupTable(List<List<O>> observations) {
     List<Pair<double[][], double[][][]>> gammaKsiLookup = new ArrayList<Pair<double[][], double[][][]>>();
     for (List<O> observation : observations) {
@@ -54,12 +54,12 @@ public abstract class GammaKsiTable<S, O> {
     }
     return gammaKsiLookup;
   }
-  
+
   private void calculateForwardBackwardTables(List<O> observation) {
     double fProb = A.forwardProbability(Pi, B, observation);
     double bProb = B.backwardProbability(Pi, A, observation);
-    if(fProb != bProb) {
-      //System.out.println("Forward/Backward probs differ by: " + Math.abs(fProb-bProb));
+    if (fProb != bProb) {
+      // System.out.println("Forward/Backward probs differ by: " + Math.abs(fProb-bProb));
     }
   }
 
@@ -89,29 +89,29 @@ public abstract class GammaKsiTable<S, O> {
   }
 
   private double[][][] calculateKsiTable(List<O> observation) {
-    double[][][] ksiTrellis = new double[observation.size()-1][states.size()][states.size()];
-    ksiTrellis = populateKsiTrellis(ksiTrellis, A.getForwardTable(), B.getBackwardTable(), observation);
+    double[][][] ksiTrellis = new double[observation.size() - 1][states.size()][states.size()];
+    ksiTrellis = populateKsiTrellis(ksiTrellis, A.getForwardTable(), B.getBackwardTable(),
+            observation);
     return ksiTrellis;
   }
-  
 
-  private double[][][] populateKsiTrellis(double[][][] trellis, double[][] alpha,
-          double[][] beta, List<O> observation) {
+  private double[][][] populateKsiTrellis(double[][][] trellis, double[][] alpha, double[][] beta,
+          List<O> observation) {
     double alphaBetaSum = LogOperations.NEG_INF;
     for (int t = 0; t < observation.size() - 1; ++t) {
-      for(Map.Entry<S, Integer> kState : states.entrySet()) {
+      for (Map.Entry<S, Integer> kState : states.entrySet()) {
         int k = kState.getValue();
         double alphaBeta = alpha[k][t] + beta[k][t];
         alphaBetaSum = LogOperations.logAdd(alphaBetaSum, alphaBeta);
       }
-      for(Map.Entry<S, Integer> iState : states.entrySet()) {
-        for(Map.Entry<S, Integer> jState : states.entrySet()) {
+      for (Map.Entry<S, Integer> iState : states.entrySet()) {
+        for (Map.Entry<S, Integer> jState : states.entrySet()) {
           int i = iState.getValue();
           int j = jState.getValue();
           double itAlpha = alpha[i][t];
-          double ijA = A.getAlphaValueFromIndex(i, j);
+          double ijA = A.getAValueAtIndex(i, j);
           double jtp1Beta = beta[j][t + 1];
-          int oTp1 = B.getIndexFromOutput(observation.get(t+1));
+          int oTp1 = B.getIndexFromOutput(observation.get(t + 1));
           double jtp1B = B.getBValueAtIndex(j, oTp1);
           double numerator = itAlpha + ijA + jtp1Beta + jtp1B;
           double ksiTerm = numerator - alphaBetaSum;
@@ -121,32 +121,5 @@ public abstract class GammaKsiTable<S, O> {
     }
     return trellis;
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
 }

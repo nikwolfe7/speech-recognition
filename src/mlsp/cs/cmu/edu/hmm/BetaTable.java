@@ -2,11 +2,14 @@ package mlsp.cs.cmu.edu.hmm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 public abstract class BetaTable<S, O> {
@@ -21,19 +24,24 @@ public abstract class BetaTable<S, O> {
 
   private boolean displayOutput = true;
 
+  private File betaUpdate;
+
   /* Assumes full path */
-  public BetaTable(String filename, List<S> states, List<O> outputs) {
+  public BetaTable(String filename, List<S> states, List<O> outputs, boolean initRandom) {
     if (states.size() < 1)
       throw new IllegalStateException("No states? WTF man!");
+    this.betaUpdate = new File(filename.replace(".txt", "-update.txt"));
     this.bTable = new double[states.size()][outputs.size()];
     this.states = new HashMap<S, Integer>();
     this.outputs = new HashMap<O, Integer>();
+
     int i = 0;
     for (S state : states)
       this.states.put(state, i++);
     int j = 0;
     for (O output : outputs)
       this.outputs.put(output, j++);
+
     File file = new File(filename);
     try {
       Scanner scn = new Scanner(file);
@@ -43,16 +51,46 @@ public abstract class BetaTable<S, O> {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
+    if (initRandom)
+      bTable = populateRandom(bTable);
   }
 
-  public void printTrellis() {
-    DecimalFormat df = new DecimalFormat("#.###");
-    for (int i = 0; i < bTable.length; ++i) {
-      for (int j = 0; j < bTable[0].length; ++j) {
-        System.out.print(df.format(bTable[i][j]) + "\t");
+  private double[][] populateRandom(double[][] table) {
+    Random rnd = new Random();
+    for (int i = 0; i < table.length; ++i) {
+      double rowSum = 0;
+      for (int j = 0; j < table[0].length; ++j) {
+        double val = rnd.nextDouble();
+        rowSum += val;
+        table[i][j] = val;
       }
-      System.out.println("\n");
+      for (int j = 0; j < table[0].length; ++j) {
+        double rndVal = LogOperations.log(table[i][j] / rowSum);
+        table[i][j] = rndVal;
+      }
     }
+    return table;
+  }
+
+  public void printTrellis() throws IOException {
+    System.out.println("\n=======\n" + "B Table\n" + "=======");
+    FileWriter fw = new FileWriter(betaUpdate);
+    DecimalFormat df = new DecimalFormat("#.###");
+    for (Map.Entry<S, Integer> state : states.entrySet()) {
+      int i = state.getValue();
+      String str = state.getKey().toString() + "\t";
+      fw.write(str);
+      System.out.print(str);
+      for (Map.Entry<O, Integer> output : outputs.entrySet()) {
+        int j = output.getValue();
+        str = output.getKey() + ":" + df.format(getBValueAtIndex(i, j)) + "\t";
+        fw.write(str);
+        System.out.print(str);
+      }
+      fw.write("\n");
+      System.out.println();
+    }
+    fw.close();
   }
 
   public double getBValue(S state, O output) {
@@ -64,7 +102,7 @@ public abstract class BetaTable<S, O> {
   public double getBValueAtIndex(int s, int o) {
     return bTable[s][o];
   }
-  
+
   public int getIndexFromOutput(O obs) {
     return outputs.get(obs);
   }
@@ -187,7 +225,7 @@ public abstract class BetaTable<S, O> {
             // get beta trellis value of j index item in next column
             double nextBeta = trellis[nextState.getValue()][t + 1];
             // get a_ij transition probability
-            double alphaIJ = alpha.getAlphaValue(state.getKey(), nextState.getKey());
+            double alphaIJ = alpha.getAValue(state.getKey(), nextState.getKey());
             // log sum (product) of these terms
             double logSum = obsTplusOneBeta + nextBeta + alphaIJ;
             // add to current sum

@@ -5,14 +5,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CharacterAlpha extends AlphaTable<String, Character> {
+  
+  private static boolean logProbs;
 
-  private CharacterAlpha(String filename, List<String> states) {
-    super(filename, states);
+  private CharacterAlpha(String filename, List<String> states, boolean initRandom) {
+    super(filename, states, initRandom);
   }
 
-  public static AlphaTable<String, Character> getInstance(String filename) {
+  public static AlphaTable<String, Character> getInstance(String filename, boolean convertToLogs, boolean initRandom) {
+    logProbs = convertToLogs;
     List<String> states = Arrays.asList("V", "C");
-    return new CharacterAlpha(filename, states);
+    return new CharacterAlpha(filename, states, initRandom);
   }
 
   @Override
@@ -22,7 +25,10 @@ public class CharacterAlpha extends AlphaTable<String, Character> {
     for (int i = 1; i < arr.length; ++i) {
       String toState = arr[i].split(":")[0];
       double prob = Double.parseDouble(arr[i].split(":")[1]);
-      setAlphaValue(fromState, toState, LogOperations.log(prob));
+      if(logProbs)
+        setAValue(fromState, toState, LogOperations.log(prob));
+      else
+        setAValue(fromState, toState, prob);
     }
   }
 

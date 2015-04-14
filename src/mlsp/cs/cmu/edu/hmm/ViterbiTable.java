@@ -112,7 +112,7 @@ public abstract class ViterbiTable<S, O> {
           for (Map.Entry<S, Integer> prevState : states.entrySet()) {
             int j = prevState.getValue();
             double prevProb = trellis[j][t - 1];
-            double alphaJI = alpha.getAlphaValue(prevState.getKey(), state.getKey());
+            double alphaJI = alpha.getAValue(prevState.getKey(), state.getKey());
             stateProb = emissionProb + prevProb + alphaJI;
             if (stateProb > maxProb) {
               maxProb = stateProb;
