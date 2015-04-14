@@ -106,7 +106,8 @@ public abstract class HiddenMarkovModel<S, O> {
         double forwardProb = A.forwardProbability(Pi, B, observation);
         double backwardProb = B.backwardProbability(Pi, A, observation);
         //Viterbi.getViterbiBestPath(observation);
-        avgLL = LogOperations.logAdd(avgLL, Math.max(forwardProb, backwardProb));
+        //avgLL = LogOperations.logAdd(avgLL, Math.max(forwardProb, backwardProb));
+        avgLL = LogOperations.logAdd(avgLL, forwardProb);
         numChars += observation.size();
       }
       perCharLL = avgLL / numChars;

@@ -17,11 +17,11 @@ public class CharacterHMMFactory extends HMMFactory<String, Character> {
 //    BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"toy-hmm-emit.txt");
 //    AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "toy-hmm-trans.txt");
 //    
-//    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "hmm-priors-update.txt", convertToLogs);
-//    BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"hmm-emit-update.txt", convertToLogs);
-//    AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "hmm-trans-update.txt", convertToLogs);
+//    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "hmm-priors-update.txt", convertToLogs, initRandom);
+//    BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"hmm-emit-update.txt", convertToLogs, initRandom);
+//    AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "hmm-trans-update.txt", convertToLogs, initRandom);
     
-    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "hmm-priors.txt", convertToLogs, initRandom);
+    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "hmm-priors.txt", convertToLogs, false);
     BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"hmm-emit.txt", convertToLogs, initRandom);
     AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "hmm-trans.txt", convertToLogs, initRandom);
     
