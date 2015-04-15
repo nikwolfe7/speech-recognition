@@ -4,7 +4,7 @@ public class CharacterHMMFactory extends HMMFactory<String, Character> {
   
   private static String rootFolder = "./hw7-data/";
   private static boolean convertToLogs = true;
-  private static boolean initRandom = true;
+  private static boolean initRandom = false;
   
   private CharacterHMMFactory(AlphaTable<String, Character> a, BetaTable<String, Character> b,
           PriorTable<String> pi, ViterbiTable<String, Character> viterbi, GammaKsiTable<String, Character> ksi) {
@@ -21,7 +21,7 @@ public class CharacterHMMFactory extends HMMFactory<String, Character> {
 //    BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"hmm-emit-update.txt", convertToLogs, initRandom);
 //    AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "hmm-trans-update.txt", convertToLogs, initRandom);
     
-    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "hmm-priors.txt", convertToLogs, false);
+    PriorTable<String> priors = CharacterPriors.getInstance(rootFolder + "hmm-priors.txt", convertToLogs, initRandom);
     BetaTable<String, Character> beta = CharacterBeta.getInstance(rootFolder +"hmm-emit.txt", convertToLogs, initRandom);
     AlphaTable<String, Character> alpha = CharacterAlpha.getInstance(rootFolder + "hmm-trans.txt", convertToLogs, initRandom);
     

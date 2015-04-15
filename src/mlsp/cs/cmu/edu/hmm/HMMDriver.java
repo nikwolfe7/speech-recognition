@@ -7,14 +7,14 @@ import java.nio.file.Paths;
 public class HMMDriver {
 
   public static void main(String[] args) throws IOException {
-    
+
     Files.deleteIfExists(Paths.get("./hw7-data/cleaned-hmm-train-japanese.txt"));
     Files.deleteIfExists(Paths.get("./hw7-data/cleaned-hmm-test-japanese.txt"));
     Files.deleteIfExists(Paths.get("./hw7-data/cleaned-hmm-train.txt"));
     Files.deleteIfExists(Paths.get("./hw7-data/cleaned-hmm-train.txt"));
     Files.deleteIfExists(Paths.get("./hw7-data/cleaned-hmm-decode.txt"));
     Files.deleteIfExists(Paths.get("./hw7-data/hmm-emit.txt"));
-    
+
     DataCleaner cleaner = new DataCleaner();
     cleaner.cleanData("./hw7-data/hmm-train.txt", true);
     cleaner.cleanData("./hw7-data/hmm-test.txt", false);
@@ -26,28 +26,33 @@ public class HMMDriver {
 
     HMM.A.getObservationProbability(HMM.Pi, HMM.B, "./hw7-data/cleaned-hmm-test.txt");
     HMM.B.getObservationProbability(HMM.Pi, HMM.A, "./hw7-data/cleaned-hmm-test.txt");
-//    HMM.A.getObservationProbability(HMM.Pi, HMM.B, "./hw7-data/toy-hmm-decode.txt");
-//    HMM.B.getObservationProbability(HMM.Pi, HMM.A, "./hw7-data/toy-hmm-decode.txt");
+    // HMM.A.getObservationProbability(HMM.Pi, HMM.B, "./hw7-data/toy-hmm-decode.txt");
+    // HMM.B.getObservationProbability(HMM.Pi, HMM.A, "./hw7-data/toy-hmm-decode.txt");
 
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-decode.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/ex-hmm-decode.txt");
+    // HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/ex-hmm-decode.txt");
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-train-japanese.txt");
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-train.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-test.txt");
+    // HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-test.txt");
     HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-test-japanese.txt");
-  
-//    HMM.trainHMMFromFile("./hw7-data/hmm-train-cleaned.txt");
+    //
+    // HMM.trainHMMFromFile("./hw7-data/hmm-train-cleaned.txt");
     HMM.trainHMMFromFile("./hw7-data/cleaned-hmm-train.txt");
-    
-//    HMM.trainHMMFromFile("./hw7-data/toy-hmm-decode.txt");
-//    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/toy-hmm-decode.txt");
-//    HMM.trainHMMFromFile("./hw7-data/ex-hmm-decode-cleaned.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-decode.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/ex-hmm-decode.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-train-japanese.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-train.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-test.txt");
-    HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-test-japanese.txt");
+    // HMM.trainHMMFromFile("./hw7-data/cleaned-hmm-train.txt");
+
+    HMM.A.setDisplayOutput(true);
+    HMM.A.getObservationProbability(HMM.Pi, HMM.B, "./hw7-data/cleaned-hmm-train.txt");
+    HMM.A.getObservationProbability(HMM.Pi, HMM.B, "./hw7-data/cleaned-hmm-test.txt");
+
+    // HMM.trainHMMFromFile("./hw7-data/toy-hmm-decode.txt");
+    // HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/toy-hmm-decode.txt");
+    // HMM.trainHMMFromFile("./hw7-data/ex-hmm-decode-cleaned.txt");
+    // HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-decode.txt");
+    // HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/ex-hmm-decode.txt");
+    // HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-train-japanese.txt");
+    //HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-train.txt");
+    //HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-test.txt");
+    // HMM.Viterbi.getViterbiBestPathFromFile("./hw7-data/cleaned-hmm-test-japanese.txt");
   }
 
 }
