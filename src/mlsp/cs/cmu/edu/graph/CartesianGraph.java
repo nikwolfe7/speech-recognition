@@ -35,7 +35,7 @@ public abstract class CartesianGraph<N, E> {
 
     @Override
     public int hashCode() {
-      return 13 * X.hashCode() * Y.hashCode();
+      return 31 * X.hashCode() * Y.hashCode();
     }
   }
 

@@ -36,6 +36,10 @@ public abstract class Node<N> {
     outgoingEdges.add(edge);
   }
   
+  /**
+   * don't do this! registerIncomingEdge is called
+   * by Node constructor. 
+   */
   public void registerIncomingEdge(Edge<?> edge) {
     incomingEdges.add(edge);
   }
