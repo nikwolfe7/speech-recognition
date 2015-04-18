@@ -49,21 +49,15 @@ public abstract class CartesianGraph<N, E> {
   }
   
   private void addNodeToGraph(Node<Pair<Node<N>,Node<N>>> newNode) {
-    Pair<Node<N>,Node<N>> c1 = getPair(n1, n3);
-    Pair<Node<N>,Node<N>> c2 = getPair(n2, n4);
+    Pair<Node<N>,Node<N>> c = newNode.getValue();
     // Get new graph nodes
-    if(graphNodes.containsKey(c1)) 
-      n1n3 = graphNodes.get(c1);
+    if(graphNodes.containsKey(c)) 
+      n1n3 = graphNodes.get(c);
     else
-      n1n3 = getNodePairImpl(c1);
-    
-    if(graphNodes.containsKey(c2)) 
-      n2n4 = graphNodes.get(c2);
-    else
-      n2n4 = getNodePairImpl(c2);
+      n1n3 = getNodePairImpl(c);
     
     // connect the dots!
-    graphNodes.put(c1, n1n3);
+    graphNodes.put(c, n1n3);
     graphNodes.put(c2, n2n4);
   }
   
