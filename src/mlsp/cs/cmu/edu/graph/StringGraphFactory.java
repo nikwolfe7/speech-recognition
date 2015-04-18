@@ -10,13 +10,13 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
 
   @Override
   public Graph<Character, String> buildGraph() {
-    CharNode head = new CharNode(null);
+    Node<Character> head = new CharNode(null);
     Graph<Character, String> G = new StringGraph(head); 
-    CharNode currNode = head;
+    Node<Character> currNode = head;
     for (String stringGraph : processList) {
       for(Character c : stringGraph.toCharArray()) {
-        CharNode newNode = new CharNode(c);
-        StringEdge newEdge = new StringEdge(currNode, newNode);
+        Node<Character> newNode = new CharNode(c);
+        Edge<String> newEdge = new Edge<String>(currNode, newNode);
       }
     }
     return G;

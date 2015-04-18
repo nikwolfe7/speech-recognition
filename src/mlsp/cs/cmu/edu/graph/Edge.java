@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.graph;
 
-public abstract class Edge<E> {
+public class Edge<E> {
 
   private E value = null;
 

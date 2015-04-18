@@ -22,6 +22,22 @@ public abstract class Node<N> {
     this.value = value;
     this.cost = cost;
   }
+  
+  public Iterable<Node<N>> getSuccessors() {
+    return retrieveNodesFromEdges(outgoingEdges);
+  }
+  
+  public Iterable<Node<N>> getPredecessors() {
+    return retrieveNodesFromEdges(incomingEdges);
+  }
+  
+  /**
+   * Get the nodes at the other ends of our edges...
+   * 
+   * @param edges
+   * @return
+   */
+  protected abstract Iterable<Node<N>> retrieveNodesFromEdges(Set<Edge<?>> edges);
 
   /**
    * Defines how to compare this node to another node, returning some double value to represent that
@@ -30,7 +46,11 @@ public abstract class Node<N> {
    * @param node
    * @return
    */
-  public abstract double getDifference(Node<N> node);
+  public double getDifference(Node<N> node) {
+    return getDistanceStrategy().getDifference(this, node);
+  }
+  
+  protected abstract DistanceCalculator<N> getDistanceStrategy();
 
   public void addOutgoingEdge(Edge<?> edge) {
     if (edge.getPredecessor() == this)
