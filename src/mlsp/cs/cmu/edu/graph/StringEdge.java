@@ -9,14 +9,15 @@ package mlsp.cs.cmu.edu.graph;
  */
 public class StringEdge extends Edge<String> {
 
-  public StringEdge(Node<?> nodePointer) {
-    super(nodePointer);
+  public StringEdge(Node<?> from, Node<?> to, double weight) {
+    super(from, to, weight);
     // TODO Auto-generated constructor stub
   }
 
-  public StringEdge(Node<?> nodePointer, double weight) {
-    super(nodePointer, weight);
+  public StringEdge(Node<?> from, Node<?> to) {
+    super(from, to);
     // TODO Auto-generated constructor stub
   }
+  
 
 }

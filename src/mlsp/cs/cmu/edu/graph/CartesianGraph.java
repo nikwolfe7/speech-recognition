@@ -4,58 +4,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.math3.util.Pair;
+
 public abstract class CartesianGraph<N, E> {
 
-  private Map<Coordinate, Node<Coordinate>> graphNodes;
+  private Map<Pair<Node<N>,Node<N>>, Node<Pair<Node<N>,Node<N>>>> graphNodes;
   
   private List<Edge<E>> graphEdges;
 
-  private Node<Coordinate> headNode;
-
-  public class Coordinate {
-
-    public Node<N> X;
-    public Node<N> Y;
-
-    public Coordinate(Node<N> x, Node<N> y) {
-      this.X = x;
-      this.Y = y;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (!(obj instanceof CartesianGraph.Coordinate))
-        return false;
-      @SuppressWarnings("unchecked")
-      Coordinate k = (Coordinate) obj;
-      return X == k.X && Y == k.Y;
-    }
-
-    @Override
-    public int hashCode() {
-      return 31 * X.hashCode() * Y.hashCode();
-    }
-  }
+  private Node<Pair<Node<N>,Node<N>>> headNode;
 
   /**
    * @return the headNode
    */
-  public Node<Coordinate> getHeadNode() {
+  public Node<Pair<Node<N>,Node<N>>> getHeadNode() {
     return headNode;
   }
 
-  protected Coordinate getCoordinate(Node<N> n1, Node<N> n2) {
-    return new Coordinate(n1, n2);
+  protected Pair<Node<N>,Node<N>> getPair(Node<N> n1, Node<N> n2) {
+    return new Pair<Node<N>,Node<N>>(n1, n2);
   }
 
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
-    graphNodes = new HashMap<Coordinate, Node<Coordinate>>();
+    graphNodes = new HashMap<Pair<Node<N>,Node<N>>, Node<Pair<Node<N>,Node<N>>>>();
     Node<N> headG1 = G1.getHead();
     Node<N> headG2 = G2.getHead();
-    Coordinate head = getCoordinate(headG1, headG2);
-    headNode = getCoordinateNodeImpl(head);
+    Pair<Node<N>,Node<N>> head = getPair(headG1, headG2);
+    headNode = getPairNodeImpl(head);
     graphNodes.put(head, headNode);
 
     // for each node n1 in G1:
@@ -69,27 +44,25 @@ public abstract class CartesianGraph<N, E> {
           for(Edge<?> e2 : n3.getOutgoingEdges()) {
             Node<N> n4 = getTypeNodeImpl(e2);
             // add edge n1,n3 --> n2,n4
-            Node<Coordinate> n1n3, n2n4;
-            Coordinate c1 = new Coordinate(n1,n3);
-            Coordinate c2 = new Coordinate(n2,n4);
+            Node<Pair<Node<N>,Node<N>>> n1n3, n2n4;
+            Pair<Node<N>,Node<N>> c1 = getPair(n1, n3);
+            Pair<Node<N>,Node<N>> c2 = getPair(n2, n4);
             
             // Get new graph nodes
             if(graphNodes.containsKey(c1)) 
               n1n3 = graphNodes.get(c1);
             else
-              n1n3 = getCoordinateNodeImpl(c1);
+              n1n3 = getPairNodeImpl(c1);
             
             if(graphNodes.containsKey(c2)) 
               n2n4 = graphNodes.get(c2);
             else
-              n2n4 = getCoordinateNodeImpl(c2);
+              n2n4 = getPairNodeImpl(c2);
             
             // connect the dots!
             graphNodes.put(c1, n1n3);
             graphNodes.put(c2, n2n4);
-            Edge<E> edge = getTypeEdgeImpl(n2n4);
-            addEdge(edge);
-            n1n3.addEdge(edge);
+            addEdge(getTypeEdgeImpl(n1n3, n2n4));
           }
         }
       }
@@ -101,13 +74,13 @@ public abstract class CartesianGraph<N, E> {
   }
   
   /* Defer edge type instantiation to subclass */
-  protected abstract Edge<E> getTypeEdgeImpl(Node<?> node);
+  protected abstract Edge<E> getTypeEdgeImpl(Node<?> from, Node<?> to);
   
   /* Get parameterized Node implemenation */
   protected abstract Node<N> getTypeNodeImpl(Edge<?> edge);
   
   /* Defer node type construction to subclasses */
-  protected abstract Node<Coordinate> getCoordinateNodeImpl(Coordinate coordinate);
+  protected abstract Node<Pair<Node<N>,Node<N>>> getPairNodeImpl(Pair<Node<N>,Node<N>> Pair);
 
   /**
    * @return the graphEdges
@@ -115,5 +88,7 @@ public abstract class CartesianGraph<N, E> {
   public List<Edge<E>> getGraphEdges() {
     return graphEdges;
   }
+
+  
 
 }

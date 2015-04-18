@@ -1,62 +1,59 @@
 package mlsp.cs.cmu.edu.graph;
 
 public abstract class Edge<E> {
-  
+
   private E value = null;
+
   private double weight;
+
   private Node<?> nodePointer;
-  
-  public Edge(Node<?> nodePointer) {
-    setNodePointer(nodePointer);
-    nodePointer.registerIncomingEdge(this);
+
+  private Node<?> predecessor;
+
+  public Edge(Node<?> from, Node<?> to) {
+    setPredecessor(from);
+    setNodePointer(to);
     this.weight = 0.0;
   }
 
-  public Edge(Node<?> nodePointer, double weight) {
-    setNodePointer(nodePointer);
-    nodePointer.registerIncomingEdge(this);
+  public Edge(Node<?> from, Node<?> to, double weight) {
+    setPredecessor(from);
+    setNodePointer(to);
     this.weight = weight;
   }
 
-  /**
-   * @return the value
-   */
+  public void setNodePointer(Node<?> nodePointer) {
+    this.nodePointer = nodePointer;
+    nodePointer.addIncomingEdge(this);
+  }
+
+  public void setPredecessor(Node<?> predecessor) {
+    this.predecessor = predecessor;
+    predecessor.addOutgoingEdge(this);
+  }
+
   public E getValue() {
     return value;
   }
 
-  /**
-   * @param value the value to set
-   */
   public void setValue(E value) {
     this.value = value;
   }
 
-  /**
-   * @return the weight
-   */
   public double getWeight() {
     return weight;
   }
 
-  /**
-   * @param weight the weight to set
-   */
   public void setWeight(double weight) {
     this.weight = weight;
   }
 
-  /**
-   * @return the nodePointer
-   */
   public Node<?> getNodePointer() {
     return nodePointer;
   }
 
-  /**
-   * @param nodePointer the nodePointer to set
-   */
-  public void setNodePointer(Node<?> nodePointer) {
-    this.nodePointer = nodePointer;
+  public Node<?> getPredecessor() {
+    return predecessor;
   }
+
 }

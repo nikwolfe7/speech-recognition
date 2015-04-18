@@ -13,7 +13,7 @@ public class GraphDriver {
     while(scn.hasNextLine()) {
       dictionary.add(scn.nextLine());
     }*/
-    dictionary.add("aaaa");
+    dictionary.add("abcd");
     
     List<String> input = new ArrayList<String>();
     /*scn = new Scanner(new File("./text/typos.txt"));
@@ -21,7 +21,7 @@ public class GraphDriver {
       String[] arr = scn.nextLine().split(" ");
       input.addAll(Arrays.asList(arr));
     }*/
-    input.add("aabb");
+    input.add("efgh");
    
     GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character,String> G1 = factory.buildGraph();

@@ -1,15 +1,18 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Node<N> {
-  
+
   private N value;
+
   private double cost;
-  private List<Edge<?>> outgoingEdges = new ArrayList<Edge<?>>();
-  private List<Edge<?>> incomingEdges = new ArrayList<Edge<?>>();
-  
+
+  private Set<Edge<?>> outgoingEdges = new HashSet<Edge<?>>();
+
+  private Set<Edge<?>> incomingEdges = new HashSet<Edge<?>>();
+
   public Node(N value) {
     this.value = value;
     this.cost = 0.0;
@@ -19,67 +22,61 @@ public abstract class Node<N> {
     this.value = value;
     this.cost = cost;
   }
-  
+
   /**
-   * Defines how to compare this node to another node, returning
-   * some double value to represent that difference. 
+   * Defines how to compare this node to another node, returning some double value to represent that
+   * difference.
    * 
    * @param node
    * @return
    */
   public abstract double getDifference(Node<N> node);
-  
-  /**
-   * @param edge
-   */
-  public void addEdge(Edge<?> edge) {
-    outgoingEdges.add(edge);
-  }
-  
-  /**
-   * don't do this! registerIncomingEdge is called
-   * by Node constructor. 
-   */
-  public void registerIncomingEdge(Edge<?> edge) {
-    incomingEdges.add(edge);
+
+  public void addOutgoingEdge(Edge<?> edge) {
+    if (edge.getPredecessor() == this)
+      outgoingEdges.add(edge);
+    else
+      throw new RuntimeException("Attempted to add outgoing edge which does not come from me!");
   }
 
-  /**
-   * @return the value
-   */
+  public void addIncomingEdge(Edge<?> edge) {
+    if (edge.getNodePointer() == this) // only if you're pointing to me.
+      incomingEdges.add(edge);
+    else
+      throw new RuntimeException("Attempted to add an incoming edge which does not point to me!");
+  }
+
+  public boolean removeOutgoingEdge(Edge<?> edge) {
+    edge.setPredecessor(null);
+    return outgoingEdges.remove(edge);
+  }
+
+  public boolean removeIncomingEdge(Edge<?> edge) {
+    edge.setNodePointer(null);
+    return incomingEdges.remove(edge);
+  }
+
   public N getValue() {
     return value;
   }
 
-  /**
-   * @param value the value to set
-   */
   public void setValue(N value) {
     this.value = value;
   }
 
-  /**
-   * @return the cost
-   */
   public double getCost() {
     return cost;
   }
 
-  /**
-   * @param cost the cost to set
-   */
   public void setCost(double cost) {
     this.cost = cost;
   }
 
-  /**
-   * @return the outgoingEdges
-   */
-  public List<Edge<?>> getOutgoingEdges() {
+  public Set<Edge<?>> getOutgoingEdges() {
     return outgoingEdges;
   }
 
-  public List<Edge<?>> getIncomingEdges() {
+  public Set<Edge<?>> getIncomingEdges() {
     return incomingEdges;
   }
 

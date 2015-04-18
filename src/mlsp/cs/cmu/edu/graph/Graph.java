@@ -1,19 +1,19 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class Graph<N, E> {
 
-  private List<Edge<E>> graphEdges;
+  private Set<Edge<E>> graphEdges;
   private Map<N, Node<N>> graphNodes;
   private final Node<N> headNode;
   
   public Graph(Node<N> head) {
     this.headNode = head;
-    this.graphEdges = new ArrayList<Edge<E>>();
+    this.graphEdges = new HashSet<Edge<E>>();
     this.graphNodes = new HashMap<N, Node<N>>();
     addNode(headNode);
   }
@@ -27,21 +27,11 @@ public abstract class Graph<N, E> {
   }
   
   public void addNode(Node<N> node) {
-    if(graphNodes.containsKey(node.getValue())) {
-      Node<N> curr = graphNodes.get(node.getValue());
-      for(Edge<?> edge : node.getOutgoingEdges())
-        curr.addEdge(edge);
-      for(Edge<?> edge : node.getIncomingEdges()) 
-        curr.registerIncomingEdge(edge);
-    } else {
-      graphNodes.put(node.getValue(), node);
-    }
+    graphNodes.put(node.getValue(), node);
+    System.out.println(graphNodes.get(node.getValue()));
   }
 
-  public List<Edge<E>> getGraphEdges() {
+  public Set<Edge<E>> getGraphEdges() {
     return graphEdges;
   }
-
-  public abstract List<Edge<E>> getNodeEdges(Node<N> node);
-
 }

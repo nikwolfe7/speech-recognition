@@ -1,5 +1,7 @@
 package mlsp.cs.cmu.edu.graph;
 
+import org.apache.commons.math3.util.Pair;
+
 /**
  * @author nwolfe
  *
@@ -11,16 +13,16 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected Edge<String> getTypeEdgeImpl(Node<?> node) {
-    return new StringEdge(node);
+  protected Edge<String> getTypeEdgeImpl(Node<?> from, Node<?> to) {
+    return new StringEdge(from, to);
   }
 
   @Override
   protected Node<Character> getTypeNodeImpl(Edge<?> edge) {
     if (edge instanceof StringEdge) {
-      StringEdge sedge = (StringEdge) edge;
-      if (sedge.getNodePointer() instanceof CharNode) {
-        return (CharNode) sedge.getNodePointer();
+      StringEdge strEdge = (StringEdge) edge;
+      if (strEdge.getNodePointer() instanceof CharNode) {
+        return (CharNode) strEdge.getNodePointer();
       }
     }
     System.out.println("Type cast failed! Check your graph!!");
@@ -28,34 +30,21 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected Node<CartesianGraph<Character, String>.Coordinate> getCoordinateNodeImpl(
-          CartesianGraph<Character, String>.Coordinate coordinate) {
-    return new CoordinateNode(coordinate);
-  }
+  protected Node<Pair<Node<Character>, Node<Character>>> getPairNodeImpl(
+          Pair<Node<Character>, Node<Character>> pair) {
+    final class PairNode extends Node<Pair<Node<Character>, Node<Character>>> {
 
-  /**
-   * Cartesian Node implementation, i.e. a node formed from two
-   * previous Nodes...
-   * 
-   * @author nwolfe
-   *
-   */
-  private class CoordinateNode extends Node<CartesianGraph<Character, String>.Coordinate> {
+      public PairNode(Pair<Node<Character>, Node<Character>> value) {
+        super(value);
+      }
 
-    public CoordinateNode(CartesianGraph<Character, String>.Coordinate value) {
-      super(value);
+      @Override
+      public double getDifference(Node<Pair<Node<Character>, Node<Character>>> node) {
+        return 0;
+      }
+
     }
-
-    public CoordinateNode(CartesianGraph<Character, String>.Coordinate value, double cost) {
-      super(value, cost);
-    }
-
-    @Override
-    public double getDifference(Node<CartesianGraph<Character, String>.Coordinate> node) {
-      // TODO Auto-generated method stub
-      return 0;
-    }
-
+    return new PairNode(pair);
   }
 
 }
