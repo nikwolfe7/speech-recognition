@@ -14,6 +14,7 @@ public class GraphDriver {
       dictionary.add(scn.nextLine());
     }*/
     dictionary.add("abcd");
+    dictionary.add("wxyz");
     
     List<String> input = new ArrayList<String>();
     /*scn = new Scanner(new File("./text/typos.txt"));
@@ -38,7 +39,7 @@ public class GraphDriver {
     
     for(Graph<Character,String> wordGraph : words) {
       CartesianGraph<Character, String> product = new StringCartesianGraph(G1, wordGraph);
-      printNodes(product.getHeadNode(), product.getHeadNode());
+      printNodes(product.getHead(), product.getHead());
     }
   }
   
@@ -48,17 +49,14 @@ public class GraphDriver {
   }
   
   private static void printNodes(Node<?> pointer, Node<?> head) {
+    print(pointer);
+    System.out.println();
+  }
+  
+  private static void print(Node<?> pointer) {
     System.out.print(" --> "+pointer.getValue());
-    for(Edge<?> edge : pointer.getOutgoingEdges()) {
-      if(edge.getValue() != null) {
-        System.out.println("\n"+edge.getValue());
-      }
-      Node<?> node = edge.getNodePointer();
-      if (node != pointer && node != head) {
-        printNodes(edge.getNodePointer(), head);
-      } else if (node.getValue() == null) { // tail
-        System.out.println("tail");
-      }
+    for(Node<?> node : pointer.getSuccessors()) {
+      print(node);
     }
   }
   

@@ -15,12 +15,10 @@ public class CharNode extends Node<Character> {
 
   public CharNode(Character value) {
     super(value);
-    // TODO Auto-generated constructor stub
   }
 
   public CharNode(Character value, double cost) {
     super(value, cost);
-    // TODO Auto-generated constructor stub
   }
 
   @Override

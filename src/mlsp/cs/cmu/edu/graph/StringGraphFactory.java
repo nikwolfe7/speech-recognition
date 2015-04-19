@@ -17,7 +17,13 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
       for(Character c : stringGraph.toCharArray()) {
         Node<Character> newNode = new CharNode(c);
         Edge<String> newEdge = new Edge<String>(currNode, newNode);
+        G.addEdge(newEdge);
+        G.addNode(newNode);
+        currNode = newNode; // move along the chain
       }
+      Edge<String> lastEdge = new Edge<String>(currNode, head);
+      lastEdge.setValue(stringGraph);
+      G.addEdge(lastEdge);
     }
     return G;
   }
