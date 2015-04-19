@@ -100,4 +100,7 @@ public abstract class Node<N> {
     return incomingEdges;
   }
 
+  @Override
+  public abstract String toString();
+
 }

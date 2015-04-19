@@ -56,4 +56,9 @@ public class Edge<E> {
     return predecessor;
   }
 
+  @Override
+  public String toString() {
+    return "--(v=" + getValue() + ",w=" + getWeight() + ")-->";
+  }
+
 }

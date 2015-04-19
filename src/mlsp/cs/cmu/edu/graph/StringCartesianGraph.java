@@ -46,7 +46,13 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
           }
         };
       }
+
+      @Override
+      public String toString() {
+        return "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue() + ")";
+      }
     }
     return new PairNode(pair);
   }
+
 }

@@ -38,5 +38,5 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
     else
       return getCartesianNodeImpl(pair);
   }
-
+  
 }

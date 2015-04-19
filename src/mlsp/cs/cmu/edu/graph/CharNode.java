@@ -27,7 +27,7 @@ public class CharNode extends Node<Character> {
     List<Node<Character>> nodes = new ArrayList<Node<Character>>();
     for (Edge<?> e : edges) {
       Object o = e.getNodePointer().getValue();
-      if (o instanceof Character) {
+      if (o instanceof Character || o == null) {
         nodes.add((Node<Character>) e.getNodePointer());
       }
     }
@@ -42,6 +42,11 @@ public class CharNode extends Node<Character> {
         return n1.getValue().compareTo(n2.getValue());
       }
     };
+  }
+
+  @Override
+  public String toString() {
+    return "" + getValue();
   }
 
 }

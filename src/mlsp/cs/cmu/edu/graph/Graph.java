@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Graph<N, E> {
+import org.apache.commons.math3.util.Pair;
+
+public class Graph<N, E> {
 
   protected Set<Edge<E>> graphEdges;
 
@@ -43,5 +45,17 @@ public abstract class Graph<N, E> {
 
   public Set<Edge<E>> getGraphEdges() {
     return graphEdges;
+  }
+  
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for(Node<N> node : getNodes()) {
+      sb.append("N( " + node.toString() + " )\n");
+      for(Edge<?> edge : node.getOutgoingEdges()) {
+        sb.append("|------" + edge.toString() + " " + edge.getNodePointer().toString() + "\n");
+      }
+    }
+    return sb.toString();
   }
 }

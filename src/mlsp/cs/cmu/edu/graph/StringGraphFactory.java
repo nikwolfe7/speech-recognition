@@ -11,7 +11,7 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
   @Override
   public Graph<Character, String> buildGraph() {
     Node<Character> head = new CharNode(null);
-    Graph<Character, String> G = new StringGraph(head); 
+    Graph<Character, String> G = new Graph<Character, String>(head); 
     Node<Character> currNode = head;
     for (String stringGraph : processList) {
       for(Character c : stringGraph.toCharArray()) {
@@ -20,6 +20,8 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
         G.addEdge(newEdge);
         G.addNode(newNode);
         currNode = newNode; // move along the chain
+        Edge<String> selfEdge = new Edge<String>(currNode, newNode);
+        G.addEdge(selfEdge);
       }
       Edge<String> lastEdge = new Edge<String>(currNode, head);
       lastEdge.setValue(stringGraph);
