@@ -38,25 +38,12 @@ public class GraphDriver {
 
     for (Graph<Character, String> wordGraph : words) {
       CartesianGraph<Character, String> product = new StringCartesianGraph(G1, wordGraph);
-      printNodes(product.getHead(), product.getHead());
+      printGraph(product);
     }
   }
 
   public static void printGraph(Graph<?, ?> graph) {
-    Node<?> pointer = graph.getHead();
-    printNodes(pointer, pointer);
-    System.out.println();
-  }
-
-  private static void printNodes(Node<?> pointer, Node<?> head) {
-    for (Node<?> node : pointer.getSuccessors()) {
-      if(node == head) {
-        return;
-      } else if (pointer != node) {
-        System.out.print(" --> " + node.toString());
-        printNodes(node, head);
-      }
-    }
+    System.out.println(graph.toString());
   }
 
 }
