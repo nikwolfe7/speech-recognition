@@ -51,7 +51,7 @@ public class Graph<N, E> {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     for(Node<N> node : getNodes()) {
-      sb.append("N( " + node.toString() + " )\n");
+      sb.append("N=" + node.toString() + "\n");
       for(Edge<?> edge : node.getOutgoingEdges()) {
         sb.append("|------" + edge.toString() + " " + edge.getNodePointer().toString() + "\n");
       }

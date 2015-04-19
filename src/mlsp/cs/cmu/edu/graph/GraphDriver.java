@@ -1,19 +1,21 @@
 package mlsp.cs.cmu.edu.graph;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class GraphDriver {
 
   public static void main(String[] args) throws FileNotFoundException {
 
     List<String> dictionary = new ArrayList<String>();
-    /*
-     * Scanner scn = new Scanner(new File("./dict/dict_80k.txt")); while(scn.hasNextLine()) {
-     * dictionary.add(scn.nextLine()); }
-     */
-    dictionary.add("abc");
+    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
+    while (scn.hasNextLine()) {
+      dictionary.add(scn.nextLine());
+    }
+    //dictionary.add("abc");
 
     List<String> input = new ArrayList<String>();
     /*
