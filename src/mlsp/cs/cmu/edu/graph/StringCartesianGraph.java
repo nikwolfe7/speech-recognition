@@ -1,9 +1,5 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.math3.util.Pair;
 
 /**
@@ -26,17 +22,27 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
       @Override
       @SuppressWarnings("unchecked")
       // it's checked...
-      protected Iterable<Node<Pair<Node<Character>, Node<Character>>>> retrieveNodesFromEdges(List<Edge<?>> edges) {
-        List<Node<Pair<Node<Character>, Node<Character>>>> nodeList = new ArrayList<Node<Pair<Node<Character>, Node<Character>>>>();
-        for (Edge<?> e : edges) {
-          Object o1 = e.getNodePointer();
-          if (o1 instanceof PairNode) {
-            nodeList.add((Node<Pair<Node<Character>, Node<Character>>>) e.getNodePointer());
-          }
+      protected Node<Pair<Node<Character>, Node<Character>>> retrievePredecessorFromEdge(Edge<?> edge) {
+        Object o = edge.getNodePredecessor();
+        if (o instanceof PairNode) {
+          return (Node<Pair<Node<Character>, Node<Character>>>) edge.getNodePredecessor();
+        } else {
+          return null;
         }
-        return nodeList;
       }
 
+      @Override
+      @SuppressWarnings("unchecked")
+      // it's checked...
+      protected Node<Pair<Node<Character>, Node<Character>>> retrieveSuccessorFromEdge(Edge<?> edge) {
+        Object o = edge.getNodeSuccessor();
+        if (o instanceof PairNode) {
+          return (Node<Pair<Node<Character>, Node<Character>>>) edge.getNodeSuccessor();
+        } else {
+          return null;
+        }
+      }
+      
       @Override
       protected DistanceCalculator<Pair<Node<Character>, Node<Character>>> getDistanceStrategy() {
         return new DistanceCalculator<Pair<Node<Character>, Node<Character>>>() {
@@ -51,7 +57,6 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
       public String toString() {
         return "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue() + ")";
       }
-
     }
     return new PairNode(pair);
   }

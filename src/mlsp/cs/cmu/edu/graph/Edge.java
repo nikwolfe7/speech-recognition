@@ -7,30 +7,39 @@ public class Edge<E> {
   // for character matching it's EDGE weights
   private double weight;
 
-  private Node<?> nodePointer;
+  private Node<?> nodeSuccessor;
 
-  private Node<?> predecessor;
+  private Node<?> nodePredecessor;
 
   public Edge(Node<?> from, Node<?> to) {
-    setPredecessor(from);
-    setNodePointer(to);
+    setAdjacentNodes(from, to);
     this.weight = 0.0;
   }
 
   public Edge(Node<?> from, Node<?> to, double weight) {
-    setPredecessor(from);
-    setNodePointer(to);
+    setAdjacentNodes(from, to);
     this.weight = weight;
   }
-
-  public void setNodePointer(Node<?> nodePointer) {
-    this.nodePointer = nodePointer;
-    nodePointer.addIncomingEdge(this);
+  
+  public void setAdjacentNodes(Node<?> from, Node<?> to) {
+    this.nodePredecessor = from;
+    this.nodeSuccessor = to;
+    nodeSuccessor.addIncomingEdge(this);
+    nodePredecessor.addOutgoingEdge(this);
   }
 
-  public void setPredecessor(Node<?> predecessor) {
-    this.predecessor = predecessor;
-    predecessor.addOutgoingEdge(this);
+  public void setNodeSuccessor(Node<?> nodeSuccessor) {
+    this.nodeSuccessor = nodeSuccessor;
+    if(nodePredecessor != null) {
+      nodeSuccessor.addIncomingEdge(this);
+    }
+  }
+
+  public void setNodePredecessor(Node<?> nodePredecessor) {
+    this.nodePredecessor = nodePredecessor;
+    if(nodeSuccessor != null) {
+      nodePredecessor.addOutgoingEdge(this);
+    }
   }
 
   public E getValue() {
@@ -49,19 +58,19 @@ public class Edge<E> {
     this.weight = weight;
   }
 
-  public Node<?> getNodePointer() {
-    return nodePointer;
+  public Node<?> getNodeSuccessor() {
+    return nodeSuccessor;
   }
 
-  public Node<?> getPredecessor() {
-    return predecessor;
+  public Node<?> getNodePredecessor() {
+    return nodePredecessor;
   }
 
   @Override
   public String toString() {
-    return " " + getPredecessor().toString() + " id=" + getPredecessor().hashCode() +
+    return " " + getNodePredecessor().toString() + " id=" + getNodePredecessor().hashCode() +
             " --> (v=" + getValue() + ",w=" + getWeight() + 
-            ") --> " + getNodePointer().toString() + " id=" + getNodePointer().hashCode();
+            ") --> " + getNodeSuccessor().toString() + " id=" + getNodeSuccessor().hashCode();
   }
 
 }

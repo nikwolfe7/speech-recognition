@@ -13,6 +13,10 @@ public abstract class Node<N> {
 
   private List<Edge<?>> incomingEdges = new ArrayList<Edge<?>>();
 
+  private List<Node<N>> successors = new ArrayList<Node<N>>();
+
+  private List<Node<N>> predecessors = new ArrayList<Node<N>>();
+
   public Node(N value) {
     this.value = value;
     this.cost = 0.0;
@@ -22,22 +26,24 @@ public abstract class Node<N> {
     this.value = value;
     this.cost = cost;
   }
-  
+
   public Iterable<Node<N>> getSuccessors() {
-    return retrieveNodesFromEdges(outgoingEdges);
+    return successors;
   }
-  
+
   public Iterable<Node<N>> getPredecessors() {
-    return retrieveNodesFromEdges(incomingEdges);
+    return predecessors;
   }
-  
+
   /**
    * Get the nodes at the other ends of our edges...
    * 
    * @param edges
    * @return
    */
-  protected abstract Iterable<Node<N>> retrieveNodesFromEdges(List<Edge<?>> edges);
+  protected abstract Node<N> retrievePredecessorFromEdge(Edge<?> edge);
+
+  protected abstract Node<N> retrieveSuccessorFromEdge(Edge<?> edge);
 
   /**
    * Defines how to compare this node to another node, returning some double value to represent that
@@ -49,30 +55,50 @@ public abstract class Node<N> {
   public double getDifference(Node<N> node) {
     return getDistanceStrategy().getDifference(this, node);
   }
-  
+
   protected abstract DistanceCalculator<N> getDistanceStrategy();
 
   public void addOutgoingEdge(Edge<?> edge) {
-    if (edge.getPredecessor() == this)
+    if (edge.getNodePredecessor() == this) {
       outgoingEdges.add(edge);
-    else
+      successors.add(retrieveSuccessorFromEdge(edge));
+    } else {
       throw new RuntimeException("Attempted to add outgoing edge which does not come from me!");
+    }
   }
 
   public void addIncomingEdge(Edge<?> edge) {
-    if (edge.getNodePointer() == this) // only if you're pointing to me.
+    if (edge.getNodeSuccessor() == this) { // only if you're pointing to me.
       incomingEdges.add(edge);
-    else
+      predecessors.add(retrievePredecessorFromEdge(edge));
+    } else {
       throw new RuntimeException("Attempted to add an incoming edge which does not point to me!");
+    }
   }
 
+  /**
+   * Discouraged unless the edge is already fully connected. 
+   * Otherwise, use setAdjacentNodes
+   * 
+   * @param edge
+   * @return
+   */
   public boolean removeOutgoingEdge(Edge<?> edge) {
-    edge.setPredecessor(null);
+    edge.setNodePredecessor(null);
+    successors.remove(edge.getNodeSuccessor());
     return outgoingEdges.remove(edge);
   }
 
+  /**
+   * Discouraged unless the edge is already fully connected. 
+   * Otherwise, use setAdjacentNodes
+   * 
+   * @param edge
+   * @return
+   */
   public boolean removeIncomingEdge(Edge<?> edge) {
-    edge.setNodePointer(null);
+    edge.setNodeSuccessor(null);
+    predecessors.remove(edge.getNodePredecessor());
     return incomingEdges.remove(edge);
   }
 

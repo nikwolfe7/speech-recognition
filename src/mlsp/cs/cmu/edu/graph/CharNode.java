@@ -3,10 +3,6 @@
  */
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 /**
  * @author nwolfe
  *
@@ -28,15 +24,22 @@ public class CharNode extends Node<Character> {
 
   @Override
   @SuppressWarnings("unchecked") // believe me it's checked.
-  protected Iterable<Node<Character>> retrieveNodesFromEdges(List<Edge<?>> edges) {
-    List<Node<Character>> nodes = new ArrayList<Node<Character>>();
-    for (Edge<?> e : edges) {
-      Object o = e.getNodePointer().getValue();
-      if (o instanceof Character || o == null) {
-        nodes.add((Node<Character>) e.getNodePointer());
-      }
-    }
-    return nodes;
+  protected Node<Character> retrievePredecessorFromEdge(Edge<?> edge) {
+    Object o = edge.getNodePredecessor().getValue();
+    if (o instanceof Character || o == null)
+      return (Node<Character>) edge.getNodePredecessor();
+    else
+      return null;
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked") // believe me it's checked.
+  protected Node<Character> retrieveSuccessorFromEdge(Edge<?> edge) {
+    Object o = edge.getNodeSuccessor().getValue();
+    if (o instanceof Character || o == null)
+      return (Node<Character>) edge.getNodeSuccessor();
+    else
+      return null;
   }
 
   @Override
