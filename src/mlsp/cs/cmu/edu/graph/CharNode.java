@@ -9,11 +9,6 @@ package mlsp.cs.cmu.edu.graph;
  */
 public class CharNode extends Node<Character> {
 
-  public CharNode() {
-    // ascii 'start of text'
-    super(new Character((char)2));
-  }
-  
   public CharNode(Character value) {
     super(value);
   }
@@ -54,7 +49,12 @@ public class CharNode extends Node<Character> {
 
   @Override
   public String toString() {
-    return "" + getValue();
+    if(getValue() == CharacterConstants.BEGIN_CHARACTER.getValue())
+      return "HEAD";
+    else if (getValue() == CharacterConstants.END_CHARACTER.getValue())
+      return "TAIL";
+    else
+      return "" + getValue();
   }
 
 }

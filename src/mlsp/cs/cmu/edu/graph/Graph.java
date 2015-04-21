@@ -47,7 +47,7 @@ public class Graph<N, E> {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     for(Node<N> node : getNodes()) {
-      sb.append("\nN=" + node.toString() + ", id="+node.hashCode()+"\n");
+      sb.append("\nN=" + node.getValue().toString() + ", id="+node.hashCode()+"\n");
       for(Edge<?> edge : node.getOutgoingEdges()) {
         sb.append("OUT:|------" + edge.toString() + "\n");
       }

@@ -68,9 +68,9 @@ public class Edge<E> {
 
   @Override
   public String toString() {
-    return " " + getNodePredecessor().toString() + " id=" + getNodePredecessor().hashCode() +
+    return " " + getNodePredecessor().getValue().toString() + " id=" + getNodePredecessor().hashCode() +
             " --> (v=" + getValue() + ",w=" + getWeight() + 
-            ") --> " + getNodeSuccessor().toString() + " id=" + getNodeSuccessor().hashCode();
+            ") --> " + getNodeSuccessor().getValue().toString() + " id=" + getNodeSuccessor().hashCode();
   }
 
 }

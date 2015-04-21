@@ -10,7 +10,11 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
 
   @Override
   public Graph<Character, String> buildGraph() {
-    Graph<Character, String> G = new Graph<Character, String>(new CharNode());
+    Node<Character> head = new CharNode(CharacterConstants.BEGIN_CHARACTER.getValue());
+    Node<Character> tail = new CharNode(CharacterConstants.END_CHARACTER.getValue());
+    Graph<Character, String> G = new Graph<Character, String>(head);
+    G.addNode(tail); // tie the tail back to the head. 
+    G.addEdge(new Edge<String>(tail, G.getHead()));
     Node<Character> currNode = G.getHead();
     for (String stringGraph : processList) {
       for (Character c : stringGraph.toCharArray()) {
@@ -22,7 +26,8 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
         Edge<String> selfEdge = new Edge<String>(currNode, newNode);
         G.addEdge(selfEdge);
       }
-      Edge<String> lastEdge = new Edge<String>(currNode, G.getHead());
+      // tail node and tie-in...
+      Edge<String> lastEdge = new Edge<String>(currNode, tail);
       lastEdge.setValue(stringGraph);
       G.addEdge(lastEdge);
       currNode = G.getHead(); // reset curr node

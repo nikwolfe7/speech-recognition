@@ -1,11 +1,8 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class GraphDriver {
 
@@ -17,10 +14,8 @@ public class GraphDriver {
 //      dictionary.add(scn.nextLine());
 //    }
 //    scn.close();
-//    dictionary.add("aaa");
-//    dictionary.add("aab");
-//    dictionary.add("abb");
-    dictionary.add("abc");
+   dictionary.add("abcd");
+   dictionary.add("abbc");
 
     List<String> input = new ArrayList<String>();
     
@@ -33,10 +28,11 @@ public class GraphDriver {
 //    }
 //    scn.close();
 //    input.add(sb.toString());
-    input.add("123");
+    input.add("abbc");
+ 
 
-//    GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
-    GraphFactory<Character, String> factory = new DummyStringGraphFactory("abc");
+    GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
+//    GraphFactory<Character, String> factory = new DummyStringGraphFactory("abc");
     Graph<Character, String> G1 = factory.buildGraph();
     System.out.println("Dictionary Graph: Done building graph!");
     printGraph(G1);
@@ -44,8 +40,8 @@ public class GraphDriver {
     List<Graph<Character, String>> words = new ArrayList<Graph<Character, String>>();
     int i = 0;
     for (String s : input) {
-//      factory = new StringGraphFactory(s);
-      factory = new DummyStringGraphFactory(s);
+      factory = new StringGraphFactory(s);
+//      factory = new DummyStringGraphFactory(s);
       Graph<Character, String> G2 = factory.buildGraph();
       words.add(G2);
       System.out.println("String Graph "+i+++": Done building graph!");

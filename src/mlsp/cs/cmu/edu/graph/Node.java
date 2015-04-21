@@ -52,7 +52,7 @@ public abstract class Node<N> {
    * @param node
    * @return
    */
-  public double getDifference(Node<N> node) {
+  public double getDistance(Node<N> node) {
     return getDistanceStrategy().getDifference(this, node);
   }
 
@@ -61,7 +61,8 @@ public abstract class Node<N> {
   public void addOutgoingEdge(Edge<?> edge) {
     if (edge.getNodePredecessor() == this) {
       outgoingEdges.add(edge);
-      successors.add(retrieveSuccessorFromEdge(edge));
+      if(edge.getNodeSuccessor() != null)
+        successors.add(retrieveSuccessorFromEdge(edge));
     } else {
       throw new RuntimeException("Attempted to add outgoing edge which does not come from me!");
     }
@@ -70,7 +71,8 @@ public abstract class Node<N> {
   public void addIncomingEdge(Edge<?> edge) {
     if (edge.getNodeSuccessor() == this) { // only if you're pointing to me.
       incomingEdges.add(edge);
-      predecessors.add(retrievePredecessorFromEdge(edge));
+      if(edge.getNodePredecessor() != null)
+        predecessors.add(retrievePredecessorFromEdge(edge));
     } else {
       throw new RuntimeException("Attempted to add an incoming edge which does not point to me!");
     }
@@ -85,7 +87,8 @@ public abstract class Node<N> {
    */
   public boolean removeOutgoingEdge(Edge<?> edge) {
     edge.setNodePredecessor(null);
-    successors.remove(edge.getNodeSuccessor());
+    if(edge.getNodeSuccessor() != null)
+      successors.remove(edge.getNodeSuccessor());
     return outgoingEdges.remove(edge);
   }
 
@@ -98,7 +101,8 @@ public abstract class Node<N> {
    */
   public boolean removeIncomingEdge(Edge<?> edge) {
     edge.setNodeSuccessor(null);
-    predecessors.remove(edge.getNodePredecessor());
+    if(edge.getNodePredecessor() != null)
+      predecessors.remove(edge.getNodePredecessor());
     return incomingEdges.remove(edge);
   }
 

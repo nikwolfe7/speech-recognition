@@ -7,6 +7,18 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   private Map2D<Node<N>, Node<N>, Integer> indexMapping;
   private int index = 0;
 
+  private Node<Pair<Node<N>, Node<N>>> getCartesianNode(Node<N> n1, Node<N> n2) {
+    if(indexMapping.containsKey(n1, n2)) {
+      return getNodes().get(indexMapping.get(n1, n2));
+    }
+    // "else"
+    Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
+    Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
+    indexMapping.put(n1, n2, index++);
+    addNode(nodePair);
+    return nodePair;
+  }
+  
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
     super(null);
     indexMapping = new Map2D<Node<N>, Node<N>, Integer>();
@@ -25,7 +37,7 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
             Node<Pair<Node<N>, Node<N>>> n1n3, n2n4;
             n1n3 = getCartesianNode(n1, n3);
             n2n4 = getCartesianNode(n2, n4);
-            Edge<E> edge = new Edge<E>(n1n3, n2n4);
+            Edge<E> edge = getEdgeValueWeightAndNodeCosts(n1n3,n2n4);
             addEdge(edge);
           }
         }
@@ -33,18 +45,10 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
     }
   }
 
-  protected abstract Node<Pair<Node<N>, Node<N>>> getCartesianNodeImpl(Pair<Node<N>, Node<N>> pair);
+  // Assess the edge penalties and node costs, if any...
+  protected abstract Edge<E> getEdgeValueWeightAndNodeCosts(Node<Pair<Node<N>, Node<N>>> pFrom, Node<Pair<Node<N>, Node<N>>> pTo); 
 
-  private Node<Pair<Node<N>, Node<N>>> getCartesianNode(Node<N> n1, Node<N> n2) {
-    if(indexMapping.containsKey(n1, n2)) {
-      return getNodes().get(indexMapping.get(n1, n2));
-    }
-    // "else"
-    Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
-    Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
-    indexMapping.put(n1, n2, index++);
-    addNode(nodePair);
-    return nodePair;
-  }
+  // get the subclass implementation of the Node<Pair>
+  protected abstract Node<Pair<Node<N>, Node<N>>> getCartesianNodeImpl(Pair<Node<N>, Node<N>> pair);
 
 }
