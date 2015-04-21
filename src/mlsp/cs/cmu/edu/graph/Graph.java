@@ -52,7 +52,7 @@ public class Graph<N, E> {
         sb.append("OUT:|------" + edge.toString() + "\n");
       }
       for(Edge<?> edge : node.getIncomingEdges()) {
-        sb.append("IN:|------" + edge.toString() + "\n");
+        sb.append("IN: |------" + edge.toString() + "\n");
       }
     }
     return sb.toString();
