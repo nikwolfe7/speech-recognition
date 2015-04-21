@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Graph<N, E> {
@@ -12,8 +12,8 @@ public class Graph<N, E> {
   private Node<N> headNode;
 
   public Graph(Node<N> head) {
-    this.graphEdges = new LinkedList<Edge<E>>();
-    this.graphNodes = new LinkedList<Node<N>>();
+    this.graphEdges = new ArrayList<Edge<E>>();
+    this.graphNodes = new ArrayList<Node<N>>();
     setHeadNode(head);
   }
 
@@ -35,19 +35,17 @@ public class Graph<N, E> {
     return headNode;
   }
 
-  public Iterable<Node<N>> getNodes() {
+  public List<Node<N>> getNodes() {
     return graphNodes;
   }
 
-  public List<Edge<E>> getGraphEdges() {
+  public List<Edge<E>> getEdges() {
     return graphEdges;
   }
   
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    System.out.println("Num Nodes: " + graphNodes.size());
-    System.out.println("Num Edges: " + graphEdges.size());
     for(Node<N> node : getNodes()) {
       sb.append("\nN=" + node.toString() + ", id="+node.hashCode()+"\n");
       for(Edge<?> edge : node.getOutgoingEdges()) {

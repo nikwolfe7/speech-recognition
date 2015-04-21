@@ -3,10 +3,15 @@ package mlsp.cs.cmu.edu.graph;
 import org.apache.commons.math3.util.Pair;
 
 public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>, E> {
+  
+  private Map2D<Node<N>, Node<N>, Integer> indexMapping;
+  private int index = 0;
 
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
     super(null);
-    setHeadNode(getCartesianNode(G1.getHead(), G2.getHead()));
+    indexMapping = new Map2D<Node<N>, Node<N>, Integer>();
+    setHeadNode(getCartesianNodeImpl(new Pair<Node<N>, Node<N>>(G1.getHead(), G2.getHead())));
+    indexMapping.put(G1.getHead(), G2.getHead(), index++);
 
     // for each node n1 in G1:
     for (Node<N> n1 : G1.getNodes()) {
@@ -31,14 +36,13 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   protected abstract Node<Pair<Node<N>, Node<N>>> getCartesianNodeImpl(Pair<Node<N>, Node<N>> pair);
 
   private Node<Pair<Node<N>, Node<N>>> getCartesianNode(Node<N> n1, Node<N> n2) {
-    for(Node<Pair<Node<N>, Node<N>>> node : getNodes()) {
-      if(node.getValue().getFirst() == n1 && node.getValue().getSecond() == n2) {
-        return node;
-      }
+    if(indexMapping.containsKey(n1, n2)) {
+      return getNodes().get(indexMapping.get(n1, n2));
     }
     // "else"
     Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
     Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
+    indexMapping.put(n1, n2, index++);
     addNode(nodePair);
     return nodePair;
   }

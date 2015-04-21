@@ -13,6 +13,11 @@ import java.util.Set;
  */
 public class CharNode extends Node<Character> {
 
+  public CharNode() {
+    // ascii 'start of text'
+    super(new Character((char)2));
+  }
+  
   public CharNode(Character value) {
     super(value);
   }

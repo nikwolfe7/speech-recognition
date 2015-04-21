@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Node<N> {
@@ -9,9 +9,9 @@ public abstract class Node<N> {
 
   private double cost;
 
-  private List<Edge<?>> outgoingEdges = new LinkedList<Edge<?>>();
+  private List<Edge<?>> outgoingEdges = new ArrayList<Edge<?>>();
 
-  private List<Edge<?>> incomingEdges = new LinkedList<Edge<?>>();
+  private List<Edge<?>> incomingEdges = new ArrayList<Edge<?>>();
 
   public Node(N value) {
     this.value = value;
