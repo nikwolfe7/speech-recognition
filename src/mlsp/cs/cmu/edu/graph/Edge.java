@@ -4,6 +4,7 @@ public class Edge<E> {
 
   private E value = null;
 
+  // for character matching it's EDGE weights
   private double weight;
 
   private Node<?> nodePointer;
@@ -58,7 +59,9 @@ public class Edge<E> {
 
   @Override
   public String toString() {
-    return "--(v=" + getValue() + ",w=" + getWeight() + ")-->";
+    return " " + getPredecessor().toString() + " id=" + getPredecessor().hashCode() +
+            " --> (v=" + getValue() + ",w=" + getWeight() + 
+            ") --> " + getNodePointer().toString() + " id=" + getNodePointer().hashCode();
   }
 
 }

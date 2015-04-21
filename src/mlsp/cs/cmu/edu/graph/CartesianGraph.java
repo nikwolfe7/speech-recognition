@@ -20,9 +20,8 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
             Node<Pair<Node<N>, Node<N>>> n1n3, n2n4;
             n1n3 = getCartesianNode(n1, n3);
             n2n4 = getCartesianNode(n2, n4);
-            addEdge(new Edge<E>(n1n3, n2n4));
-            addNode(n1n3);
-            addNode(n2n4);
+            Edge<E> edge = new Edge<E>(n1n3, n2n4);
+            addEdge(edge);
           }
         }
       }
@@ -32,11 +31,16 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   protected abstract Node<Pair<Node<N>, Node<N>>> getCartesianNodeImpl(Pair<Node<N>, Node<N>> pair);
 
   private Node<Pair<Node<N>, Node<N>>> getCartesianNode(Node<N> n1, Node<N> n2) {
+    for(Node<Pair<Node<N>, Node<N>>> node : getNodes()) {
+      if(node.getValue().getFirst() == n1 && node.getValue().getSecond() == n2) {
+        return node;
+      }
+    }
+    // "else"
     Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
-    if (graphNodes.containsKey(pair))
-      return graphNodes.get(pair);
-    else
-      return getCartesianNodeImpl(pair);
+    Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
+    addNode(nodePair);
+    return nodePair;
   }
-  
+
 }

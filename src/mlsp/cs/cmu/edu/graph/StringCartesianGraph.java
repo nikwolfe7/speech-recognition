@@ -26,7 +26,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
       @Override
       @SuppressWarnings("unchecked")
       // it's checked...
-      protected Iterable<Node<Pair<Node<Character>, Node<Character>>>> retrieveNodesFromEdges(Set<Edge<?>> edges) {
+      protected Iterable<Node<Pair<Node<Character>, Node<Character>>>> retrieveNodesFromEdges(List<Edge<?>> edges) {
         List<Node<Pair<Node<Character>, Node<Character>>>> nodeList = new ArrayList<Node<Pair<Node<Character>, Node<Character>>>>();
         for (Edge<?> e : edges) {
           Object o1 = e.getNodePointer();
@@ -52,10 +52,6 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
         return "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue() + ")";
       }
 
-      @Override
-      public int hashCode() {
-        return 31 * getValue().hashCode() * getValue().getFirst().hashCode() * getValue().getSecond().hashCode();
-      }
     }
     return new PairNode(pair);
   }

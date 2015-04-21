@@ -1,7 +1,7 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Node<N> {
 
@@ -9,9 +9,9 @@ public abstract class Node<N> {
 
   private double cost;
 
-  private Set<Edge<?>> outgoingEdges = new HashSet<Edge<?>>();
+  private List<Edge<?>> outgoingEdges = new LinkedList<Edge<?>>();
 
-  private Set<Edge<?>> incomingEdges = new HashSet<Edge<?>>();
+  private List<Edge<?>> incomingEdges = new LinkedList<Edge<?>>();
 
   public Node(N value) {
     this.value = value;
@@ -37,7 +37,7 @@ public abstract class Node<N> {
    * @param edges
    * @return
    */
-  protected abstract Iterable<Node<N>> retrieveNodesFromEdges(Set<Edge<?>> edges);
+  protected abstract Iterable<Node<N>> retrieveNodesFromEdges(List<Edge<?>> edges);
 
   /**
    * Defines how to compare this node to another node, returning some double value to represent that
@@ -92,11 +92,11 @@ public abstract class Node<N> {
     this.cost = cost;
   }
 
-  public Set<Edge<?>> getOutgoingEdges() {
+  public List<Edge<?>> getOutgoingEdges() {
     return outgoingEdges;
   }
 
-  public Set<Edge<?>> getIncomingEdges() {
+  public List<Edge<?>> getIncomingEdges() {
     return incomingEdges;
   }
 

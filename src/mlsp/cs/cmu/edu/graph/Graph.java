@@ -1,23 +1,19 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.math3.util.Pair;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Graph<N, E> {
 
-  protected Set<Edge<E>> graphEdges;
+  private List<Edge<E>> graphEdges;
 
-  protected Map<N, Node<N>> graphNodes;
+  private List<Node<N>> graphNodes;
 
-  protected Node<N> headNode;
+  private Node<N> headNode;
 
   public Graph(Node<N> head) {
-    this.graphEdges = new HashSet<Edge<E>>();
-    this.graphNodes = new HashMap<N, Node<N>>();
+    this.graphEdges = new LinkedList<Edge<E>>();
+    this.graphNodes = new LinkedList<Node<N>>();
     setHeadNode(head);
   }
 
@@ -28,7 +24,7 @@ public class Graph<N, E> {
 
   public void addNode(Node<N> node) {
     if(node != null)
-      graphNodes.put(node.getValue(), node);
+      graphNodes.add(node);
   }
 
   public void addEdge(Edge<E> edge) {
@@ -40,20 +36,25 @@ public class Graph<N, E> {
   }
 
   public Iterable<Node<N>> getNodes() {
-    return graphNodes.values();
+    return graphNodes;
   }
 
-  public Set<Edge<E>> getGraphEdges() {
+  public List<Edge<E>> getGraphEdges() {
     return graphEdges;
   }
   
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
+    System.out.println("Num Nodes: " + graphNodes.size());
+    System.out.println("Num Edges: " + graphEdges.size());
     for(Node<N> node : getNodes()) {
-      sb.append("N=" + node.toString() + "\n");
+      sb.append("\nN=" + node.toString() + ", id="+node.hashCode()+"\n");
       for(Edge<?> edge : node.getOutgoingEdges()) {
-        sb.append("|------" + edge.toString() + " " + edge.getNodePointer().toString() + "\n");
+        sb.append("OUT:|------" + edge.toString() + "\n");
+      }
+      for(Edge<?> edge : node.getIncomingEdges()) {
+        sb.append("IN:|------" + edge.toString() + "\n");
       }
     }
     return sb.toString();
