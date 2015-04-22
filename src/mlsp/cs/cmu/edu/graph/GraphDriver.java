@@ -14,8 +14,7 @@ public class GraphDriver {
 //      dictionary.add(scn.nextLine());
 //    }
 //    scn.close();
-   dictionary.add("abcd");
-   dictionary.add("abbc");
+   dictionary.add("sitting");
 
     List<String> input = new ArrayList<String>();
     
@@ -28,7 +27,7 @@ public class GraphDriver {
 //    }
 //    scn.close();
 //    input.add(sb.toString());
-    input.add("abbc");
+    input.add("kitten");
  
 
     GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
@@ -52,7 +51,10 @@ public class GraphDriver {
       CartesianGraph<Character, String> product = new StringCartesianGraph(G1, wordGraph);
       System.out.println("Cartesian Graph "+i+++": Done building graph!");
       printGraph(product);
+      product.doViterbiSearch(product.getHead());
     }
+    
+    
   }
 
   public static void printGraph(Graph<?, ?> graph) {
