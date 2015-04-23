@@ -81,17 +81,17 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
               return 1e100; // infinity
             } else {
               if(n2idx == n1idx) { // horizontal move
-                return 1;
+                return 1; // insertion
               } else if(n2idy == n1idy) { // vertical move
-                return 1;
+                return 1; // deletion
               } else if(xToValue.equals(yToValue)) {
                 if(xToValue == CharacterConstants.BEGIN_CHARACTER.getValue()) {
-                  return 1; // begin char 
+                  return 1; // begin char  
                 } else {
                   return 0; // perfect match
                 }
               } else {
-                return 1; // some other kind of penalized movement...
+                return 1; // substitution 
               }
             }
           }
@@ -101,7 +101,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
       @Override
       public String toString() {
         return "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue()
-                + ")";
+                + ") id=" + hashCode();
       }
     }
     return new PairNode(pair);

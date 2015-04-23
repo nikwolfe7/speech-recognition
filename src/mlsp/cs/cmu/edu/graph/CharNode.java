@@ -10,7 +10,7 @@ package mlsp.cs.cmu.edu.graph;
 public class CharNode extends Node<Character> {
 
   public CharNode(Character value) {
-    super(value);
+    super(value); // infinite cost
   }
 
   public CharNode(Character value, double cost) {

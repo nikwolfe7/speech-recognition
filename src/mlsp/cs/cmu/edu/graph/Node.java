@@ -16,6 +16,8 @@ public abstract class Node<N> {
   private List<Node<N>> successors = new ArrayList<Node<N>>();
 
   private List<Node<N>> predecessors = new ArrayList<Node<N>>();
+  
+  private Edge<?> backPointer;
 
   public Node(N value) {
     this.value = value;
@@ -132,5 +134,24 @@ public abstract class Node<N> {
 
   @Override
   public abstract String toString();
+
+  public Edge<?> getBackPointer() {
+    return backPointer;
+  }
+  
+  @SuppressWarnings("unchecked")
+  public Node<N> getNodeFromBackPointer() {
+    if(getBackPointer() != null) {
+      Node<?> node = getBackPointer().getNodePredecessor();
+      if(node.getClass().isAssignableFrom(this.getClass())) {
+        return (Node<N>) node;
+      } 
+    }
+    return null;
+  }
+  
+  public void setBackPointer(Edge<?> backPointer) {
+    this.backPointer = backPointer;
+  }
 
 }

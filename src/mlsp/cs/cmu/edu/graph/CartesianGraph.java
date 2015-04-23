@@ -44,15 +44,6 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
       }
     }
   }
-  
-  // get the viterbi best path cost
-  public double doViterbiSearch(Node<Pair<Node<N>, Node<N>>> pointer) {
-    double pathCost = 0;
-    for(Edge<?> edge : pointer.getOutgoingEdges()) {
-      pathCost += edge.getWeight();
-    }
-    return 0;
-  }
 
   // Assess the edge penalties and node costs, if any...
   protected abstract Edge<E> getEdgeValueWeightAndNodeCosts(Node<Pair<Node<N>, Node<N>>> pFrom, Node<Pair<Node<N>, Node<N>>> pTo); 
