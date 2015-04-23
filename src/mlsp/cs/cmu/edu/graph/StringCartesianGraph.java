@@ -16,13 +16,17 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   protected Edge<String> getEdgeValueWeightAndNodeCosts(
           Node<Pair<Node<Character>, Node<Character>>> pFrom,
           Node<Pair<Node<Character>, Node<Character>>> pTo) {
+    // FIRST elements are the template
+    // SECOND elements are the input
     double weight = pFrom.getDistance(pTo);
     Edge<String> edge = new Edge<String>(pFrom, pTo, weight);
     // if this is the last node, we will find the correct string on the
-    // outgoing edge of the TEMPLATE, which is the second value in the pair
-    if(weight == 0 && pTo.getValue().getSecond().getValue() == CharacterConstants.END_CHARACTER.getValue()) {
+    // outgoing edge of the TEMPLATE, which is the first value in the pair
+    Character pToTemplateVal = pTo.getValue().getFirst().getValue();
+    Character pToInputVal = pTo.getValue().getSecond().getValue();
+    if(pToTemplateVal == CharacterConstants.END_CHARACTER.getValue() && pToInputVal == CharacterConstants.END_CHARACTER.getValue()) {
       // this is an end state, the template value will be the value of this nodes incoming edge
-      Object word = pTo.getValue().getSecond().getIncomingEdges().get(0).getValue();
+      Object word = pTo.getValue().getFirst().getIncomingEdges();
       if(word != null && word instanceof String) {
         // set this outgoing edge value
         edge.setValue((String)word);
