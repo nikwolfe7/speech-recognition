@@ -19,10 +19,13 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
     return nodePair;
   }
   
+  @SuppressWarnings("unchecked") // it's checked
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
     super(null);
     indexMapping = new Map2D<Node<N>, Node<N>, Integer>();
-    setHeadNode(getCartesianNodeImpl(new Pair<Node<N>, Node<N>>(G1.getHead(), G2.getHead())));
+    Node<Pair<Node<N>, Node<N>>> headNode = getCartesianNodeImpl(new Pair<Node<N>, Node<N>>(G1.getHead(), G2.getHead())); 
+    setHeadNode(headNode);
+    addNode(headNode);
     indexMapping.put(G1.getHead(), G2.getHead(), index++);
 
     // for each node n1 in G1:
@@ -38,6 +41,9 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
             n1n3 = getCartesianNode(n1, n3);
             n2n4 = getCartesianNode(n2, n4);
             Edge<E> edge = getEdgeValueWeightAndNodeCosts(n1n3,n2n4);
+            if(n2 == G1.getTailNode() && n4 == G2.getTailNode()) {
+              setTailNode(n2n4);
+            }
             addEdge(edge);
           }
         }

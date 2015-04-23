@@ -15,6 +15,7 @@ public class GraphDriver {
 //    }
 //    scn.close();
    dictionary.add("abc");
+   dictionary.add("bbc");
 
     List<String> input = new ArrayList<String>();
     
@@ -27,7 +28,7 @@ public class GraphDriver {
 //    }
 //    scn.close();
 //    input.add(sb.toString());
-    input.add("abb");
+    input.add("123");
  
 
     GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
@@ -50,9 +51,7 @@ public class GraphDriver {
     for (Graph<Character, String> wordGraph : words) {
       CartesianGraph<Character, String> product = new StringCartesianGraph(G1, wordGraph);
       System.out.println("Cartesian Graph "+i+++": Done building graph!");
-      Node<?> node = product.getViterbiBestPath();
       printGraph(product);
-      System.out.println("last node: " + node.toString());
     }
     
     
