@@ -29,7 +29,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
     if (pToCost == null) {
       pTo.setCost(nodeCost);
       pTo.setBackPointer(edge);
-    } else if (nodeCost < pTo.getCost()) {
+    } else if (nodeCost <= pTo.getCost()) {
       pTo.setCost(nodeCost);
       pTo.setBackPointer(edge); 
     }
@@ -82,21 +82,29 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
             Node<Character> n1idx = n1.getValue().getFirst();
             Node<Character> n2idy = n2.getValue().getSecond();
             Node<Character> n1idy = n1.getValue().getSecond();
-            if ( n1 == n2 ) { // insanity check
-              return 1e100; // infinity
+            char end = CharacterConstants.END_CHARACTER.getValue();
+            char begin = CharacterConstants.BEGIN_CHARACTER.getValue();
+            if (xToValue.equals(yToValue)) {
+              return 0;
+            } else if (n1 == n2) { // self transition
+              return 1e100;
+            } else if (n1idx.getValue() != n1idy.getValue()) {
+              if (n1idx.getValue() == end || n1idy.getValue() == end || n1idx.getValue() == begin
+                      || n1idy.getValue() == begin) {
+                return 1e100;
+              } else {
+                return 1;
+              }
             } else {
-              if(n2idx == n1idx) { // horizontal move
-                return 1; // insertion
-              } else if(n2idy == n1idy) { // vertical move
-                return 2; // deletion
-              } else if(xToValue.equals(yToValue)) {
-                if(xToValue == CharacterConstants.BEGIN_CHARACTER.getValue()) {
-                  return 0; // begin char  
+              if (n2idx.getValue() != n2idy.getValue()) {
+                if (n2idx.getValue() == end || n2idy.getValue() == end || n2idx.getValue() == begin
+                        || n2idy.getValue() == begin) {
+                  return 1e100;
                 } else {
-                  return -1; // perfect match
+                  return 1;
                 }
               } else {
-                return 2; // substitution 
+                return 1e100;
               }
             }
           }

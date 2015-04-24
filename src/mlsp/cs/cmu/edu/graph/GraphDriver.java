@@ -13,12 +13,12 @@ public class GraphDriver {
   public static void main(String[] args) throws FileNotFoundException {
 
     List<String> dictionary = new ArrayList<String>();
-//    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
-//    while (scn.hasNextLine()) {
-//      dictionary.add(scn.nextLine());
-//    }
-//    scn.close();
-   dictionary.add("abc");
+    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
+    while (scn.hasNextLine()) {
+      dictionary.add(scn.nextLine());
+    }
+    scn.close();
+//   dictionary.add("abc");
 //   dictionary.add("pohnae");
 //   dictionary.add("was");
 //   dictionary.add("a");
@@ -36,13 +36,13 @@ public class GraphDriver {
    
 
     List<String> input = new ArrayList<String>();
-//    scn = new Scanner(new File("./text/typos.txt"));
-//    while (scn.hasNextLine()) {
-//      String[] arr = scn.nextLine().split(" ");
-//      input.addAll(Arrays.asList(arr));
-//    }
-//    scn.close();
-    input.add("123");
+    scn = new Scanner(new File("./text/typos.txt"));
+    while (scn.hasNextLine()) {
+      String[] arr = scn.nextLine().split(" ");
+      input.addAll(Arrays.asList(arr));
+    }
+    scn.close();
+//    input.add("123");
 //    input.add("fpohnae");
 //    input.add("was");
 //    input.add("a");
@@ -79,7 +79,7 @@ public class GraphDriver {
       System.out.println("Word: " + word);
     }
     
-//    printAccuracy(checkedList);
+    printAccuracy(checkedList);
     
   }
   
@@ -92,13 +92,15 @@ public class GraphDriver {
     }
     scn.close();
     double numCorrect = 0;
-    for(int i = 0; i < truthList.size(); i++) {
-      if(truthList.get(i).equals(checkedList.get(i))) {
-        numCorrect++;
+    if (checkedList.size() > 0) {
+      for (int i = 0; i < checkedList.size(); i++) {
+        if (truthList.get(i).equals(checkedList.get(i))) {
+          numCorrect++;
+        }
       }
     }
     DecimalFormat df = new DecimalFormat("#.####");
-    System.out.println("Accuracy: " + df.format(numCorrect/truthList.size()));
+    System.out.println("Accuracy: " + df.format(numCorrect / truthList.size()));
   }
 
   public static void printGraph(Graph<?, ?> graph) {
