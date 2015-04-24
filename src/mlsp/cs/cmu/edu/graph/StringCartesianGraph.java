@@ -105,8 +105,11 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
 
       @Override
       public String toString() {
-        return "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue()
+        String s = "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue()
                 + ") id=" + hashCode();
+        if(getCost() != null)
+          s += " cost=" + getCost();
+        return s;
       }
     }
     return new PairNode(pair);

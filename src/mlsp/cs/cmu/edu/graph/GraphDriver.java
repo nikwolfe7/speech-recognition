@@ -13,11 +13,12 @@ public class GraphDriver {
   public static void main(String[] args) throws FileNotFoundException {
 
     List<String> dictionary = new ArrayList<String>();
-    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
-    while (scn.hasNextLine()) {
-      dictionary.add(scn.nextLine());
-    }
-    scn.close();
+//    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
+//    while (scn.hasNextLine()) {
+//      dictionary.add(scn.nextLine());
+//    }
+//    scn.close();
+   dictionary.add("abc");
 //   dictionary.add("pohnae");
 //   dictionary.add("was");
 //   dictionary.add("a");
@@ -26,6 +27,7 @@ public class GraphDriver {
 //   dictionary.add("but");
 //   dictionary.add("his");
 //   dictionary.add("wife");
+//   dictionary.add(",");
 //   dictionary.add("mohnae");
 //   dictionary.add(",");
 //   dictionary.add("was");
@@ -34,12 +36,13 @@ public class GraphDriver {
    
 
     List<String> input = new ArrayList<String>();
-    scn = new Scanner(new File("./text/typos.txt"));
-    while (scn.hasNextLine()) {
-      String[] arr = scn.nextLine().split(" ");
-      input.addAll(Arrays.asList(arr));
-    }
-    scn.close();
+//    scn = new Scanner(new File("./text/typos.txt"));
+//    while (scn.hasNextLine()) {
+//      String[] arr = scn.nextLine().split(" ");
+//      input.addAll(Arrays.asList(arr));
+//    }
+//    scn.close();
+    input.add("123");
 //    input.add("fpohnae");
 //    input.add("was");
 //    input.add("a");
@@ -55,8 +58,6 @@ public class GraphDriver {
 //    input.add("vey");
 //    input.add("smrxt");
     
- 
-
     GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character, String> G1 = factory.buildGraph();
     System.out.println("Dictionary Graph: Done building graph!");
@@ -78,8 +79,13 @@ public class GraphDriver {
       System.out.println("Word: " + word);
     }
     
+//    printAccuracy(checkedList);
+    
+  }
+  
+  private static void printAccuracy(List<String> checkedList) throws FileNotFoundException {
     List<String> truthList = new ArrayList<String>();
-    scn = new Scanner(new File("./text/original.txt"));
+    Scanner scn = new Scanner(new File("./text/original.txt"));
     while (scn.hasNextLine()) {
       String[] arr = scn.nextLine().split(" ");
       truthList.addAll(Arrays.asList(arr));
@@ -93,8 +99,6 @@ public class GraphDriver {
     }
     DecimalFormat df = new DecimalFormat("#.####");
     System.out.println("Accuracy: " + df.format(numCorrect/truthList.size()));
-    
-    
   }
 
   public static void printGraph(Graph<?, ?> graph) {

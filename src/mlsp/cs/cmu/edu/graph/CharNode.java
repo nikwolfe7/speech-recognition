@@ -49,12 +49,12 @@ public class CharNode extends Node<Character> {
 
   @Override
   public String toString() {
+    String s = "";
     if(getValue() == CharacterConstants.BEGIN_CHARACTER.getValue())
-      return "HEAD";
+      s += "HEAD";
     else if (getValue() == CharacterConstants.END_CHARACTER.getValue())
-      return "TAIL";
-    else
-      return "" + getValue();
+      s += "TAIL";
+    return s;
   }
 
 }
