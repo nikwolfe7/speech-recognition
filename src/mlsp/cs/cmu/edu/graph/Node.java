@@ -7,7 +7,7 @@ public abstract class Node<N> {
 
   private N value;
 
-  private double cost;
+  private Double cost;
 
   private List<Edge<?>> outgoingEdges = new ArrayList<Edge<?>>();
 
@@ -21,10 +21,10 @@ public abstract class Node<N> {
 
   public Node(N value) {
     this.value = value;
-    this.cost = 0.0;
+    this.cost = null;
   }
 
-  public Node(N value, double cost) {
+  public Node(N value, Double cost) {
     this.value = value;
     this.cost = cost;
   }
@@ -48,13 +48,13 @@ public abstract class Node<N> {
   protected abstract Node<N> retrieveSuccessorFromEdge(Edge<?> edge);
 
   /**
-   * Defines how to compare this node to another node, returning some double value to represent that
+   * Defines how to compare this node to another node, returning some Double value to represent that
    * difference.
    * 
    * @param node
    * @return
    */
-  public double getDistance(Node<N> node) {
+  public Double getDistance(Node<N> node) {
     return getDistanceStrategy().getDifference(this, node);
   }
 
@@ -116,11 +116,11 @@ public abstract class Node<N> {
     this.value = value;
   }
 
-  public double getCost() {
+  public Double getCost() {
     return cost;
   }
 
-  public void setCost(double cost) {
+  public void setCost(Double cost) {
     this.cost = cost;
   }
 

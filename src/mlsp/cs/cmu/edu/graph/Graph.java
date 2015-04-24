@@ -53,25 +53,26 @@ public class Graph<N, E> {
     return graphEdges;
   }
   
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    for (Node<N> node : getNodes()) {
-      sb.append("\nN=" + node.getValue().toString() + ",w=" + node.getCost() + " id="
-              + node.hashCode());
-      if (node.getBackPointer() != null) {
-        sb.append(" <<Ptr=" + node.getNodeFromBackPointer().getValue().toString() + " id="
-                + node.getNodeFromBackPointer().hashCode());
-      }
-      sb.append(" \n");
-      for (Edge<?> edge : node.getOutgoingEdges()) {
-        sb.append("OUT:|------" + edge.toString() + "\n");
-      }
+//  @Override
+//  public String toString() {
+//    StringBuilder sb = new StringBuilder();
+//    for (Node<N> node : getNodes()) {
+//      sb.append("\nN=" + node.getValue().toString() + ",cost=" + node.getCost() + " id="
+//              + node.hashCode());
+//      if (node.getBackPointer() != null) {
+//        sb.append(" <<Ptr=" + node.getNodeFromBackPointer().getValue().toString() + " id="
+//                + node.getNodeFromBackPointer().hashCode());
+//      }
+//      sb.append(" \n");
+//      for (Edge<?> edge : node.getOutgoingEdges()) {
+//        sb.append("OUT:|------" + edge.toString() + "\n");
+//      }
 //      sb.append(" \n");
 //      for (Edge<?> edge : node.getIncomingEdges()) {
 //        sb.append("IN: |------" + edge.toString() + "\n");
 //      }
-    }
-    return sb.toString();
-  }
+//    }
+//    sb.append("\nTail: " + getTailNode().hashCode());
+//    return sb.toString();
+//  }
 }

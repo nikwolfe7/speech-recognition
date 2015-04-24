@@ -13,24 +13,25 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected Edge<String> getEdgeValueWeightAndNodeCosts(
+  protected Edge<String> getEdgeValueWeightAndPushNodeCosts(
           Node<Pair<Node<Character>, Node<Character>>> pFrom,
           Node<Pair<Node<Character>, Node<Character>>> pTo) {
     // FIRST elements are the template
     // SECOND elements are the input
     double weight = pFrom.getDistance(pTo);
     Edge<String> edge = new Edge<String>(pFrom, pTo, weight);
-    // if this is the last node, we will find the correct string on the
-    // outgoing edge of the TEMPLATE, which is the first value in the pair
-    Character pToTemplateVal = pTo.getValue().getFirst().getValue();
-    Character pToInputVal = pTo.getValue().getSecond().getValue();
-    if(pToTemplateVal == CharacterConstants.END_CHARACTER.getValue() && pToInputVal == CharacterConstants.END_CHARACTER.getValue()) {
-      // this is an end state, the template value will be the value of this nodes incoming edge
-      Object word = pTo.getValue().getFirst().getIncomingEdges();
-      if(word != null && word instanceof String) {
-        // set this outgoing edge value
-        edge.setValue((String)word);
-      }
+    // push the weight out to the node...
+    Double pFromCost = pFrom.getCost(); 
+    if(pFromCost == null)
+      pFrom.setCost(0.0);
+    double nodeCost = weight + pFrom.getCost();
+    Double pToCost = pTo.getCost(); 
+    if (pToCost == null) {
+      pTo.setCost(nodeCost);
+      pTo.setBackPointer(edge);
+    } else if (nodeCost < pTo.getCost()) {
+      pTo.setCost(nodeCost);
+      pTo.setBackPointer(edge); 
     }
     return edge;
   }
@@ -87,15 +88,15 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
               if(n2idx == n1idx) { // horizontal move
                 return 1; // insertion
               } else if(n2idy == n1idy) { // vertical move
-                return 1; // deletion
+                return 2; // deletion
               } else if(xToValue.equals(yToValue)) {
                 if(xToValue == CharacterConstants.BEGIN_CHARACTER.getValue()) {
-                  return 1; // begin char  
+                  return 0; // begin char  
                 } else {
-                  return 0; // perfect match
+                  return -1; // perfect match
                 }
               } else {
-                return 1; // substitution 
+                return 2; // substitution 
               }
             }
           }

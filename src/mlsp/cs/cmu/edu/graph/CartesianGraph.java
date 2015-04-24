@@ -40,8 +40,13 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
             Node<Pair<Node<N>, Node<N>>> n1n3, n2n4;
             n1n3 = getCartesianNode(n1, n3);
             n2n4 = getCartesianNode(n2, n4);
-            Edge<E> edge = getEdgeValueWeightAndNodeCosts(n1n3,n2n4);
+            Edge<E> edge = getEdgeValueWeightAndPushNodeCosts(n1n3,n2n4);
             if(n2 == G1.getTailNode() && n4 == G2.getTailNode()) {
+              for(Edge<?> e : n1.getOutgoingEdges()) {
+                if(e.getValue() != null) {
+                  edge.setValue((E) e.getValue());
+                }
+              }
               setTailNode(n2n4);
             }
             addEdge(edge);
@@ -52,7 +57,7 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   }
 
   // Assess the edge penalties and node costs, if any...
-  protected abstract Edge<E> getEdgeValueWeightAndNodeCosts(Node<Pair<Node<N>, Node<N>>> pFrom, Node<Pair<Node<N>, Node<N>>> pTo); 
+  protected abstract Edge<E> getEdgeValueWeightAndPushNodeCosts(Node<Pair<Node<N>, Node<N>>> pFrom, Node<Pair<Node<N>, Node<N>>> pTo); 
 
   // get the subclass implementation of the Node<Pair>
   protected abstract Node<Pair<Node<N>, Node<N>>> getCartesianNodeImpl(Pair<Node<N>, Node<N>> pair);
