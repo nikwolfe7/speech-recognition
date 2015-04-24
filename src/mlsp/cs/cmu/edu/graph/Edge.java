@@ -30,14 +30,14 @@ public class Edge<E> {
 
   public void setNodeSuccessor(Node<?> nodeSuccessor) {
     this.nodeSuccessor = nodeSuccessor;
-    if(nodePredecessor != null) {
+    if(nodePredecessor != null && nodeSuccessor != null) {
       nodeSuccessor.addIncomingEdge(this);
     }
   }
 
   public void setNodePredecessor(Node<?> nodePredecessor) {
     this.nodePredecessor = nodePredecessor;
-    if(nodeSuccessor != null) {
+    if(nodeSuccessor != null && nodePredecessor != null) {
       nodePredecessor.addOutgoingEdge(this);
     }
   }

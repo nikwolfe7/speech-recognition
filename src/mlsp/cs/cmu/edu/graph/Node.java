@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Node<N> {
@@ -9,13 +9,13 @@ public abstract class Node<N> {
 
   private Double cost;
 
-  private List<Edge<?>> outgoingEdges = new ArrayList<Edge<?>>();
+  private List<Edge<?>> outgoingEdges = new LinkedList<Edge<?>>();
 
-  private List<Edge<?>> incomingEdges = new ArrayList<Edge<?>>();
+  private List<Edge<?>> incomingEdges = new LinkedList<Edge<?>>();
 
-  private List<Node<N>> successors = new ArrayList<Node<N>>();
+  private List<Node<N>> successors = new LinkedList<Node<N>>();
 
-  private List<Node<N>> predecessors = new ArrayList<Node<N>>();
+  private List<Node<N>> predecessors = new LinkedList<Node<N>>();
   
   private Edge<?> backPointer;
 
@@ -29,11 +29,11 @@ public abstract class Node<N> {
     this.cost = cost;
   }
 
-  public Iterable<Node<N>> getSuccessors() {
+  public List<Node<N>> getSuccessors() {
     return successors;
   }
 
-  public Iterable<Node<N>> getPredecessors() {
+  public List<Node<N>> getPredecessors() {
     return predecessors;
   }
 
