@@ -13,33 +13,42 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected Edge<String> getEdgeValueWeightAndPushNodeCosts(
-          Node<Pair<Node<Character>, Node<Character>>> pFrom,
-          Node<Pair<Node<Character>, Node<Character>>> pTo) {
-    // FIRST elements are the template
-    // SECOND elements are the input
-    double weight = pFrom.getDistance(pTo);
-    Edge<String> edge = new Edge<String>(pFrom, pTo, weight);
+  protected void pushNodeCosts(Node<Pair<Node<Character>, Node<Character>>> pFrom,
+          Node<Pair<Node<Character>, Node<Character>>> pTo, Edge<String> edge) {
     // push the weight out to the node...
-    Double pFromCost = pFrom.getCost(); 
-    if(pFromCost == null)
+    Double pFromCost = pFrom.getCost();
+    if (pFromCost == null)
       pFrom.setCost(0.0);
-    double nodeCost = weight + pFrom.getCost();
-    Double pToCost = pTo.getCost(); 
+    double nodeCost = edge.getWeight() + pFrom.getCost();
+    Double pToCost = pTo.getCost();
     if (pToCost == null) {
       pTo.setCost(nodeCost);
       pTo.setBackPointer(edge);
     } else if (nodeCost <= pTo.getCost()) {
       pTo.setCost(nodeCost);
-      pTo.setBackPointer(edge); 
+      pTo.setBackPointer(edge);
     }
-    return edge;
+
   }
 
   @Override
-  protected Node<Pair<Node<Character>, Node<Character>>> getCartesianNodeImpl(Pair<Node<Character>, Node<Character>> pair) {
-    
+  protected Edge<String> getEdgeValueAndSetWeights(
+          Node<Pair<Node<Character>, Node<Character>>> pFrom,
+          Node<Pair<Node<Character>, Node<Character>>> pTo) {
+    // FIRST elements are the template
+    // SECOND elements are the input
+    double weight = pFrom.getDistance(pTo);
+    return new Edge<String>(pFrom, pTo, weight);
+  }
+
+  @Override
+  protected Node<Pair<Node<Character>, Node<Character>>> getCartesianNodeImpl(
+          Pair<Node<Character>, Node<Character>> pair) {
+
     final class PairNode extends Node<Pair<Node<Character>, Node<Character>>> {
+
+      private double INFINITY = 1e100;
+
       public PairNode(Pair<Node<Character>, Node<Character>> value) {
         super(value);
       }
@@ -47,7 +56,8 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
       @Override
       @SuppressWarnings("unchecked")
       // it's checked...
-      protected Node<Pair<Node<Character>, Node<Character>>> retrievePredecessorFromEdge(Edge<?> edge) {
+      protected Node<Pair<Node<Character>, Node<Character>>> retrievePredecessorFromEdge(
+              Edge<?> edge) {
         Object o = edge.getNodePredecessor();
         if (o instanceof PairNode) {
           return (Node<Pair<Node<Character>, Node<Character>>>) edge.getNodePredecessor();
@@ -75,51 +85,58 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
           @Override
           public double getDifference(Node<Pair<Node<Character>, Node<Character>>> n1,
                   Node<Pair<Node<Character>, Node<Character>>> n2) {
-            Character xToValue, yToValue;
+            Character xToValue, yToValue, xFromValue, yFromValue;
+            xFromValue = n1.getValue().getFirst().getValue();
+            yFromValue = n1.getValue().getSecond().getValue();
             xToValue = n2.getValue().getFirst().getValue();
             yToValue = n2.getValue().getSecond().getValue();
-            Node<Character> n2idx = n2.getValue().getFirst();
-            Node<Character> n1idx = n1.getValue().getFirst();
-            Node<Character> n2idy = n2.getValue().getSecond();
-            Node<Character> n1idy = n1.getValue().getSecond();
-            char end = CharacterConstants.END_CHARACTER.getValue();
-            char begin = CharacterConstants.BEGIN_CHARACTER.getValue();
-            if (xToValue.equals(yToValue)) {
-              return 0;
-            } else if (n1 == n2) { // self transition
-              return 1e100;
-            } else if (n1idx.getValue() != n1idy.getValue()) {
-              if (n1idx.getValue() == end || n1idy.getValue() == end || n1idx.getValue() == begin
-                      || n1idy.getValue() == begin) {
-                return 1e100;
-              } else {
-                return 1;
-              }
-            } else {
-              if (n2idx.getValue() != n2idy.getValue()) {
-                if (n2idx.getValue() == end || n2idy.getValue() == end || n2idx.getValue() == begin
-                        || n2idy.getValue() == begin) {
-                  return 1e100;
-                } else {
+            if (n1 == n2) {
+              return INFINITY;
+            } else if (xToValue.equals(yToValue)) {
+              if (!checkIsNonEmittingNode(n1))
+                return 0;
+              else
+                return INFINITY;
+            } else if (xFromValue.equals(yFromValue)) {
+              if (!checkIsNonEmittingNode(n2)) {
+                if (xToValue.equals(yToValue))
+                  return 0;
+                else
                   return 1;
-                }
               } else {
-                return 1e100;
+                return INFINITY;
               }
+            } else if (checkIsNonEmittingNode(n2) || checkIsNonEmittingNode(n1)) {
+              return INFINITY;
+            } else {
+              return 1;
             }
           }
         };
+      }
+
+      private boolean checkIsNonEmittingNode(Node<Pair<Node<Character>, Node<Character>>> node) {
+        Character xValue = node.getValue().getFirst().getValue();
+        Character yValue = node.getValue().getSecond().getValue();
+        char end = CharacterConstants.END_CHARACTER.getValue();
+        char begin = CharacterConstants.BEGIN_CHARACTER.getValue();
+        if (xValue.equals(yValue) && (xValue.equals(end) || xValue.equals(begin)))
+          return false;
+        else
+          return xValue.equals(end) || yValue.equals(end) || xValue.equals(begin)
+                  || yValue.equals(begin);
       }
 
       @Override
       public String toString() {
         String s = "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue()
                 + ") id=" + hashCode();
-        if(getCost() != null)
+        if (getCost() != null)
           s += " cost=" + getCost();
         return s;
       }
     }
     return new PairNode(pair);
   }
+
 }
