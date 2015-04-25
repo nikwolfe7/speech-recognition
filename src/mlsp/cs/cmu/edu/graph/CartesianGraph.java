@@ -6,16 +6,15 @@ import org.apache.commons.math3.util.Pair;
 
 public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>, E> {
   
-  private Map2D<Node<N>, Node<N>, Integer> indexMapping;
-  private int index = 0;
+  private Map2D<Node<N>, Node<N>, Node<Pair<Node<N>, Node<N>>>> indexMapping;
 
   private Node<Pair<Node<N>, Node<N>>> getCartesianNode(Node<N> n1, Node<N> n2) {
     if (indexMapping.containsKey(n1, n2)) {
-      return getNodes().get(indexMapping.get(n1, n2));
+      return indexMapping.get(n1, n2);
     } else {
       Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
       Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
-      indexMapping.put(n1, n2, index++);
+      indexMapping.put(n1, n2, nodePair);
       addNode(nodePair);
       return nodePair;
     }
@@ -24,15 +23,15 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   @SuppressWarnings("unchecked") // it's checked
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
     super(null);
-    indexMapping = new Map2D<Node<N>, Node<N>, Integer>();
+    indexMapping = new Map2D<Node<N>, Node<N>, Node<Pair<Node<N>, Node<N>>>>();
     Node<Pair<Node<N>, Node<N>>> headNode = getCartesianNodeImpl(new Pair<Node<N>, Node<N>>(G1.getHead(), G2.getHead())); 
     setHeadNode(headNode);
     addNode(headNode);
-    indexMapping.put(G1.getHead(), G2.getHead(), index++);
+    indexMapping.put(G1.getHead(), G2.getHead(), headNode);
 
     // for each node n1 in G1:
     for (Node<N> n1 : G1.getNodes()) {
-      //prune(getNodes());
+//      prune(getNodes());
       // for each node n2 in successors of (n1):
       for (Node<N> n2 : n1.getSuccessors()) {
         // for each node n3 in G2:
@@ -58,6 +57,12 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
         }
       }
     }
+  }
+  
+
+  @Override
+  public void remove(Node<Pair<Node<N>, Node<N>>> node) {
+    indexMapping.remove(node.getValue().getFirst(), node.getValue().getSecond());
   }
 
   // define the pruning strategy

@@ -57,6 +57,15 @@ public class Map2D<X, Y, Z> {
     }
   }
   
+  public void remove(X x, Y y) {
+    if(map.containsKey(x))
+      map.get(x).remove(y);
+  }
+  
+  public void clear() {
+    map.clear();
+  }
+  
   public static void main(String[] args) {
     Map2D<Character, Character, String> map = new Map2D<Character, Character, String>();
     map.put('x', 'y', "a");

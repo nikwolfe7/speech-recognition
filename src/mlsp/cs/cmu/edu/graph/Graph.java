@@ -54,6 +54,10 @@ public class Graph<N, E> {
     return graphEdges;
   }
   
+  public void remove(Node<N> node) {
+    getNodes().remove(node);
+  }
+  
 //  @Override
 //  public String toString() {
 //    StringBuilder sb = new StringBuilder();

@@ -10,56 +10,75 @@ import java.util.Scanner;
 
 public class GraphDriver {
 
-  public static void main(String[] args) throws FileNotFoundException {
-
-    List<String> dictionary = new ArrayList<String>();
+  private static List<String> fillDictionary1(List<String> dictionary) throws FileNotFoundException {
     Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
     while (scn.hasNextLine()) {
       dictionary.add(scn.nextLine());
     }
     scn.close();
-//     dictionary.add("abc");
-//     dictionary.add("a");
-//     dictionary.add("pohnae");
-//     dictionary.add("was");
-//     dictionary.add("a");
-//     dictionary.add("dim-witted");
-//     dictionary.add("man");
-//     dictionary.add("but");
-//     dictionary.add("his");
-//     dictionary.add("wife");
-//     dictionary.add(",");
-//     dictionary.add("mohnae");
-//     dictionary.add(",");
-//     dictionary.add("was");
-//     dictionary.add("very");
-//     dictionary.add("smart");
-//     dictionary.add("zudda");
-//     dictionary.add("woodsman");
-//     dictionary.add("tac");
+    return dictionary;
+  }
 
-    List<String> input = new ArrayList<String>();
-    scn = new Scanner(new File("./text/typos.txt"));
+  private static List<String> fillDictionary2(List<String> dictionary) {
+//     dictionary.add("abc");
+    dictionary.add("a");
+    dictionary.add("pohnae");
+    dictionary.add("was");
+    dictionary.add("a");
+    dictionary.add("dim-witted");
+    dictionary.add("man");
+    dictionary.add("but");
+    dictionary.add("his");
+    dictionary.add("wife");
+    dictionary.add(",");
+    dictionary.add("mohnae");
+    dictionary.add(",");
+    dictionary.add("was");
+    dictionary.add("very");
+    dictionary.add("smart");
+    dictionary.add("zudda");
+    dictionary.add("woodsman");
+    dictionary.add("tac");
+    return dictionary;
+  }
+
+  private static List<String> fillInput1(List<String> input) throws FileNotFoundException {
+    Scanner scn = new Scanner(new File("./text/typos.txt"));
     while (scn.hasNextLine()) {
       String[] arr = scn.nextLine().split(" ");
       input.addAll(Arrays.asList(arr));
     }
     scn.close();
+    return input;
+  }
+
+  private static List<String> fillInput2(List<String> input) {
 //     input.add("123");
-//     input.add("fpohnae");
-//     input.add("was");
-//     input.add("a");
-//     input.add("diwitted");
-//     input.add("man");
-//     input.add("but");
-//     input.add("his");
-//     input.add("wdfe");
-//     input.add(",");
-//     input.add("mohnaje");
-//     input.add(",");
-//     input.add("was");
-//     input.add("vey");
-//     input.add("smrxt");
+    input.add("fpohnae");
+    input.add("was");
+    input.add("a");
+    input.add("diwitted");
+    input.add("man");
+    input.add("but");
+    input.add("his");
+    input.add("wdfe");
+    input.add(",");
+    input.add("mohnaje");
+    input.add(",");
+    input.add("was");
+    input.add("vey");
+    input.add("smrxt");
+    return input;
+  }
+
+  public static void main(String[] args) throws FileNotFoundException {
+
+    List<String> dictionary = new ArrayList<String>();
+    List<String> input = new ArrayList<String>();
+    dictionary = fillDictionary1(dictionary);
+    input = fillInput1(input);
+//    dictionary = fillDictionary2(dictionary);
+//    input = fillInput2(input);
 
     GraphFactory<Character, String> factory = new StringGraphFactory(
             dictionary.toArray(new String[dictionary.size()]));
@@ -82,7 +101,6 @@ public class GraphDriver {
       checkedList.add(word);
       System.out.println("Word: " + word);
     }
-    
     printAccuracy(checkedList);
   }
 

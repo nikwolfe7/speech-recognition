@@ -17,25 +17,26 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   
   @Override
   protected void prune(List<Node<Pair<Node<Character>, Node<Character>>>> nodes) {
-    double beamWidth = 1000;
-    double INFINITY = 1e100;
-    double minCost = INFINITY;
-    for (Node<Pair<Node<Character>, Node<Character>>> node : nodes) {
-      if (node.getCost() != null)
-        minCost = Math.min(node.getCost(), minCost);
-    }
-    ListIterator<Node<Pair<Node<Character>, Node<Character>>>> iter = getNodes().listIterator();
-    while (iter.hasNext()) {
-      Node<Pair<Node<Character>, Node<Character>>> node = iter.next();
-      if (node.getCost() != null) {
-        double nodeCost = node.getCost();
-        double diff = Math.abs(nodeCost - minCost); 
-        if (diff >= beamWidth) {
-          node.destroy();
-          iter.remove(); // prune it!
-        }
-      }
-    }
+//    double beamWidth = 3;
+//    double INFINITY = 1e100;
+//    double minCost = INFINITY;
+//    for (Node<Pair<Node<Character>, Node<Character>>> node : nodes) {
+//      if (node.getCost() != null)
+//        minCost = Math.min(node.getCost(), minCost);
+//    }
+//    ListIterator<Node<Pair<Node<Character>, Node<Character>>>> iter = getNodes().listIterator();
+//    while (iter.hasNext()) {
+//      Node<Pair<Node<Character>, Node<Character>>> node = iter.next();
+//      if (node.getCost() != null) {
+//        double nodeCost = node.getCost();
+//        double diff = Math.abs(nodeCost - minCost); 
+//        if (diff >= beamWidth) {
+//          node.destroy();
+//          remove(node);
+//          iter.remove(); // prune it!
+//        }
+//      }
+//    }
   }
 
   @Override
