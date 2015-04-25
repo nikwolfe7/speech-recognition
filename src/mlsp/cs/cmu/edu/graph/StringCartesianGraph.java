@@ -1,5 +1,8 @@
 package mlsp.cs.cmu.edu.graph;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import org.apache.commons.math3.util.Pair;
 
 /**
@@ -7,9 +10,32 @@ import org.apache.commons.math3.util.Pair;
  *
  */
 public class StringCartesianGraph extends CartesianGraph<Character, String> {
-
+  
   public StringCartesianGraph(Graph<Character, String> G1, Graph<Character, String> G2) {
     super(G1, G2);
+  }
+  
+  @Override
+  protected void prune(List<Node<Pair<Node<Character>, Node<Character>>>> nodes) {
+    double beamWidth = 1000;
+    double INFINITY = 1e100;
+    double minCost = INFINITY;
+    for (Node<Pair<Node<Character>, Node<Character>>> node : nodes) {
+      if (node.getCost() != null)
+        minCost = Math.min(node.getCost(), minCost);
+    }
+    ListIterator<Node<Pair<Node<Character>, Node<Character>>>> iter = getNodes().listIterator();
+    while (iter.hasNext()) {
+      Node<Pair<Node<Character>, Node<Character>>> node = iter.next();
+      if (node.getCost() != null) {
+        double nodeCost = node.getCost();
+        double diff = Math.abs(nodeCost - minCost); 
+        if (diff >= beamWidth) {
+          node.destroy();
+          iter.remove(); // prune it!
+        }
+      }
+    }
   }
 
   @Override
@@ -149,5 +175,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
     }
     return new PairNode(pair);
   }
+
+ 
 
 }

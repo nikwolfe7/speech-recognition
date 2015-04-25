@@ -1,8 +1,8 @@
 package mlsp.cs.cmu.edu.graph;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public abstract class Node<N> {
 
@@ -36,6 +36,19 @@ public abstract class Node<N> {
 
   public List<Node<N>> getPredecessors() {
     return predecessors;
+  }
+  
+  public void destroy() {
+    ListIterator<Edge<?>> iter = getIncomingEdges().listIterator();
+    while(iter.hasNext()) {
+      iter.next();
+      iter.remove();
+    }
+    iter = getOutgoingEdges().listIterator();
+    while(iter.hasNext()) {
+      iter.next();
+      iter.remove();
+    }
   }
 
   /**
@@ -91,7 +104,7 @@ public abstract class Node<N> {
   public boolean removeOutgoingEdge(Edge<?> edge) {
     edge.setNodePredecessor(null);
     if(edge.getNodeSuccessor() != null)
-      successors.remove(edge.getNodeSuccessor());
+      edge.getNodeSuccessor().removeIncomingEdge(edge);
     return outgoingEdges.remove(edge);
   }
 
@@ -105,7 +118,7 @@ public abstract class Node<N> {
   public boolean removeIncomingEdge(Edge<?> edge) {
     edge.setNodeSuccessor(null);
     if(edge.getNodePredecessor() != null)
-      predecessors.remove(edge.getNodePredecessor());
+      edge.getNodePredecessor().removeOutgoingEdge(edge);
     return incomingEdges.remove(edge);
   }
 
@@ -154,5 +167,7 @@ public abstract class Node<N> {
   public void setBackPointer(Edge<?> backPointer) {
     this.backPointer = backPointer;
   }
+
+  
 
 }

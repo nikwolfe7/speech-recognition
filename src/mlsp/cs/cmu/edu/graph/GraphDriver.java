@@ -13,12 +13,12 @@ public class GraphDriver {
   public static void main(String[] args) throws FileNotFoundException {
 
     List<String> dictionary = new ArrayList<String>();
-//    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
-//    while (scn.hasNextLine()) {
-//      dictionary.add(scn.nextLine());
-//    }
-//    scn.close();
-     dictionary.add("abc");
+    Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
+    while (scn.hasNextLine()) {
+      dictionary.add(scn.nextLine());
+    }
+    scn.close();
+//     dictionary.add("abc");
 //     dictionary.add("a");
 //     dictionary.add("pohnae");
 //     dictionary.add("was");
@@ -39,13 +39,13 @@ public class GraphDriver {
 //     dictionary.add("tac");
 
     List<String> input = new ArrayList<String>();
-//    scn = new Scanner(new File("./text/typos.txt"));
-//    while (scn.hasNextLine()) {
-//      String[] arr = scn.nextLine().split(" ");
-//      input.addAll(Arrays.asList(arr));
-//    }
-//    scn.close();
-     input.add("123");
+    scn = new Scanner(new File("./text/typos.txt"));
+    while (scn.hasNextLine()) {
+      String[] arr = scn.nextLine().split(" ");
+      input.addAll(Arrays.asList(arr));
+    }
+    scn.close();
+//     input.add("123");
 //     input.add("fpohnae");
 //     input.add("was");
 //     input.add("a");
@@ -82,9 +82,7 @@ public class GraphDriver {
       checkedList.add(word);
       System.out.println("Word: " + word);
     }
-
-     //printAccuracy(checkedList);
-
+    printAccuracy(checkedList);
   }
 
   private static void printAccuracy(List<String> checkedList) throws FileNotFoundException {

@@ -1,5 +1,7 @@
 package mlsp.cs.cmu.edu.graph;
 
+import java.util.List;
+
 import org.apache.commons.math3.util.Pair;
 
 public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>, E> {
@@ -30,6 +32,7 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
 
     // for each node n1 in G1:
     for (Node<N> n1 : G1.getNodes()) {
+      //prune(getNodes());
       // for each node n2 in successors of (n1):
       for (Node<N> n2 : n1.getSuccessors()) {
         // for each node n3 in G2:
@@ -57,10 +60,13 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
     }
   }
 
-  //Assess the edge penalties and node costs, if any...
+  // define the pruning strategy
+  protected abstract void prune(List<Node<Pair<Node<N>, Node<N>>>> nodes);
+
+  // Assess and push node costs, if any...
   protected abstract void pushNodeCosts(Node<Pair<Node<N>, Node<N>>> pFrom, Node<Pair<Node<N>, Node<N>>> pTo, Edge<E> edge); 
 
-//Assess the edge penalties and node costs, if any...
+  // Assess the edge penalties, if any...
   protected abstract Edge<E> getEdgeValueAndSetWeights(Node<Pair<Node<N>, Node<N>>> pFrom, Node<Pair<Node<N>, Node<N>>> pTo); 
 
   // get the subclass implementation of the Node<Pair>
