@@ -82,6 +82,7 @@ public class GraphDriver {
       checkedList.add(word);
       System.out.println("Word: " + word);
     }
+    
     printAccuracy(checkedList);
   }
 
