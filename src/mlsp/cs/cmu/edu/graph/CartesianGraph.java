@@ -8,15 +8,15 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   private int index = 0;
 
   private Node<Pair<Node<N>, Node<N>>> getCartesianNode(Node<N> n1, Node<N> n2) {
-    if(indexMapping.containsKey(n1, n2)) {
+    if (indexMapping.containsKey(n1, n2)) {
       return getNodes().get(indexMapping.get(n1, n2));
+    } else {
+      Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
+      Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
+      indexMapping.put(n1, n2, index++);
+      addNode(nodePair);
+      return nodePair;
     }
-    // "else"
-    Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
-    Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
-    indexMapping.put(n1, n2, index++);
-    addNode(nodePair);
-    return nodePair;
   }
   
   @SuppressWarnings("unchecked") // it's checked

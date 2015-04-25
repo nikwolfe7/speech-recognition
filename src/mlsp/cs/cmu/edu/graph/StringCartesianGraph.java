@@ -106,7 +106,12 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
               } else {
                 return INFINITY;
               }
-            } else if (checkIsNonEmittingNode(n2) || checkIsNonEmittingNode(n1)) {
+            } else if (xFromValue.equals(xToValue) || yFromValue.equals(yToValue)) {
+              if (checkPairContainsNonEmittingNode(n1, n2))
+                return INFINITY;
+              else
+                return 1;
+            } else if (checkPairContainsNonEmittingNode(n1, n2)) {
               return INFINITY;
             } else {
               return 1;
@@ -115,6 +120,12 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
         };
       }
 
+      private boolean checkPairContainsNonEmittingNode(
+              Node<Pair<Node<Character>, Node<Character>>> n1,
+              Node<Pair<Node<Character>, Node<Character>>> n2) {
+        return checkIsNonEmittingNode(n1) || checkIsNonEmittingNode(n2);
+      }
+      
       private boolean checkIsNonEmittingNode(Node<Pair<Node<Character>, Node<Character>>> node) {
         Character xValue = node.getValue().getFirst().getValue();
         Character yValue = node.getValue().getSecond().getValue();
