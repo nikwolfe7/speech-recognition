@@ -1,6 +1,5 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,8 +14,8 @@ public class Graph<N, E> {
   private Node<N> tailNode;
 
   public Graph(Node<N> head) {
-    this.graphEdges = new ArrayList<Edge<E>>();
-    this.graphNodes = new ArrayList<Node<N>>();
+    this.graphEdges = new LinkedList<Edge<E>>();
+    this.graphNodes = new LinkedList<Node<N>>();
     setHeadNode(head);
     addNode(head);
   }

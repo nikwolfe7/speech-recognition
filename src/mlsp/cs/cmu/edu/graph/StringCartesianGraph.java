@@ -16,11 +16,6 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
   
   @Override
-  protected void prune(List<Node<Pair<Node<Character>, Node<Character>>>> nodes) {
-
-  }
-
-  @Override
   protected void pushNodeCosts(Node<Pair<Node<Character>, Node<Character>>> pFrom,
           Node<Pair<Node<Character>, Node<Character>>> pTo, Edge<String> edge) {
     // push the weight out to the node...
