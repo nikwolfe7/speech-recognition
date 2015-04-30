@@ -1,6 +1,6 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
 
@@ -33,7 +33,6 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
 
     // for each node n1 in G1:
     for (Node<N> n1 : G1.getNodes()) {
-      prune(getNodes());
       // for each node n2 in successors of (n1):
       for (Node<N> n2 : n1.getSuccessors()) {
         // for each node n3 in G2:
@@ -58,18 +57,26 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
             addEdge(edge);
           }
         }
+        prune(n1);
       }
     }
   }
 
+  private void prune(Node<N> column) {
+    Set<Node<N>> colValues = indexMapping.yKeyset(column);
+    for(Node<N> node : colValues) {
+      Node<Pair<Node<N>, Node<N>>> cartNode = getCartesianNode(column, node);
+      if(!acceptOrRejectNode(cartNode)) {
+        
+      }
+    }
+  }
+
+  protected abstract boolean acceptOrRejectNode(Node<Pair<Node<N>, Node<N>>> cartNode);
+
   @Override
   public void remove(Node<Pair<Node<N>, Node<N>>> node) {
     indexMapping.remove(node.getValue().getFirst(), node.getValue().getSecond());
-  }
-
-  // define the pruning strategy
-  private void prune(List<Node<Pair<Node<N>, Node<N>>>> nodes){
-    
   }
 
   // Assess and push node costs, if any...
