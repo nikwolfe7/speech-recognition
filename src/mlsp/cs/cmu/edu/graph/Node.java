@@ -167,7 +167,4 @@ public abstract class Node<N> {
   public void setBackPointer(Edge<?> backPointer) {
     this.backPointer = backPointer;
   }
-
-  
-
 }

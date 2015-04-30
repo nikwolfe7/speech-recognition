@@ -1,4 +1,4 @@
-package mlsp.cs.cmu.edu.graph;
+package mlsp.cs.cmu.edu.spellchecker;
 
 public enum CharacterConstants {
 

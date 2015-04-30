@@ -1,4 +1,9 @@
-package mlsp.cs.cmu.edu.graph;
+package mlsp.cs.cmu.edu.spellchecker;
+
+import mlsp.cs.cmu.edu.graph.Edge;
+import mlsp.cs.cmu.edu.graph.Graph;
+import mlsp.cs.cmu.edu.graph.GraphFactory;
+import mlsp.cs.cmu.edu.graph.Node;
 
 public class StringGraphFactory implements GraphFactory<Character, String> {
 

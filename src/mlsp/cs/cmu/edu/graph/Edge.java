@@ -4,7 +4,6 @@ public class Edge<E> {
 
   private E value = null;
 
-  // for character matching it's EDGE weights
   private double weight;
 
   private Node<?> nodeSuccessor;

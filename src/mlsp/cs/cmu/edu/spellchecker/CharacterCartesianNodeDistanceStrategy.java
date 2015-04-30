@@ -1,19 +1,19 @@
-package mlsp.cs.cmu.edu.graph;
+package mlsp.cs.cmu.edu.spellchecker;
+
+import mlsp.cs.cmu.edu.graph.DistanceCalculator;
+import mlsp.cs.cmu.edu.graph.Node;
 
 import org.apache.commons.math3.util.Pair;
 
-public class CharacterNodeDistanceStrategy implements DistanceCalculator<Pair<Node<Character>, Node<Character>>> {
+public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculator<Pair<Node<Character>, Node<Character>>> {
 
-  private double INFINITY; 
-  private static CharacterNodeDistanceStrategy singleton = null;
+  private static CharacterCartesianNodeDistanceStrategy singleton = null;
   
-  private CharacterNodeDistanceStrategy(double infValue) {
-    this.INFINITY = infValue;
-  }
+  private CharacterCartesianNodeDistanceStrategy() {}
   
-  public static CharacterNodeDistanceStrategy getInstance() {
+  public static CharacterCartesianNodeDistanceStrategy getInstance() {
     if(singleton == null) {
-      singleton = new CharacterNodeDistanceStrategy(1e100);
+      singleton = new CharacterCartesianNodeDistanceStrategy();
     } 
     return singleton;
   }
@@ -21,6 +21,7 @@ public class CharacterNodeDistanceStrategy implements DistanceCalculator<Pair<No
   @Override
   public double getDifference(Node<Pair<Node<Character>, Node<Character>>> n1,
           Node<Pair<Node<Character>, Node<Character>>> n2) {
+    double INFINITY = 1e100; 
     Character xToValue, yToValue, xFromValue, yFromValue;
     xFromValue = n1.getValue().getFirst().getValue();
     yFromValue = n1.getValue().getSecond().getValue();

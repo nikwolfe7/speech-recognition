@@ -1,7 +1,11 @@
 /**
  * 
  */
-package mlsp.cs.cmu.edu.graph;
+package mlsp.cs.cmu.edu.spellchecker;
+
+import mlsp.cs.cmu.edu.graph.DistanceCalculator;
+import mlsp.cs.cmu.edu.graph.Edge;
+import mlsp.cs.cmu.edu.graph.Node;
 
 /**
  * @author nwolfe

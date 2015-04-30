@@ -6,14 +6,14 @@ import org.apache.commons.math3.util.Pair;
 
 public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>, E> {
 
-  private Map2D<Node<N>, Node<N>, Node<Pair<Node<N>, Node<N>>>> indexMapping;
+  private Map2D<Node<N>, Node<N>, CartesianNode<N>> indexMapping;
 
-  private Node<Pair<Node<N>, Node<N>>> getCartesianNode(Node<N> n1, Node<N> n2) {
+  private CartesianNode<N> getCartesianNode(Node<N> n1, Node<N> n2) {
     if (indexMapping.containsKey(n1, n2)) {
       return indexMapping.get(n1, n2);
     } else {
       Pair<Node<N>, Node<N>> pair = new Pair<Node<N>, Node<N>>(n1, n2);
-      Node<Pair<Node<N>, Node<N>>> nodePair = getCartesianNodeImpl(pair);
+      CartesianNode<N> nodePair = getCartesianNodeImpl(pair);
       indexMapping.put(n1, n2, nodePair);
       addNode(nodePair);
       return nodePair;
@@ -24,8 +24,8 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   // it's checked
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
     super(null);
-    indexMapping = new Map2D<Node<N>, Node<N>, Node<Pair<Node<N>, Node<N>>>>();
-    Node<Pair<Node<N>, Node<N>>> headNode = getCartesianNodeImpl(new Pair<Node<N>, Node<N>>(
+    indexMapping = new Map2D<Node<N>, Node<N>, CartesianNode<N>>();
+    CartesianNode<N> headNode = getCartesianNodeImpl(new Pair<Node<N>, Node<N>>(
             G1.getHead(), G2.getHead()));
     setHeadNode(headNode);
     addNode(headNode);
@@ -40,7 +40,7 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
           // for each node n4 in successors of (n3):
           for (Node<N> n4 : n3.getSuccessors()) {
             // add edge n1,n3 --> n2,n4
-            Node<Pair<Node<N>, Node<N>>> n1n3, n2n4;
+            CartesianNode<N> n1n3, n2n4;
             // n1 is the
             n1n3 = getCartesianNode(n1, n3);
             n2n4 = getCartesianNode(n2, n4);
@@ -57,7 +57,7 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
             addEdge(edge);
           }
         }
-        prune(n1);
+        //prune(n1);
       }
     }
   }
@@ -65,29 +65,24 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   private void prune(Node<N> column) {
     Set<Node<N>> colValues = indexMapping.yKeyset(column);
     for(Node<N> node : colValues) {
-      Node<Pair<Node<N>, Node<N>>> cartNode = getCartesianNode(column, node);
+      CartesianNode<N> cartNode = getCartesianNode(column, node);
       if(!acceptOrRejectNode(cartNode)) {
         
       }
     }
   }
 
-  protected abstract boolean acceptOrRejectNode(Node<Pair<Node<N>, Node<N>>> cartNode);
-
-  @Override
-  public void remove(Node<Pair<Node<N>, Node<N>>> node) {
-    indexMapping.remove(node.getValue().getFirst(), node.getValue().getSecond());
-  }
+  protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode);
 
   // Assess and push node costs, if any...
-  protected abstract void pushNodeCosts(Node<Pair<Node<N>, Node<N>>> pFrom,
-          Node<Pair<Node<N>, Node<N>>> pTo, Edge<E> edge);
+  protected abstract void pushNodeCosts(CartesianNode<N> pFrom,
+          CartesianNode<N> pTo, Edge<E> edge);
 
   // Assess the edge penalties, if any...
-  protected abstract Edge<E> getEdgeValueAndSetWeights(Node<Pair<Node<N>, Node<N>>> pFrom,
-          Node<Pair<Node<N>, Node<N>>> pTo);
+  protected abstract Edge<E> getEdgeValueAndSetWeights(CartesianNode<N> pFrom,
+          CartesianNode<N> pTo);
 
   // get the subclass implementation of the Node<Pair>
-  protected abstract Node<Pair<Node<N>, Node<N>>> getCartesianNodeImpl(Pair<Node<N>, Node<N>> pair);
+  protected abstract CartesianNode<N> getCartesianNodeImpl(Pair<Node<N>, Node<N>> pair);
 
 }

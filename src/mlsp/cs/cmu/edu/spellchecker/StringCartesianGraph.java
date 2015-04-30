@@ -1,7 +1,10 @@
-package mlsp.cs.cmu.edu.graph;
+package mlsp.cs.cmu.edu.spellchecker;
 
-import java.util.List;
-import java.util.ListIterator;
+import mlsp.cs.cmu.edu.graph.CartesianGraph;
+import mlsp.cs.cmu.edu.graph.CartesianNode;
+import mlsp.cs.cmu.edu.graph.Edge;
+import mlsp.cs.cmu.edu.graph.Graph;
+import mlsp.cs.cmu.edu.graph.Node;
 
 import org.apache.commons.math3.util.Pair;
 
@@ -10,23 +13,20 @@ import org.apache.commons.math3.util.Pair;
  *
  */
 public class StringCartesianGraph extends CartesianGraph<Character, String> {
-  
-  private PairNode nodePrototype;
-  
+
   public StringCartesianGraph(Graph<Character, String> G1, Graph<Character, String> G2) {
     super(G1, G2);
-    this.nodePrototype = new PairNode(null);
   }
-  
+
   @Override
-  protected boolean acceptOrRejectNode(Node<Pair<Node<Character>, Node<Character>>> cartNode) {
+  protected boolean acceptOrRejectNode(CartesianNode<Character> cartNode) {
     // TODO Auto-generated method stub
     return false;
   }
-  
+
   @Override
-  protected void pushNodeCosts(Node<Pair<Node<Character>, Node<Character>>> pFrom,
-          Node<Pair<Node<Character>, Node<Character>>> pTo, Edge<String> edge) {
+  protected void pushNodeCosts(CartesianNode<Character> pFrom,
+          CartesianNode<Character> pTo, Edge<String> edge) {
     // push the weight out to the node...
     Double pFromCost = pFrom.getCost();
     if (pFromCost == null)
@@ -45,8 +45,8 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
 
   @Override
   protected Edge<String> getEdgeValueAndSetWeights(
-          Node<Pair<Node<Character>, Node<Character>>> pFrom,
-          Node<Pair<Node<Character>, Node<Character>>> pTo) {
+          CartesianNode<Character> pFrom,
+          CartesianNode<Character> pTo) {
     // FIRST elements are the template
     // SECOND elements are the input
     double weight = pFrom.getDistance(pTo);
@@ -54,14 +54,8 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected Node<Pair<Node<Character>, Node<Character>>> getCartesianNodeImpl(Pair<Node<Character>, Node<Character>> pair) {
-    try {
-      PairNode newNode = (PairNode) nodePrototype.clone();
-      newNode.setValue(pair);
-      return newNode;
-    } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
-    }
-    return null;
+  protected CartesianNode<Character> getCartesianNodeImpl(
+          Pair<Node<Character>, Node<Character>> pair) {
+    return CharacterCartesianNodeFactory.getInstance().getNewNode(pair);
   }
 }

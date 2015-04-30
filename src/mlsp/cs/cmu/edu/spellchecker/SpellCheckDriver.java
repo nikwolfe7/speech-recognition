@@ -1,4 +1,4 @@
-package mlsp.cs.cmu.edu.graph;
+package mlsp.cs.cmu.edu.spellchecker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,7 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class GraphDriver {
+import mlsp.cs.cmu.edu.graph.CartesianGraph;
+import mlsp.cs.cmu.edu.graph.Graph;
+import mlsp.cs.cmu.edu.graph.GraphFactory;
+
+public class SpellCheckDriver {
 
   private static List<String> fillDictionary1(List<String> dictionary) throws FileNotFoundException {
     Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
@@ -23,22 +27,22 @@ public class GraphDriver {
 //     dictionary.add("abc");
 //    dictionary.add("a");
     dictionary.add("pohnae");
-//    dictionary.add("was");
-//    dictionary.add("a");
-//    dictionary.add("dim-witted");
-//    dictionary.add("man");
-//    dictionary.add("but");
-//    dictionary.add("his");
-//    dictionary.add("wife");
-//    dictionary.add(",");
-//    dictionary.add("mohnae");
-//    dictionary.add(",");
-//    dictionary.add("was");
-//    dictionary.add("very");
-//    dictionary.add("smart");
-//    dictionary.add("zudda");
-//    dictionary.add("woodsman");
-//    dictionary.add("tac");
+    dictionary.add("was");
+    dictionary.add("a");
+    dictionary.add("dim-witted");
+    dictionary.add("man");
+    dictionary.add("but");
+    dictionary.add("his");
+    dictionary.add("wife");
+    dictionary.add(",");
+    dictionary.add("mohnae");
+    dictionary.add(",");
+    dictionary.add("was");
+    dictionary.add("very");
+    dictionary.add("smart");
+    dictionary.add("zudda");
+    dictionary.add("woodsman");
+    dictionary.add("tac");
     return dictionary;
   }
 
@@ -55,19 +59,19 @@ public class GraphDriver {
   private static List<String> fillInput2(List<String> input) {
 //     input.add("123");
     input.add("fpohnae");
-//    input.add("was");
-//    input.add("a");
-//    input.add("diwitted");
-//    input.add("man");
-//    input.add("but");
-//    input.add("his");
-//    input.add("wdfe");
-//    input.add(",");
-//    input.add("mohnaje");
-//    input.add(",");
-//    input.add("was");
-//    input.add("vey");
-//    input.add("smrxt");
+    input.add("was");
+    input.add("a");
+    input.add("diwitted");
+    input.add("man");
+    input.add("but");
+    input.add("his");
+    input.add("wdfe");
+    input.add(",");
+    input.add("mohnaje");
+    input.add(",");
+    input.add("was");
+    input.add("vey");
+    input.add("smrxt");
     return input;
   }
 
@@ -75,10 +79,10 @@ public class GraphDriver {
 
     List<String> dictionary = new ArrayList<String>();
     List<String> input = new ArrayList<String>();
-//    dictionary = fillDictionary1(dictionary);
-//    input = fillInput1(input);
-      dictionary = fillDictionary2(dictionary);
-      input = fillInput2(input);
+    dictionary = fillDictionary1(dictionary);
+    input = fillInput1(input);
+//      dictionary = fillDictionary2(dictionary);
+//      input = fillInput2(input);
 
     GraphFactory<Character, String> factory = new StringGraphFactory(
             dictionary.toArray(new String[dictionary.size()]));
