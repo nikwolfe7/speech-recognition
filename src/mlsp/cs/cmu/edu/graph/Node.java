@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public abstract class Node<N> {
+public abstract class Node<N> implements Cloneable {
 
   private N value;
 
@@ -166,5 +166,20 @@ public abstract class Node<N> {
   
   public void setBackPointer(Edge<?> backPointer) {
     this.backPointer = backPointer;
+  }
+
+  @Override
+  protected Object clone() throws CloneNotSupportedException {
+    Object clone = super.clone();
+    @SuppressWarnings("unchecked")
+    Node<N> nodeClone = (Node<N>) clone;
+    nodeClone.value = this.value;
+    nodeClone.cost = this.cost;
+    nodeClone.outgoingEdges = this.outgoingEdges;
+    nodeClone.incomingEdges = this.incomingEdges;
+    nodeClone.successors = this.successors;
+    nodeClone.predecessors = this.predecessors;
+    nodeClone.backPointer = this.backPointer;
+    return nodeClone;
   }
 }

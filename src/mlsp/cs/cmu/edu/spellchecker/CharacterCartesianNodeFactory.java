@@ -6,7 +6,7 @@ import mlsp.cs.cmu.edu.graph.NodeFactory;
 
 import org.apache.commons.math3.util.Pair;
 
-public class CharacterCartesianNodeFactory implements NodeFactory<Pair<Node<Character>, Node<Character>>> {
+public class CharacterCartesianNodeFactory implements NodeFactory<Character> {
 
   private static CartesianNode<Character> nodePrototype = new CharacterCartesianNode(null);
 
@@ -20,23 +20,17 @@ public class CharacterCartesianNodeFactory implements NodeFactory<Pair<Node<Char
     }
     return singleton;
   }
-
-  @Override
-  public CartesianNode<Character> getNewNode(
-          Pair<Node<Character>, Node<Character>> value) {
-    try {
-      CharacterCartesianNode node = (CharacterCartesianNode) nodePrototype.clone();
-      node.setValue(value);
-      return node;
-    } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
-    }
+  
+  public CartesianNode<Character> getNewCartesianNode(Node<Character> n1, Node<Character> n2) {
+//  try {
+    //  CharacterCartesianNode node = (CharacterCartesianNode) nodePrototype.clone();
+    //  node.setValue(value);
+    //  return node;
+    //} catch (CloneNotSupportedException e) {
+    //  e.printStackTrace();
+    //}
     return null;
   }
-
-  @Override
-  public String toString() {
-    return super.toString();
-  }
+  
 
 }

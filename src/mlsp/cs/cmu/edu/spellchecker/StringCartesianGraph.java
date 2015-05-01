@@ -36,7 +36,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
     if (pToCost == null) {
       pTo.setCost(nodeCost);
       pTo.setBackPointer(edge);
-    } else if (nodeCost <= pTo.getCost()) {
+    } else if (nodeCost < pTo.getCost()) {
       pTo.setCost(nodeCost);
       pTo.setBackPointer(edge);
     }
@@ -54,8 +54,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected CartesianNode<Character> getCartesianNodeImpl(
-          Pair<Node<Character>, Node<Character>> pair) {
-    return CharacterCartesianNodeFactory.getInstance().getNewNode(pair);
+  protected CartesianNode<Character> getCartesianNodeImpl(Node<Character> n1, Node<Character> n2) {
+    return CharacterCartesianNodeFactory.getInstance().getNewCartesianNode(n1, n2);
   }
 }

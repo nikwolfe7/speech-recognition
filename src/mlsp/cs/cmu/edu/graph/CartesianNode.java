@@ -4,8 +4,16 @@ import org.apache.commons.math3.util.Pair;
 
 public abstract class CartesianNode<N> extends Node<Pair<Node<N>, Node<N>>> implements Cloneable {
 
-  public CartesianNode(Pair<Node<N>, Node<N>> value) {
-    super(value);
+  public CartesianNode(Node<N> n1, Node<N> n2) {
+    super(new Pair<>(n1,n2));
+  }
+  
+  public Node<N> getFirst() {
+    return getValue().getFirst();
+  }
+  
+  public Node<N> getSecond() {
+    return getValue().getSecond();
   }
 
   @Override
@@ -15,10 +23,10 @@ public abstract class CartesianNode<N> extends Node<Pair<Node<N>, Node<N>>> impl
   @Override
   @SuppressWarnings("unchecked")
   // it's checked...
-  protected Node<Pair<Node<N>, Node<N>>> retrievePredecessorFromEdge(Edge<?> edge) {
+  protected CartesianNode<N> retrievePredecessorFromEdge(Edge<?> edge) {
     Object o = edge.getNodePredecessor();
     if (o instanceof CartesianNode) {
-      return (Node<Pair<Node<N>, Node<N>>>) edge.getNodePredecessor();
+      return (CartesianNode<N>) edge.getNodePredecessor();
     } else {
       return null;
     }
@@ -27,10 +35,10 @@ public abstract class CartesianNode<N> extends Node<Pair<Node<N>, Node<N>>> impl
   @Override
   @SuppressWarnings("unchecked")
   // it's checked...
-  protected Node<Pair<Node<N>, Node<N>>> retrieveSuccessorFromEdge(Edge<?> edge) {
+  protected CartesianNode<N> retrieveSuccessorFromEdge(Edge<?> edge) {
     Object o = edge.getNodeSuccessor();
     if (o instanceof CartesianNode) {
-      return (Node<Pair<Node<N>, Node<N>>>) edge.getNodeSuccessor();
+      return (CartesianNode<N>) edge.getNodeSuccessor();
     } else {
       return null;
     }

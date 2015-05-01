@@ -9,11 +9,27 @@ import java.util.List;
 import java.util.Scanner;
 
 import mlsp.cs.cmu.edu.graph.CartesianGraph;
+import mlsp.cs.cmu.edu.graph.CartesianNode;
+import mlsp.cs.cmu.edu.graph.Edge;
 import mlsp.cs.cmu.edu.graph.Graph;
 import mlsp.cs.cmu.edu.graph.GraphFactory;
 
 public class SpellCheckDriver {
-
+  
+  private static long startTime;
+  private static long endTime;
+  
+  private static void startTimer() {
+    startTime = System.nanoTime();
+  }
+  
+  private static void stopTimer(){
+    endTime = System.nanoTime();
+    long duration = (endTime - startTime) / 1000000; 
+    System.out.println("Execution took: " + duration + "ms");
+    startTime = 0;
+  }
+  
   private static List<String> fillDictionary1(List<String> dictionary) throws FileNotFoundException {
     Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
     while (scn.hasNextLine()) {
@@ -43,6 +59,13 @@ public class SpellCheckDriver {
     dictionary.add("zudda");
     dictionary.add("woodsman");
     dictionary.add("tac");
+    dictionary.add("skime");
+    dictionary.add("time");
+    dictionary.add("off");
+    dictionary.add("it");
+    dictionary.add("the");
+    dictionary.add("of");
+    dictionary.add(".");
     return dictionary;
   }
 
@@ -72,17 +95,24 @@ public class SpellCheckDriver {
     input.add("was");
     input.add("vey");
     input.add("smrxt");
+    input.add(".");
+    input.add("it");
+    input.add("was");
+    input.add("the");
+    input.add("tkime");
+    input.add("of");
     return input;
   }
 
   public static void main(String[] args) throws FileNotFoundException {
-
+    startTimer();
+    
     List<String> dictionary = new ArrayList<String>();
     List<String> input = new ArrayList<String>();
-    dictionary = fillDictionary1(dictionary);
-    input = fillInput1(input);
-//      dictionary = fillDictionary2(dictionary);
-//      input = fillInput2(input);
+//    dictionary = fillDictionary1(dictionary);
+//    input = fillInput1(input);
+      dictionary = fillDictionary2(dictionary);
+      input = fillInput2(input);
 
     GraphFactory<Character, String> factory = new StringGraphFactory(
             dictionary.toArray(new String[dictionary.size()]));
@@ -101,11 +131,15 @@ public class SpellCheckDriver {
     for (Graph<Character, String> wordGraph : words) {
       CartesianGraph<Character, String> product = new StringCartesianGraph(G1, wordGraph);
       // printGraph(product);
+      CartesianNode<Character> n = (CartesianNode<Character>) product.getTailNode();
+      List<Edge<?>> x = n.getIncomingEdges();
       String word = product.getTailNode().getBackPointer().getValue().toString();
       checkedList.add(word);
       System.out.println("Word: " + word);
     }
     printAccuracy(checkedList);
+    
+    stopTimer();
   }
 
   private static void printAccuracy(List<String> checkedList) throws FileNotFoundException {
