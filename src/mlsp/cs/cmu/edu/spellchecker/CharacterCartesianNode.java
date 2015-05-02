@@ -8,8 +8,8 @@ import org.apache.commons.math3.util.Pair;
 
 public class CharacterCartesianNode extends CartesianNode<Character> {
 
-  public CharacterCartesianNode(Pair<Node<Character>, Node<Character>> value) {
-    super(value);
+  public CharacterCartesianNode(Node<Character> n1, Node<Character> n2) {
+    super(n1, n2);
   }
 
   @Override

@@ -138,7 +138,6 @@ public class SpellCheckDriver {
       System.out.println("Word: " + word);
     }
     printAccuracy(checkedList);
-    
     stopTimer();
   }
 

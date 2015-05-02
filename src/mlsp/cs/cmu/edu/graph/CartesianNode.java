@@ -4,8 +4,15 @@ import org.apache.commons.math3.util.Pair;
 
 public abstract class CartesianNode<N> extends Node<Pair<Node<N>, Node<N>>> implements Cloneable {
 
+  @Override
+  protected abstract DistanceCalculator<Pair<Node<N>, Node<N>>> getDistanceStrategy();
+  
   public CartesianNode(Node<N> n1, Node<N> n2) {
     super(new Pair<>(n1,n2));
+  }
+  
+  public void setValue(Node<N> n1, Node<N> n2) {
+    setValue(new Pair<>(n1, n2));
   }
   
   public Node<N> getFirst() {
@@ -15,11 +22,7 @@ public abstract class CartesianNode<N> extends Node<Pair<Node<N>, Node<N>>> impl
   public Node<N> getSecond() {
     return getValue().getSecond();
   }
-
-  @Override
-  // to be used with edge weight assesssments...
-  protected abstract DistanceCalculator<Pair<Node<N>, Node<N>>> getDistanceStrategy();
-
+  
   @Override
   @SuppressWarnings("unchecked")
   // it's checked...
