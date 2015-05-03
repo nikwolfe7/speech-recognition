@@ -1,28 +1,32 @@
 package mlsp.cs.cmu.edu.graph;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
-public abstract class CartesianNode<N> extends Node<Pair<Node<N>, Node<N>>> implements Cloneable {
+public abstract class CartesianNode<N> extends Node<MutablePair<Node<N>, Node<N>>> {
 
   @Override
-  protected abstract DistanceCalculator<Pair<Node<N>, Node<N>>> getDistanceStrategy();
-  
+  protected abstract DistanceCalculator<MutablePair<Node<N>, Node<N>>> getDistanceStrategy();
+
   public CartesianNode(Node<N> n1, Node<N> n2) {
-    super(new Pair<>(n1,n2));
+    super(new MutablePair<Node<N>, Node<N>>(n1, n2));
   }
-  
-  public void setValue(Node<N> n1, Node<N> n2) {
-    setValue(new Pair<>(n1, n2));
+
+  public void setLeft(Node<N> node) {
+    getValue().setLeft(node);
   }
-  
-  public Node<N> getFirst() {
-    return getValue().getFirst();
+
+  public void setRight(Node<N> node) {
+    getValue().setRight(node);
   }
-  
-  public Node<N> getSecond() {
-    return getValue().getSecond();
+
+  public Node<N> getLeft() {
+    return getValue().getLeft();
   }
-  
+
+  public Node<N> getRight() {
+    return getValue().getRight();
+  }
+
   @Override
   @SuppressWarnings("unchecked")
   // it's checked...
@@ -49,15 +53,11 @@ public abstract class CartesianNode<N> extends Node<Pair<Node<N>, Node<N>>> impl
 
   @Override
   public String toString() {
-    String s = "(" + getValue().getFirst().getValue() + "," + getValue().getSecond().getValue()
+    String s = "(" + getValue().getLeft().getValue() + "," + getValue().getRight().getValue()
             + ") id=" + hashCode();
     if (getCost() != null)
       s += " cost=" + getCost();
     return s;
   }
 
-  @Override
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.math3.util.MutablePair;
 
 class Counter<K> extends HashMap<K, Integer> {
     private static final long serialVersionUID = 1L;
@@ -31,11 +31,11 @@ class Counter<K> extends HashMap<K, Integer> {
       return list;
     }
     
-    public List<Pair<K, Double>> getProbabilites() {
+    public List<MutablePair<K, Double>> getProbabilites() {
       List<Map.Entry<K, Integer>> sortedItems = getSortedNgrams();
-      List<Pair<K, Double>> wordProbs = new ArrayList<Pair<K,Double>>();
+      List<MutablePair<K, Double>> wordProbs = new ArrayList<MutablePair<K,Double>>();
       for(Map.Entry<K, Integer> item : sortedItems) {
-        Pair<K,Double> pair = new Pair<K, Double>(item.getKey(), item.getValue()/total);
+        MutablePair<K,Double> pair = new MutablePair<K, Double>(item.getKey(), item.getValue()/total);
         wordProbs.add(pair);
       }
       return wordProbs;

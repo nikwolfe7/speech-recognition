@@ -23,11 +23,12 @@ public class SpellCheckDriver {
     startTime = System.nanoTime();
   }
   
-  private static void stopTimer(){
+  private static long stopTimer(){
     endTime = System.nanoTime();
     long duration = (endTime - startTime) / 1000000; 
     System.out.println("Execution took: " + duration + "ms");
     startTime = 0;
+    return duration;
   }
   
   private static List<String> fillDictionary1(List<String> dictionary) throws FileNotFoundException {
@@ -105,8 +106,18 @@ public class SpellCheckDriver {
   }
 
   public static void main(String[] args) throws FileNotFoundException {
-    startTimer();
-    
+    long numRuns = 3;
+    long runTotal = 0;
+    long counter = numRuns;
+    while((counter--) > 0) {
+      startTimer();
+      doStuff();
+      runTotal += stopTimer();
+    }
+    System.out.println("Avg runtime: " + (runTotal/numRuns) + "ms");
+  }
+  
+  private static void doStuff() throws FileNotFoundException {
     List<String> dictionary = new ArrayList<String>();
     List<String> input = new ArrayList<String>();
 //    dictionary = fillDictionary1(dictionary);
@@ -138,7 +149,6 @@ public class SpellCheckDriver {
       System.out.println("Word: " + word);
     }
     printAccuracy(checkedList);
-    stopTimer();
   }
 
   private static void printAccuracy(List<String> checkedList) throws FileNotFoundException {

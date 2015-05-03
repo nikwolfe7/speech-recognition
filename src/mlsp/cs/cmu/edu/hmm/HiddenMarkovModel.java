@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.math3.util.MutablePair;
 
 /**
  * @author nwolfe
@@ -139,7 +139,7 @@ public abstract class HiddenMarkovModel<S, O> {
     // Calculate Gamma and Ksi values for all observations
     /* ======================================================= */
     double M = observations.size();
-    List<Pair<double[][], double[][][]>> gammaKsiLookup = Ksi.getGammaKsiLookupTable(observations);
+    List<MutablePair<double[][], double[][][]>> gammaKsiLookup = Ksi.getGammaKsiLookupTable(observations);
     /* ======================================================= */
     // M-step
     // Re-estimate Pi
@@ -148,7 +148,7 @@ public abstract class HiddenMarkovModel<S, O> {
       double gammaPiSum = LogOperations.NEG_INF;
       int i = state.getValue();
       for (int m = 0; m < M; ++m) {
-        double[][] gammaTable = gammaKsiLookup.get(m).getFirst();
+        double[][] gammaTable = gammaKsiLookup.get(m).getLeft();
         double gammaValue = gammaTable[i][0];
         gammaPiSum = LogOperations.logAdd(gammaPiSum, gammaValue);
       }
@@ -165,7 +165,7 @@ public abstract class HiddenMarkovModel<S, O> {
         double numerator = LogOperations.NEG_INF;
         double denominator = LogOperations.NEG_INF;
         for (int m = 0; m < M; ++m) {
-          double[][][] ksiTable = gammaKsiLookup.get(m).getSecond();
+          double[][][] ksiTable = gammaKsiLookup.get(m).getRight();
           List<O> observation = observations.get(m);
           for (int t = 0; t < observation.size() - 1; ++t) {
             double ksiVal = ksiTable[t][i][j];
@@ -195,7 +195,7 @@ public abstract class HiddenMarkovModel<S, O> {
         double gammaNumerator = LogOperations.NEG_INF;
         for (int m = 0; m < M; ++m) {
           List<O> observation = observations.get(m);
-          double[][] gammaTable = gammaKsiLookup.get(m).getFirst();
+          double[][] gammaTable = gammaKsiLookup.get(m).getLeft();
           for (int t = 0; t < observation.size(); ++t) {
             O Ot = observation.get(t);
             double gammaVal = gammaTable[i][t];

@@ -4,7 +4,7 @@ import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.DistanceCalculator;
 import mlsp.cs.cmu.edu.graph.Node;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 public class CharacterCartesianNode extends CartesianNode<Character> {
 
@@ -13,8 +13,13 @@ public class CharacterCartesianNode extends CartesianNode<Character> {
   }
 
   @Override
-  protected DistanceCalculator<Pair<Node<Character>, Node<Character>>> getDistanceStrategy() {
+  protected DistanceCalculator<MutablePair<Node<Character>, Node<Character>>> getDistanceStrategy() {
     return CharacterCartesianNodeDistanceStrategy.getInstance();
+  }
+
+  @Override
+  public Node<MutablePair<Node<Character>, Node<Character>>> clone() {
+   return super.clone();
   }
 
 }

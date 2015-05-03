@@ -146,7 +146,6 @@ public abstract class Node<N> implements Cloneable {
     return incomingEdges;
   }
 
-  @Override
   public abstract String toString();
 
   public Edge<?> getBackPointer() {
@@ -167,19 +166,9 @@ public abstract class Node<N> implements Cloneable {
   public void setBackPointer(Edge<?> backPointer) {
     this.backPointer = backPointer;
   }
-
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    Object clone = super.clone();
-    @SuppressWarnings("unchecked")
-    Node<N> nodeClone = (Node<N>) clone;
-    nodeClone.value = this.value;
-    nodeClone.cost = this.cost;
-    nodeClone.outgoingEdges = this.outgoingEdges;
-    nodeClone.incomingEdges = this.incomingEdges;
-    nodeClone.successors = this.successors;
-    nodeClone.predecessors = this.predecessors;
-    nodeClone.backPointer = this.backPointer;
-    return nodeClone;
+  
+  public Object clone() {
+    return super.clone();
   }
+
 }

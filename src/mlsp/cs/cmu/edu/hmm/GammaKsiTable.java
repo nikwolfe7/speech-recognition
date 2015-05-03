@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.math3.util.MutablePair;
 
 public abstract class GammaKsiTable<S, O> {
 
@@ -43,13 +43,13 @@ public abstract class GammaKsiTable<S, O> {
       outputs.put(output, j++);
   }
 
-  public List<Pair<double[][], double[][][]>> getGammaKsiLookupTable(List<List<O>> observations) {
-    List<Pair<double[][], double[][][]>> gammaKsiLookup = new ArrayList<Pair<double[][], double[][][]>>();
+  public List<MutablePair<double[][], double[][][]>> getGammaKsiLookupTable(List<List<O>> observations) {
+    List<MutablePair<double[][], double[][][]>> gammaKsiLookup = new ArrayList<MutablePair<double[][], double[][][]>>();
     for (List<O> observation : observations) {
       calculateForwardBackwardTables(observation);
       double[][] gamma = calculateGammaTable(observation);
       double[][][] ksi = calculateKsiTable(observation);
-      Pair<double[][], double[][][]> gammaKsi = new Pair<double[][], double[][][]>(gamma, ksi);
+      MutablePair<double[][], double[][][]> gammaKsi = new MutablePair<double[][], double[][][]>(gamma, ksi);
       gammaKsiLookup.add(gammaKsi);
     }
     return gammaKsiLookup;

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.math3.util.MutablePair;
 
 public abstract class ViterbiTable<S, O> {
 
@@ -78,9 +78,9 @@ public abstract class ViterbiTable<S, O> {
 
   public List<S> getViterbiBestPath(List<O> observation) {
     viterbiTable = new double[states.size()][observation.size()];
-    Pair<double[][], List<S>> viterbiResult = viterbi(observation, viterbiTable);
-    viterbiTable = viterbiResult.getFirst();
-    List<S> bestPath = viterbiResult.getSecond();
+    MutablePair<double[][], List<S>> viterbiResult = viterbi(observation, viterbiTable);
+    viterbiTable = viterbiResult.getLeft();
+    List<S> bestPath = viterbiResult.getRight();
     if (displayOutput) {
       System.out.println("\n==================\nViterbi Algorithm\n==================");
       System.out.println("Most Likely State Sequence: " + bestPath.toString());
@@ -90,8 +90,8 @@ public abstract class ViterbiTable<S, O> {
     return bestPath;
   }
 
-  private Pair<double[][], List<S>> viterbi(List<O> observation, double[][] trellis) {
-    Pair<double[][], List<S>> viterbiResult = new Pair<double[][], List<S>>(trellis,
+  private MutablePair<double[][], List<S>> viterbi(List<O> observation, double[][] trellis) {
+    MutablePair<double[][], List<S>> viterbiResult = new MutablePair<double[][], List<S>>(trellis,
             new ArrayList<S>());
     for (int t = 0; t < observation.size(); ++t) {
       if (t == 0) {
@@ -121,7 +121,7 @@ public abstract class ViterbiTable<S, O> {
           }
           trellis[i][t] = stateProb;
         }
-        viterbiResult.getSecond().add(maxState);
+        viterbiResult.getRight().add(maxState);
       }
     }
     /* Get the last state, return */
@@ -135,7 +135,7 @@ public abstract class ViterbiTable<S, O> {
         maxState = state.getKey();
       }
     }
-    viterbiResult.getSecond().add(maxState);
+    viterbiResult.getRight().add(maxState);
     return viterbiResult;
   }
 

@@ -6,16 +6,21 @@ import mlsp.cs.cmu.edu.graph.Edge;
 import mlsp.cs.cmu.edu.graph.Graph;
 import mlsp.cs.cmu.edu.graph.Node;
 
-import org.apache.commons.math3.util.Pair;
-
 /**
  * @author nwolfe
  *
  */
 public class StringCartesianGraph extends CartesianGraph<Character, String> {
 
+  private CharacterCartesianNodeFactory factory;
+
   public StringCartesianGraph(Graph<Character, String> G1, Graph<Character, String> G2) {
     super(G1, G2);
+  }
+
+  @Override
+  protected void setup() {
+    this.factory = new CharacterCartesianNodeFactory();
   }
 
   @Override
@@ -25,8 +30,8 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected void pushNodeCosts(CartesianNode<Character> pFrom,
-          CartesianNode<Character> pTo, Edge<String> edge) {
+  protected void pushNodeCosts(CartesianNode<Character> pFrom, CartesianNode<Character> pTo,
+          Edge<String> edge) {
     // push the weight out to the node...
     Double pFromCost = pFrom.getCost();
     if (pFromCost == null)
@@ -44,8 +49,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   }
 
   @Override
-  protected Edge<String> getEdgeValueAndSetWeights(
-          CartesianNode<Character> pFrom,
+  protected Edge<String> getEdgeValueAndSetWeights(CartesianNode<Character> pFrom,
           CartesianNode<Character> pTo) {
     // FIRST elements are the template
     // SECOND elements are the input
@@ -55,6 +59,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
 
   @Override
   protected CartesianNode<Character> getCartesianNodeImpl(Node<Character> n1, Node<Character> n2) {
-    return CharacterCartesianNodeFactory.getInstance().getNewCartesianNode(n1, n2);
+    CartesianNode<Character> n00b = factory.getNewCartesianNode(n1, n2);
+    return n00b;
   }
 }

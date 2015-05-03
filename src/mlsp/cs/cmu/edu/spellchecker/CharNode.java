@@ -61,4 +61,9 @@ public class CharNode extends Node<Character> {
     return s;
   }
 
+  @Override
+  public Node<Character> clone() {
+    return this.clone();
+  }
+
 }

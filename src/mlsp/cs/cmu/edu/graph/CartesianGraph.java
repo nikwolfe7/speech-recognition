@@ -2,9 +2,10 @@ package mlsp.cs.cmu.edu.graph;
 
 import java.util.Set;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
-public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>, E> {
+public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, Node<N>>, E> {
 
   private Map2D<Node<N>, Node<N>, CartesianNode<N>> indexMapping;
 
@@ -18,11 +19,22 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
       return nodePair;
     }
   }
+  
+  private void prune(Node<N> column) {
+    Set<Node<N>> colValues = indexMapping.yKeyset(column);
+    for(Node<N> node : colValues) {
+      CartesianNode<N> cartNode = getCartesianNode(column, node);
+      if(!acceptOrRejectNode(cartNode)) {
+        
+      }
+    }
+  }
 
   @SuppressWarnings("unchecked")
   // it's checked
   public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
     super(null);
+    setup();
     indexMapping = new Map2D<Node<N>, Node<N>, CartesianNode<N>>();
     CartesianNode<N> headNode = getCartesianNodeImpl(G1.getHead(), G2.getHead());
     setHeadNode(headNode);
@@ -60,15 +72,9 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
     }
   }
 
-  private void prune(Node<N> column) {
-    Set<Node<N>> colValues = indexMapping.yKeyset(column);
-    for(Node<N> node : colValues) {
-      CartesianNode<N> cartNode = getCartesianNode(column, node);
-      if(!acceptOrRejectNode(cartNode)) {
-        
-      }
-    }
-  }
+  
+  // Gives subclasses a chance to establish state if need be
+  protected abstract void setup();
 
   protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode);
 
@@ -80,7 +86,7 @@ public abstract class CartesianGraph<N, E> extends Graph<Pair<Node<N>, Node<N>>,
   protected abstract Edge<E> getEdgeValueAndSetWeights(CartesianNode<N> pFrom,
           CartesianNode<N> pTo);
 
-  // get the subclass implementation of the Node<Pair>
+  // get the subclass implementation of the Node<MutablePair>
   protected abstract CartesianNode<N> getCartesianNodeImpl(Node<N> n1, Node<N> n2);
 
 }

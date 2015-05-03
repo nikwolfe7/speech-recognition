@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.math3.util.MutablePair;
 
 public class DataCleaner {
 
@@ -51,8 +51,8 @@ public class DataCleaner {
       }
 
       /* Output priors */
-      List<Pair<Character, Double>> probs = counter.getProbabilites();
-      for (Pair<Character, Double> prob : probs) {
+      List<MutablePair<Character, Double>> probs = counter.getProbabilites();
+      for (MutablePair<Character, Double> prob : probs) {
         //System.out.println(prob.getKey() + ":" + prob.getValue());
       }
 
@@ -60,7 +60,7 @@ public class DataCleaner {
       Double vowelsum = 0.0;
       Double consonantsum = 0.0;
       List<Character> vowels = new ArrayList<Character>(Arrays.asList('A','E','I','O','U','Y',' '));
-      for (Pair<Character, Double> prob : probs) {
+      for (MutablePair<Character, Double> prob : probs) {
         if (vowels.contains(prob.getKey()))
           vowelsum += prob.getValue();
         else
@@ -71,7 +71,7 @@ public class DataCleaner {
       StringBuilder V = new StringBuilder();
       StringBuilder C = new StringBuilder();
       
-      for (Pair<Character, Double> prob : probs) {
+      for (MutablePair<Character, Double> prob : probs) {
         Character character = prob.getKey();
         Double vprob = 0.0;
         Double cprob = 0.0;

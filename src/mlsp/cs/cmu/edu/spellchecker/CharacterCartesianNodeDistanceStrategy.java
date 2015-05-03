@@ -3,9 +3,9 @@ package mlsp.cs.cmu.edu.spellchecker;
 import mlsp.cs.cmu.edu.graph.DistanceCalculator;
 import mlsp.cs.cmu.edu.graph.Node;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
-public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculator<Pair<Node<Character>, Node<Character>>> {
+public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculator<MutablePair<Node<Character>, Node<Character>>> {
 
   private static CharacterCartesianNodeDistanceStrategy singleton = null;
   
@@ -19,14 +19,14 @@ public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculato
   }
 
   @Override
-  public double getDifference(Node<Pair<Node<Character>, Node<Character>>> n1,
-          Node<Pair<Node<Character>, Node<Character>>> n2) {
+  public double getDifference(Node<MutablePair<Node<Character>, Node<Character>>> n1,
+          Node<MutablePair<Node<Character>, Node<Character>>> n2) {
     double INFINITY = 1e100; 
     Character xToValue, yToValue, xFromValue, yFromValue;
-    xFromValue = n1.getValue().getFirst().getValue();
-    yFromValue = n1.getValue().getSecond().getValue();
-    xToValue = n2.getValue().getFirst().getValue();
-    yToValue = n2.getValue().getSecond().getValue();
+    xFromValue = n1.getValue().getLeft().getValue();
+    yFromValue = n1.getValue().getRight().getValue();
+    xToValue = n2.getValue().getLeft().getValue();
+    yToValue = n2.getValue().getRight().getValue();
     if (n1 == n2) {
       return INFINITY;
     } else if (xToValue.equals(yToValue)) {
@@ -55,9 +55,9 @@ public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculato
     }
   }
   
-  private boolean checkIsNonEmittingNode(Node<Pair<Node<Character>, Node<Character>>> node) {
-    Character xValue = node.getValue().getFirst().getValue();
-    Character yValue = node.getValue().getSecond().getValue();
+  private boolean checkIsNonEmittingNode(Node<MutablePair<Node<Character>, Node<Character>>> node) {
+    Character xValue = node.getValue().getLeft().getValue();
+    Character yValue = node.getValue().getRight().getValue();
     char end = CharacterConstants.END_CHARACTER.getValue();
     char begin = CharacterConstants.BEGIN_CHARACTER.getValue();
     if (xValue.equals(yValue) && (xValue.equals(end) || xValue.equals(begin)))
@@ -67,8 +67,8 @@ public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculato
               || yValue.equals(begin);
   }
   
-  private boolean checkPairContainsNonEmittingNode(Node<Pair<Node<Character>, Node<Character>>> n1,
-          Node<Pair<Node<Character>, Node<Character>>> n2) {
+  private boolean checkPairContainsNonEmittingNode(Node<MutablePair<Node<Character>, Node<Character>>> n1,
+          Node<MutablePair<Node<Character>, Node<Character>>> n2) {
     return checkIsNonEmittingNode(n1) || checkIsNonEmittingNode(n2);
   }
 
