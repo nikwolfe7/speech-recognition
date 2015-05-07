@@ -4,6 +4,8 @@ import org.apache.commons.lang3.tuple.MutablePair;
 
 public abstract class CartesianNode<N> extends Node<MutablePair<Node<N>, Node<N>>> {
 
+  private static final long serialVersionUID = 8623888536440491160L;
+
   @Override
   protected abstract DistanceCalculator<MutablePair<Node<N>, Node<N>>> getDistanceStrategy();
 
@@ -11,6 +13,17 @@ public abstract class CartesianNode<N> extends Node<MutablePair<Node<N>, Node<N>
     super(new MutablePair<Node<N>, Node<N>>(n1, n2));
   }
 
+  @Override
+  public void destroy() {
+    // leave value because we can just reset left/right
+    setCost(null);
+    getIncomingEdges().clear();
+    getOutgoingEdges().clear();
+    getSuccessors().clear();
+    getPredecessors().clear();
+    setBackPointer(null);
+  }
+  
   public void setLeft(Node<N> node) {
     getValue().setLeft(node);
   }

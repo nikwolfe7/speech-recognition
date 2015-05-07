@@ -3,7 +3,6 @@ package mlsp.cs.cmu.edu.graph;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.MutablePair;
 
 public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, Node<N>>, E> {
 
@@ -13,39 +12,13 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
 
   public CartesianGraph(CartesianNodeFactory<N> nodeFactory) {
     super(null);
-    setup();
     this.factory = nodeFactory;
-  }
-
-  private CartesianNode<N> getCartesianNode(Node<N> n1, Node<N> n2) {
-    if (indexMapping.containsKey(n1, n2)) {
-      return indexMapping.get(n1, n2);
-    } else {
-      CartesianNode<N> nodePair = getCartesianNodeImpl(n1, n2);
-      indexMapping.put(n1, n2, nodePair);
-      addNode(nodePair);
-      return nodePair;
-    }
-  }
-
-  private Map2D<Node<N>, Node<N>, CartesianNode<N>> initiateMapping() {
-    return new Map2D<Node<N>, Node<N>, CartesianNode<N>>();
-  }
-  
-  protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode);
-
-  private void prune(Node<N> column) {
-    Set<Node<N>> colValues = indexMapping.yKeyset(column);
-    for (Node<N> node : colValues) {
-      CartesianNode<N> cartNode = getCartesianNode(column, node);
-      if (!acceptOrRejectNode(cartNode)) {
-
-      }
-    }
+    initialize();
   }
 
   @SuppressWarnings("unchecked")
   public void buildGraph(Graph<N, E> G1, Graph<N, E> G2) {
+    tearDown();
     CartesianNode<N> headNode = getCartesianNodeImpl(G1.getHead(), G2.getHead());
     setHeadNode(headNode);
     addNode(headNode);
@@ -82,28 +55,61 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
     }
   }
 
+  private CartesianNode<N> getCartesianNode(Node<N> n1, Node<N> n2) {
+    if (indexMapping.containsKey(n1, n2)) {
+      return indexMapping.get(n1, n2);
+    } else {
+      CartesianNode<N> nodePair = getCartesianNodeImpl(n1, n2);
+      indexMapping.put(n1, n2, nodePair);
+      addNode(nodePair);
+      return nodePair;
+    }
+  }
+
+  private Map2D<Node<N>, Node<N>, CartesianNode<N>> initiateMapping() {
+    return new Map2D<Node<N>, Node<N>, CartesianNode<N>>();
+  }
+
   // get the subclass implementation of the Node<MutablePair>
   protected CartesianNode<N> getCartesianNodeImpl(Node<N> n1, Node<N> n2) {
     return factory.getNewCartesianNode(n1, n2);
   }
 
+  // Assess the edge penalties, if any...
+  @SuppressWarnings("unchecked")
+  protected Edge<E> getEdgeValueAndSetWeights(CartesianNode<N> pFrom, CartesianNode<N> pTo) {
+    double weight = pFrom.getDistance(pTo);
+    return (Edge<E>) factory.getNewEdge(pFrom, pTo, weight);
+  }
+
   // tear down
   private void tearDown() {
-    for(CartesianNode<N> node : indexMapping.values()) {
-      
+    for (CartesianNode<N> node : indexMapping.values()) {
+      factory.recycleEdges(node.getIncomingEdges());
+      factory.recycleEdges(node.getOutgoingEdges());
       factory.recycleNode(node);
     }
     indexMapping.clear();
-    getNodes().clear();
+    destroy();
   }
 
-  // Gives subclasses a chance to establish state if need be
-  protected abstract void setup();
+  private void prune(Node<N> column) {
+    Set<Node<N>> colValues = indexMapping.yKeyset(column);
+    for (Node<N> node : colValues) {
+      CartesianNode<N> cartNode = getCartesianNode(column, node);
+      if (!acceptOrRejectNode(cartNode)) {
+
+      }
+    }
+  }
+
+  // defer pruning decision to subclasses
+  protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode);
+
+  // Gives subclasses a chance to establish initial state if need be
+  protected abstract void initialize();
 
   // Assess and push node costs, if any...
   protected abstract void pushNodeCosts(CartesianNode<N> pFrom, CartesianNode<N> pTo, Edge<E> edge);
-
-  // Assess the edge penalties, if any...
-  protected abstract Edge<E> getEdgeValueAndSetWeights(CartesianNode<N> pFrom, CartesianNode<N> pTo);
 
 }

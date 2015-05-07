@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import mlsp.cs.cmu.edu.graph.CartesianGraph;
+import mlsp.cs.cmu.edu.graph.CartesianGraphFactory;
 import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.Edge;
 import mlsp.cs.cmu.edu.graph.Graph;
@@ -138,10 +139,11 @@ public class SpellCheckDriver {
       words.add(G2);
       // printGraph(G2);
     }
+    
     List<String> checkedList = new ArrayList<String>();
+    CartesianGraphFactory<Character, String> cgFactory = new StringCartesianGraphFactory();
     for (Graph<Character, String> wordGraph : words) {
-      CartesianGraph<Character, String> product = new StringCartesianGraph(G1, wordGraph);
-      // printGraph(product);
+      CartesianGraph<Character, String> product = cgFactory.buildGraph(G1, wordGraph);
       CartesianNode<Character> n = (CartesianNode<Character>) product.getTailNode();
       List<Edge<?>> x = n.getIncomingEdges();
       String word = product.getTailNode().getBackPointer().getValue().toString();

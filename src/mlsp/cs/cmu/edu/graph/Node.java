@@ -22,6 +22,16 @@ public abstract class Node<N> implements Cloneable, Serializable {
   private List<Node<N>> predecessors = new LinkedList<Node<N>>();
   
   private Edge<?> backPointer;
+  
+  public void destroy() {
+    setValue(null);
+    setCost(null);
+    getIncomingEdges().clear();
+    getOutgoingEdges().clear();
+    getSuccessors().clear();
+    getPredecessors().clear();
+    setBackPointer(null);
+  }
 
   public Node(N value) {
     this.value = value;
@@ -41,11 +51,6 @@ public abstract class Node<N> implements Cloneable, Serializable {
     return predecessors;
   }
   
-  public void destroy() {
-    getIncomingEdges().clear();
-    getOutgoingEdges().clear();
-  }
-
   /**
    * Get the nodes at the other ends of our edges...
    * 

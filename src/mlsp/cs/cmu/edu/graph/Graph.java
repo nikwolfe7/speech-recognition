@@ -12,6 +12,13 @@ public class Graph<N, E> {
   private Node<N> headNode;
   
   private Node<N> tailNode;
+  
+  public void destroy() {
+    getEdges().clear();
+    getNodes().clear();
+    setHeadNode(null);
+    setTailNode(null);
+  }
 
   public Graph(Node<N> head) {
     this.graphEdges = new LinkedList<Edge<E>>();

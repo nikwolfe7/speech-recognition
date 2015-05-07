@@ -1,6 +1,10 @@
 package mlsp.cs.cmu.edu.graph;
 
-public class Edge<E> {
+import java.io.Serializable;
+
+public class Edge<E> implements Serializable{
+
+  private static final long serialVersionUID = -5653940785139037110L;
 
   private E value = null;
 
@@ -9,6 +13,13 @@ public class Edge<E> {
   private Node<?> nodeSuccessor;
 
   private Node<?> nodePredecessor;
+  
+  public void destroy() {
+    setValue(null);
+    setWeight(0.0);
+    setNodeSuccessor(null);
+    setNodePredecessor(null);
+  }
 
   public Edge(Node<?> from, Node<?> to) {
     setAdjacentNodes(from, to);

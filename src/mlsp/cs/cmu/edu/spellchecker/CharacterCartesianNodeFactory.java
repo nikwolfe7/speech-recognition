@@ -2,6 +2,7 @@ package mlsp.cs.cmu.edu.spellchecker;
 
 import mlsp.cs.cmu.edu.graph.AbstractCartesianNodeFactory;
 import mlsp.cs.cmu.edu.graph.CartesianNode;
+import mlsp.cs.cmu.edu.graph.Edge;
 import mlsp.cs.cmu.edu.graph.Node;
 
 public class CharacterCartesianNodeFactory extends AbstractCartesianNodeFactory<Character> {
@@ -12,20 +13,24 @@ public class CharacterCartesianNodeFactory extends AbstractCartesianNodeFactory<
   }
 
   @Override
-  protected CartesianNode<Character> getPrototype() {
+  protected CartesianNode<Character> getNodePrototype() {
     char beginChar = CharacterConstants.BEGIN_CHARACTER.getValue();
     return new CharacterCartesianNode(getNewNode(beginChar), getNewNode(beginChar));
   }
 
   @Override
   protected int getMinCapacity() {
-    return 1000;
+    return 10000;
   }
 
   @Override
   protected int getIncreaseCapacity() {
-    return 100000;
+    return 1000000;
   }
 
+  @Override
+  protected Edge<?> getEdgePrototype() {
+    return new Edge<String>(getNodePrototype(), getNodePrototype());
+  }
   
 }

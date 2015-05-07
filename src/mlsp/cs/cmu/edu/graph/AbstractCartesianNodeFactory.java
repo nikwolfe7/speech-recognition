@@ -1,12 +1,15 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 public abstract class AbstractCartesianNodeFactory<N> implements CartesianNodeFactory<N> {
 
-  private LinkedBlockingQueue<CartesianNode<N>> queue = new LinkedBlockingQueue<CartesianNode<N>>();
-  
-  private CartesianNode<N> nodePrototype = getPrototype();
+  private Queue<CartesianNode<N>> nodeQueue = new LinkedList<CartesianNode<N>>();
+
+  private Queue<Edge<?>> edgeQueue = new LinkedList<Edge<?>>();
 
   private int increaseCapacity = getIncreaseCapacity();
 
@@ -15,66 +18,67 @@ public abstract class AbstractCartesianNodeFactory<N> implements CartesianNodeFa
   private class NodeCreator implements Runnable {
     @Override
     public void run() {
-      if (queue.size() < minCapacity) {
-        System.out.println("Refilling queue...");
-        int count = 0;
-        while (count++ <= increaseCapacity) {
-          try {
-            queue.put(generateNode());
-          } catch (InterruptedException e) {
-            System.out.println("Node queue was interrupted!");
-          }
-        }
+      System.out.println("Refilling nodeQueue...");
+      int count = 0;
+      while (count++ <= increaseCapacity) {
+        nodeQueue.add(getNodePrototype());
       }
     }
+  }
 
-    private CartesianNode<N> generateNode() {
-      return getPrototype();
-//      try {
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        ObjectOutputStream oos = new ObjectOutputStream(baos);
-//        oos.writeObject(nodePrototype);
-//        oos.flush();
-//        oos.close();
-//        ByteArrayInputStream ins = new ByteArrayInputStream(baos.toByteArray());
-//        ObjectInputStream in = new ObjectInputStream(ins);
-//        return (CartesianNode<N>) in.readObject();
-//      } catch (IOException | ClassNotFoundException e) {
-//        e.printStackTrace();
-//      }
-//      return null;
+  private class EdgeCreator implements Runnable {
+    @Override
+    public void run() {
+      System.out.println("Refilling edgeQueue...");
+      int count = 0;
+      while (count++ <= increaseCapacity) {
+        edgeQueue.add(getEdgePrototype());
+      }
     }
   }
 
   @Override
   public CartesianNode<N> getNewCartesianNode(Node<N> n1, Node<N> n2) {
-    CartesianNode<N> node;
-    try {
+    CartesianNode<N> node = null;
+    if (nodeQueue.size() < minCapacity)
       new NodeCreator().run();
-      node = queue.take();
-      node.setLeft(n1);
-      node.setRight(n2);
-      return node;
-    } catch (InterruptedException e) {
-      System.out.println("Node queue was interrupted!");
-    }
-    return null;
+    node = nodeQueue.poll();
+    node.setLeft(n1);
+    node.setRight(n2);
+    return node;
   }
 
-  
+  @Override
+  public Edge<?> getNewEdge(CartesianNode<N> pFrom, CartesianNode<N> pTo, double weight) {
+    Edge<?> edge = null;
+    if (edgeQueue.size() < minCapacity)
+      new EdgeCreator().run();
+    edge = edgeQueue.poll();
+    edge.setAdjacentNodes(pFrom, pTo);
+    edge.setWeight(weight);
+    return edge;
+  }
+
   @Override
   public void recycleNode(CartesianNode<N> node) {
-    try {
-      queue.put(node);
-    } catch (InterruptedException e) {
-      System.out.println("Node queue was interrupted!");
+    node.destroy();
+    nodeQueue.add(node);
+  }
+
+  @Override
+  public void recycleEdges(List<Edge<?>> edges) {
+    for (Edge<?> edge : edges) {
+      edge.destroy();
+      edgeQueue.add(edge);
     }
   }
-  
-  protected abstract int getMinCapacity(); 
-  
+
+  protected abstract Edge<?> getEdgePrototype();
+
+  protected abstract int getMinCapacity();
+
   protected abstract int getIncreaseCapacity();
 
-  protected abstract CartesianNode<N> getPrototype();
+  protected abstract CartesianNode<N> getNodePrototype();
 
 }

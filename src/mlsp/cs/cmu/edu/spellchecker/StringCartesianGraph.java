@@ -2,6 +2,7 @@ package mlsp.cs.cmu.edu.spellchecker;
 
 import mlsp.cs.cmu.edu.graph.CartesianGraph;
 import mlsp.cs.cmu.edu.graph.CartesianNode;
+import mlsp.cs.cmu.edu.graph.CartesianNodeFactory;
 import mlsp.cs.cmu.edu.graph.Edge;
 import mlsp.cs.cmu.edu.graph.Node;
 
@@ -11,11 +12,8 @@ import mlsp.cs.cmu.edu.graph.Node;
  */
 public class StringCartesianGraph extends CartesianGraph<Character, String> {
 
-  private CharacterCartesianNodeFactory factory;
-
-  @Override
-  protected void setup() {
-    this.factory = new CharacterCartesianNodeFactory();
+  public StringCartesianGraph(CartesianNodeFactory<Character> nodeFactory) {
+    super(nodeFactory);
   }
 
   @Override
@@ -40,21 +38,10 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
       pTo.setCost(nodeCost);
       pTo.setBackPointer(edge);
     }
-
   }
 
-  @Override
-  protected Edge<String> getEdgeValueAndSetWeights(CartesianNode<Character> pFrom,
-          CartesianNode<Character> pTo) {
-    // FIRST elements are the template
-    // SECOND elements are the input
-    double weight = pFrom.getDistance(pTo);
-    return new Edge<String>(pFrom, pTo, weight);
-  }
 
   @Override
-  protected CartesianNode<Character> getCartesianNodeImpl(Node<Character> n1, Node<Character> n2) {
-    CartesianNode<Character> n00b = factory.getNewCartesianNode(n1, n2);
-    return n00b;
-  }
+  protected void initialize() {}
+
 }
