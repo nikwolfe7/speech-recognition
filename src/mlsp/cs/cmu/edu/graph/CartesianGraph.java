@@ -89,10 +89,11 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
 
   // tear down
   private void tearDown() {
-    for() {
-      
+    for(CartesianNode<N> node : indexMapping.values()) {
+      factory.recycleNode(node);
     }
     this.indexMapping = initiateMapping();
+    getNodes().clear();
   }
 
   // Gives subclasses a chance to establish state if need be
