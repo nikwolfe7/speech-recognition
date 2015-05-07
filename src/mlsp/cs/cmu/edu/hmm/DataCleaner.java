@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.math3.util.MutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 public class DataCleaner {
 

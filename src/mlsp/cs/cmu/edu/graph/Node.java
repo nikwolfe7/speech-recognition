@@ -1,10 +1,13 @@
 package mlsp.cs.cmu.edu.graph;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public abstract class Node<N> implements Cloneable {
+public abstract class Node<N> implements Cloneable, Serializable {
+
+  private static final long serialVersionUID = -72017848348636318L;
 
   private N value;
 
@@ -167,8 +170,4 @@ public abstract class Node<N> implements Cloneable {
     this.backPointer = backPointer;
   }
   
-  public Object clone() {
-    return super.clone();
-  }
-
 }

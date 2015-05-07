@@ -3,7 +3,6 @@ package mlsp.cs.cmu.edu.spellchecker;
 import mlsp.cs.cmu.edu.graph.CartesianGraph;
 import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.Edge;
-import mlsp.cs.cmu.edu.graph.Graph;
 import mlsp.cs.cmu.edu.graph.Node;
 
 /**
@@ -13,10 +12,6 @@ import mlsp.cs.cmu.edu.graph.Node;
 public class StringCartesianGraph extends CartesianGraph<Character, String> {
 
   private CharacterCartesianNodeFactory factory;
-
-  public StringCartesianGraph(Graph<Character, String> G1, Graph<Character, String> G2) {
-    super(G1, G2);
-  }
 
   @Override
   protected void setup() {

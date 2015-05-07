@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math3.util.MutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 public abstract class GammaKsiTable<S, O> {
 

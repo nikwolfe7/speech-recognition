@@ -1,12 +1,10 @@
 package mlsp.cs.cmu.edu.spellchecker;
 
+import mlsp.cs.cmu.edu.graph.AbstractCartesianNodeFactory;
 import mlsp.cs.cmu.edu.graph.CartesianNode;
-import mlsp.cs.cmu.edu.graph.CartesianNodeFactory;
 import mlsp.cs.cmu.edu.graph.Node;
 
-public class CharacterCartesianNodeFactory implements CartesianNodeFactory<Character> {
-
-  private CharacterCartesianNode nodePrototype = new CharacterCartesianNode(null, null);
+public class CharacterCartesianNodeFactory extends AbstractCartesianNodeFactory<Character> {
 
   @Override
   public Node<Character> getNewNode(Character value) {
@@ -14,14 +12,20 @@ public class CharacterCartesianNodeFactory implements CartesianNodeFactory<Chara
   }
 
   @Override
-  public CartesianNode<Character> getNewCartesianNode(Node<Character> n1, Node<Character> n2) {
-//    CharacterCartesianNode node =  new CharacterCartesianNode(null, null);
-//    node.setLeft(n1);
-//    node.setRight(n2);
-//    return node;
-      CharacterCartesianNode clone = (CharacterCartesianNode) nodePrototype.clone();
-      clone.setLeft(n1);
-      clone.setRight(n2);
-      return clone;
+  protected CartesianNode<Character> getPrototype() {
+    char beginChar = CharacterConstants.BEGIN_CHARACTER.getValue();
+    return new CharacterCartesianNode(getNewNode(beginChar), getNewNode(beginChar));
   }
+
+  @Override
+  protected int getMinCapacity() {
+    return 1000;
+  }
+
+  @Override
+  protected int getIncreaseCapacity() {
+    return 100000;
+  }
+
+  
 }

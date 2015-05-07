@@ -120,10 +120,10 @@ public class SpellCheckDriver {
   private static void doStuff() throws FileNotFoundException {
     List<String> dictionary = new ArrayList<String>();
     List<String> input = new ArrayList<String>();
-//    dictionary = fillDictionary1(dictionary);
-//    input = fillInput1(input);
-      dictionary = fillDictionary2(dictionary);
-      input = fillInput2(input);
+    dictionary = fillDictionary1(dictionary);
+    input = fillInput1(input);
+//      dictionary = fillDictionary2(dictionary);
+//      input = fillInput2(input);
 
     GraphFactory<Character, String> factory = new StringGraphFactory(
             dictionary.toArray(new String[dictionary.size()]));

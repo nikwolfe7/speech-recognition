@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.commons.math3.util.MutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 public abstract class ViterbiTable<S, O> {
 

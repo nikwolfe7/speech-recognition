@@ -7,7 +7,15 @@ import org.apache.commons.lang3.tuple.MutablePair;
 
 public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, Node<N>>, E> {
 
-  private Map2D<Node<N>, Node<N>, CartesianNode<N>> indexMapping;
+  private Map2D<Node<N>, Node<N>, CartesianNode<N>> indexMapping = initiateMapping();
+
+  private CartesianNodeFactory<N> factory;
+
+  public CartesianGraph(CartesianNodeFactory<N> nodeFactory) {
+    super(null);
+    setup();
+    this.factory = nodeFactory;
+  }
 
   private CartesianNode<N> getCartesianNode(Node<N> n1, Node<N> n2) {
     if (indexMapping.containsKey(n1, n2)) {
@@ -19,23 +27,25 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
       return nodePair;
     }
   }
+
+  private Map2D<Node<N>, Node<N>, CartesianNode<N>> initiateMapping() {
+    return new Map2D<Node<N>, Node<N>, CartesianNode<N>>();
+  }
   
+  protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode);
+
   private void prune(Node<N> column) {
     Set<Node<N>> colValues = indexMapping.yKeyset(column);
-    for(Node<N> node : colValues) {
+    for (Node<N> node : colValues) {
       CartesianNode<N> cartNode = getCartesianNode(column, node);
-      if(!acceptOrRejectNode(cartNode)) {
-        
+      if (!acceptOrRejectNode(cartNode)) {
+
       }
     }
   }
 
   @SuppressWarnings("unchecked")
-  // it's checked
-  public CartesianGraph(Graph<N, E> G1, Graph<N, E> G2) {
-    super(null);
-    setup();
-    indexMapping = new Map2D<Node<N>, Node<N>, CartesianNode<N>>();
+  public void buildGraph(Graph<N, E> G1, Graph<N, E> G2) {
     CartesianNode<N> headNode = getCartesianNodeImpl(G1.getHead(), G2.getHead());
     setHeadNode(headNode);
     addNode(headNode);
@@ -67,26 +77,31 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
             addEdge(edge);
           }
         }
-        //prune(n1);
+        // prune(n1);
       }
     }
   }
 
-  
+  // get the subclass implementation of the Node<MutablePair>
+  protected CartesianNode<N> getCartesianNodeImpl(Node<N> n1, Node<N> n2) {
+    return factory.getNewCartesianNode(n1, n2);
+  }
+
+  // tear down
+  private void tearDown() {
+    for() {
+      
+    }
+    this.indexMapping = initiateMapping();
+  }
+
   // Gives subclasses a chance to establish state if need be
   protected abstract void setup();
 
-  protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode);
-
   // Assess and push node costs, if any...
-  protected abstract void pushNodeCosts(CartesianNode<N> pFrom,
-          CartesianNode<N> pTo, Edge<E> edge);
+  protected abstract void pushNodeCosts(CartesianNode<N> pFrom, CartesianNode<N> pTo, Edge<E> edge);
 
   // Assess the edge penalties, if any...
-  protected abstract Edge<E> getEdgeValueAndSetWeights(CartesianNode<N> pFrom,
-          CartesianNode<N> pTo);
-
-  // get the subclass implementation of the Node<MutablePair>
-  protected abstract CartesianNode<N> getCartesianNodeImpl(Node<N> n1, Node<N> n2);
+  protected abstract Edge<E> getEdgeValueAndSetWeights(CartesianNode<N> pFrom, CartesianNode<N> pTo);
 
 }
