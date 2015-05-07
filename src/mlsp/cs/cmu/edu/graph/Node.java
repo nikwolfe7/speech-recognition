@@ -42,16 +42,8 @@ public abstract class Node<N> implements Cloneable, Serializable {
   }
   
   public void destroy() {
-    ListIterator<Edge<?>> iter = getIncomingEdges().listIterator();
-    while(iter.hasNext()) {
-      iter.next();
-      iter.remove();
-    }
-    iter = getOutgoingEdges().listIterator();
-    while(iter.hasNext()) {
-      iter.next();
-      iter.remove();
-    }
+    getIncomingEdges().clear();
+    getOutgoingEdges().clear();
   }
 
   /**
