@@ -1,10 +1,6 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.io.Serializable;
-
-public class Edge<E> implements Serializable{
-
-  private static final long serialVersionUID = -5653940785139037110L;
+public class Edge<E> implements Cloneable {
 
   private E value = null;
 
@@ -81,6 +77,12 @@ public class Edge<E> implements Serializable{
     return " " + getNodePredecessor().getValue().toString() + " id=" + getNodePredecessor().hashCode() +
             " --> (v=" + getValue() + ",w=" + getWeight() + 
             ") --> " + getNodeSuccessor().getValue().toString() + " id=" + getNodeSuccessor().hashCode();
+  }
+
+  @Override
+  public Object clone() throws CloneNotSupportedException {
+    // TODO Auto-generated method stub
+    return super.clone();
   }
 
 }

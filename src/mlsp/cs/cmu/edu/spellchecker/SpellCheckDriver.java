@@ -16,22 +16,23 @@ import mlsp.cs.cmu.edu.graph.Graph;
 import mlsp.cs.cmu.edu.graph.GraphFactory;
 
 public class SpellCheckDriver {
-  
+
   private static long startTime;
+
   private static long endTime;
-  
+
   private static void startTimer() {
     startTime = System.nanoTime();
   }
-  
-  private static long stopTimer(){
+
+  private static long stopTimer() {
     endTime = System.nanoTime();
-    long duration = (endTime - startTime) / 1000000; 
+    long duration = (endTime - startTime) / 1000000;
     System.out.println("Execution took: " + duration + "ms");
     startTime = 0;
     return duration;
   }
-  
+
   private static List<String> fillDictionary1(List<String> dictionary) throws FileNotFoundException {
     Scanner scn = new Scanner(new File("./dict/dict_5k.txt"));
     while (scn.hasNextLine()) {
@@ -42,32 +43,34 @@ public class SpellCheckDriver {
   }
 
   private static List<String> fillDictionary2(List<String> dictionary) {
-//     dictionary.add("abc");
-//    dictionary.add("a");
-    dictionary.add("pohnae");
-    dictionary.add("was");
-    dictionary.add("a");
-    dictionary.add("dim-witted");
-    dictionary.add("man");
-    dictionary.add("but");
-    dictionary.add("his");
-    dictionary.add("wife");
-    dictionary.add(",");
-    dictionary.add("mohnae");
-    dictionary.add(",");
-    dictionary.add("was");
-    dictionary.add("very");
-    dictionary.add("smart");
-    dictionary.add("zudda");
-    dictionary.add("woodsman");
-    dictionary.add("tac");
-    dictionary.add("skime");
-    dictionary.add("time");
-    dictionary.add("off");
-    dictionary.add("it");
-    dictionary.add("the");
-    dictionary.add("of");
-    dictionary.add(".");
+    // dictionary.add("abc");
+    // dictionary.add("a");
+    for (int i = 0; i < 10; i++) {
+      dictionary.add("pohnae");
+      dictionary.add("was");
+      dictionary.add("a");
+      dictionary.add("dim-witted");
+      dictionary.add("man");
+      dictionary.add("but");
+      dictionary.add("his");
+      dictionary.add("wife");
+      dictionary.add(",");
+      dictionary.add("mohnae");
+      dictionary.add(",");
+      dictionary.add("was");
+      dictionary.add("very");
+      dictionary.add("smart");
+      dictionary.add("zudda");
+      dictionary.add("woodsman");
+      dictionary.add("tac");
+      dictionary.add("skime");
+      dictionary.add("time");
+      dictionary.add("off");
+      dictionary.add("it");
+      dictionary.add("the");
+      dictionary.add("of");
+      dictionary.add(".");
+    }
     return dictionary;
   }
 
@@ -82,27 +85,29 @@ public class SpellCheckDriver {
   }
 
   private static List<String> fillInput2(List<String> input) {
-//     input.add("123");
-    input.add("fpohnae");
-    input.add("was");
-    input.add("a");
-    input.add("diwitted");
-    input.add("man");
-    input.add("but");
-    input.add("his");
-    input.add("wdfe");
-    input.add(",");
-    input.add("mohnaje");
-    input.add(",");
-    input.add("was");
-    input.add("vey");
-    input.add("smrxt");
-    input.add(".");
-    input.add("it");
-    input.add("was");
-    input.add("the");
-    input.add("tkime");
-    input.add("of");
+    // input.add("123");
+    for (int i = 0; i < 10; i++) {
+      input.add("fpohnae");
+      input.add("was");
+      input.add("a");
+      input.add("diwitted");
+      input.add("man");
+      input.add("but");
+      input.add("his");
+      input.add("wdfe");
+      input.add(",");
+      input.add("mohnaje");
+      input.add(",");
+      input.add("was");
+      input.add("vey");
+      input.add("smrxt");
+      input.add(".");
+      input.add("it");
+      input.add("was");
+      input.add("the");
+      input.add("tkime");
+      input.add("of");
+    }
     return input;
   }
 
@@ -110,21 +115,21 @@ public class SpellCheckDriver {
     long numRuns = 3;
     long runTotal = 0;
     long counter = numRuns;
-    while((counter--) > 0) {
+    while ((counter--) > 0) {
       startTimer();
       doStuff();
       runTotal += stopTimer();
     }
-    System.out.println("Avg runtime: " + (runTotal/numRuns) + "ms");
+    System.out.println("Avg runtime: " + (runTotal / numRuns) + "ms");
   }
-  
+
   private static void doStuff() throws FileNotFoundException {
     List<String> dictionary = new ArrayList<String>();
     List<String> input = new ArrayList<String>();
-    dictionary = fillDictionary1(dictionary);
-    input = fillInput1(input);
-//      dictionary = fillDictionary2(dictionary);
-//      input = fillInput2(input);
+     dictionary = fillDictionary1(dictionary);
+     input = fillInput1(input);
+//    dictionary = fillDictionary2(dictionary);
+//    input = fillInput2(input);
 
     GraphFactory<Character, String> factory = new StringGraphFactory(
             dictionary.toArray(new String[dictionary.size()]));
@@ -139,7 +144,7 @@ public class SpellCheckDriver {
       words.add(G2);
       // printGraph(G2);
     }
-    
+
     List<String> checkedList = new ArrayList<String>();
     CartesianGraphFactory<Character, String> cgFactory = new StringCartesianGraphFactory();
     for (Graph<Character, String> wordGraph : words) {

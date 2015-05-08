@@ -2,9 +2,7 @@ package mlsp.cs.cmu.edu.graph;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
-public abstract class CartesianNode<N> extends Node<MutablePair<Node<N>, Node<N>>> {
-
-  private static final long serialVersionUID = 8623888536440491160L;
+public abstract class CartesianNode<N> extends Node<MutablePair<Node<N>, Node<N>>> implements Cloneable {
 
   @Override
   protected abstract DistanceCalculator<MutablePair<Node<N>, Node<N>>> getDistanceStrategy();

@@ -1,13 +1,9 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
-public abstract class Node<N> implements Cloneable, Serializable {
-
-  private static final long serialVersionUID = -72017848348636318L;
+public abstract class Node<N> implements Cloneable {
 
   private N value;
 
@@ -165,6 +161,11 @@ public abstract class Node<N> implements Cloneable, Serializable {
   
   public void setBackPointer(Edge<?> backPointer) {
     this.backPointer = backPointer;
+  }
+
+  @Override
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
   
 }

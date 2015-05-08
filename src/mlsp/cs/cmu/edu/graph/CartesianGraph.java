@@ -81,14 +81,16 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
     double weight = pFrom.getDistance(pTo);
     return (Edge<E>) factory.getNewEdge(pFrom, pTo, weight);
   }
+  
+  private void recycleNode(CartesianNode<N> node) {
+    factory.recycleEdges(node.getOutgoingEdges());
+    factory.recycleNode(node);
+  }
 
   // tear down
   private void tearDown() {
-    for (CartesianNode<N> node : indexMapping.values()) {
-      factory.recycleEdges(node.getIncomingEdges());
-      factory.recycleEdges(node.getOutgoingEdges());
-      factory.recycleNode(node);
-    }
+    for (CartesianNode<N> node : indexMapping.values()) 
+      recycleNode(node);
     indexMapping.clear();
     destroy();
   }

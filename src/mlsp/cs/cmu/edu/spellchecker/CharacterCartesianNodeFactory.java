@@ -14,28 +14,27 @@ public class CharacterCartesianNodeFactory extends AbstractCartesianNodeFactory<
 
   @Override
   protected CartesianNode<Character> getNodePrototype() {
-    char beginChar = CharacterConstants.BEGIN_CHARACTER.getValue();
-    return new CharacterCartesianNode(getNewNode(beginChar), getNewNode(beginChar));
+    return new CharacterCartesianNode(getNewNode(null), getNewNode(null));
   }
 
   @Override
   protected int getMinCapacity() {
-    return 1000;
+    return 100;
   }
 
   @Override
   protected Edge<?> getEdgePrototype() {
-    return new Edge<String>(getNodePrototype(), getNodePrototype());
+   return new Edge<String>(getNodePrototype(), getNodePrototype());
   }
 
   @Override
   protected int getIncreaseNodeCapacity() {
-    return 50000;
+    return 10000;
   }
 
   @Override
   protected int getIncreaseEdgeCapacity() {
-    return 100000;
+    return 10000;
   }
-  
+
 }
