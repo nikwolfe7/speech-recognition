@@ -20,17 +20,22 @@ public class CharacterCartesianNodeFactory extends AbstractCartesianNodeFactory<
 
   @Override
   protected int getMinCapacity() {
-    return 10000;
-  }
-
-  @Override
-  protected int getIncreaseCapacity() {
-    return 1000000;
+    return 1000;
   }
 
   @Override
   protected Edge<?> getEdgePrototype() {
     return new Edge<String>(getNodePrototype(), getNodePrototype());
+  }
+
+  @Override
+  protected int getIncreaseNodeCapacity() {
+    return 50000;
+  }
+
+  @Override
+  protected int getIncreaseEdgeCapacity() {
+    return 100000;
   }
   
 }

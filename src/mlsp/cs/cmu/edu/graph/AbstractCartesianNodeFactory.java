@@ -1,48 +1,80 @@
 package mlsp.cs.cmu.edu.graph;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.ListIterator;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class AbstractCartesianNodeFactory<N> implements CartesianNodeFactory<N> {
 
-  private Queue<CartesianNode<N>> nodeQueue = new LinkedList<CartesianNode<N>>();
+  private LinkedBlockingQueue<CartesianNode<N>> nodeQueue;
 
-  private Queue<Edge<?>> edgeQueue = new LinkedList<Edge<?>>();
+  private LinkedBlockingQueue<Edge<?>> edgeQueue;
 
-  private int increaseCapacity = getIncreaseCapacity();
+  private Runnable nodeThead;
 
-  private int minCapacity = getMinCapacity();
+  private Runnable edgeThread;
 
-  private class NodeCreator implements Runnable {
+  public AbstractCartesianNodeFactory() {
+    this.nodeQueue = new LinkedBlockingQueue<CartesianNode<N>>();
+    this.edgeQueue = new LinkedBlockingQueue<Edge<?>>();
+    this.nodeThead = new refillNodeQueue();
+    this.edgeThread = new refillEdgeQueue();
+    nodeThead.run();
+    edgeThread.run();
+  }
+
+  private class refillNodeQueue implements Runnable {
     @Override
     public void run() {
-      System.out.println("Refilling nodeQueue...");
-      int count = 0;
-      while (count++ <= increaseCapacity) {
-        nodeQueue.add(getNodePrototype());
+      while (!Thread.currentThread().isInterrupted()) {
+        if (nodeQueue.size() < getMinCapacity()) {
+          System.out.println("Refilling nodeQueue...");
+          int count = 0;
+          while (count++ <= getIncreaseNodeCapacity()) {
+            nodeQueue.add(getNodePrototype());
+          }
+        }
+        synchronized (this) {
+          try {
+            this.wait();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
       }
     }
   }
 
-  private class EdgeCreator implements Runnable {
+  private class refillEdgeQueue implements Runnable {
     @Override
     public void run() {
-      System.out.println("Refilling edgeQueue...");
-      int count = 0;
-      while (count++ <= increaseCapacity) {
-        edgeQueue.add(getEdgePrototype());
+      while (!Thread.currentThread().isInterrupted()) {
+        if (edgeQueue.size() < getMinCapacity()) {
+          System.out.println("Refilling edgeQueue...");
+          int count = 0;
+          while (count++ <= getIncreaseEdgeCapacity()) {
+            edgeQueue.add(getEdgePrototype());
+          }
+        }
+        synchronized (this) {
+          try {
+            this.wait();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
       }
     }
   }
 
   @Override
   public CartesianNode<N> getNewCartesianNode(Node<N> n1, Node<N> n2) {
-    CartesianNode<N> node = null;
-    if (nodeQueue.size() < minCapacity)
-      new NodeCreator().run();
-    node = nodeQueue.poll();
+    CartesianNode<N> node = nodeQueue.poll();
+    // don't delay execution
+    if (node == null) {
+      nodeThead.notify();
+      node = getNodePrototype();
+    }
     node.setLeft(n1);
     node.setRight(n2);
     return node;
@@ -50,10 +82,12 @@ public abstract class AbstractCartesianNodeFactory<N> implements CartesianNodeFa
 
   @Override
   public Edge<?> getNewEdge(CartesianNode<N> pFrom, CartesianNode<N> pTo, double weight) {
-    Edge<?> edge = null;
-    if (edgeQueue.size() < minCapacity)
-      new EdgeCreator().run();
-    edge = edgeQueue.poll();
+    Edge<?> edge = edgeQueue.poll();
+    // don't delay execution
+    if (edge == null) {
+      edgeThread.notify();
+      edge = getEdgePrototype();
+    }
     edge.setAdjacentNodes(pFrom, pTo);
     edge.setWeight(weight);
     return edge;
@@ -67,17 +101,27 @@ public abstract class AbstractCartesianNodeFactory<N> implements CartesianNodeFa
 
   @Override
   public void recycleEdges(List<Edge<?>> edges) {
-    for (Edge<?> edge : edges) {
-      edge.destroy();
-      edgeQueue.add(edge);
+    // executor.execute(new Runnable() {
+    // @Override
+    // public void run() {
+    ListIterator<Edge<?>> iter = edges.listIterator();
+    while (iter.hasNext()) {
+      Edge<?> e = iter.next();
+      e.destroy();
+      edgeQueue.add(e);
     }
+    // }
+    // });
+    // executor.shutdown();
   }
-
-  protected abstract Edge<?> getEdgePrototype();
 
   protected abstract int getMinCapacity();
 
-  protected abstract int getIncreaseCapacity();
+  protected abstract int getIncreaseNodeCapacity();
+
+  protected abstract int getIncreaseEdgeCapacity();
+
+  protected abstract Edge<?> getEdgePrototype();
 
   protected abstract CartesianNode<N> getNodePrototype();
 
