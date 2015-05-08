@@ -50,7 +50,7 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
             addEdge(edge);
           }
         }
-        // prune(n1);
+        prune(n1);
       }
     }
   }

@@ -1,27 +1,30 @@
 package mlsp.cs.cmu.edu.spellchecker;
 
+import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.DistanceCalculator;
 import mlsp.cs.cmu.edu.graph.Node;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
-public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculator<MutablePair<Node<Character>, Node<Character>>> {
+public class CharacterCartesianNodeDistanceStrategy implements
+        DistanceCalculator<MutablePair<Node<Character>, Node<Character>>> {
 
   private static CharacterCartesianNodeDistanceStrategy singleton = null;
-  
-  private CharacterCartesianNodeDistanceStrategy() {}
-  
+
+  private CharacterCartesianNodeDistanceStrategy() {
+  }
+
   public static CharacterCartesianNodeDistanceStrategy getInstance() {
-    if(singleton == null) {
+    if (singleton == null) {
       singleton = new CharacterCartesianNodeDistanceStrategy();
-    } 
+    }
     return singleton;
   }
 
   @Override
   public double getDifference(Node<MutablePair<Node<Character>, Node<Character>>> n1,
           Node<MutablePair<Node<Character>, Node<Character>>> n2) {
-    double INFINITY = 1e100; 
+    double INFINITY = 1e100;
     Character xToValue, yToValue, xFromValue, yFromValue;
     xFromValue = n1.getValue().getLeft().getValue();
     yFromValue = n1.getValue().getRight().getValue();
@@ -54,23 +57,22 @@ public class CharacterCartesianNodeDistanceStrategy implements DistanceCalculato
       return 1;
     }
   }
-  
+
   private boolean checkIsNonEmittingNode(Node<MutablePair<Node<Character>, Node<Character>>> node) {
-    Character xValue = node.getValue().getLeft().getValue();
-    Character yValue = node.getValue().getRight().getValue();
+    char xValue = node.getValue().getLeft().getValue();
+    char yValue = node.getValue().getRight().getValue();
     char end = CharacterConstants.END_CHARACTER.getValue();
     char begin = CharacterConstants.BEGIN_CHARACTER.getValue();
-    if (xValue.equals(yValue) && (xValue.equals(end) || xValue.equals(begin)))
+    if ((xValue == yValue) && ((xValue == end) || (xValue == begin)))
       return false;
     else
-      return xValue.equals(end) || yValue.equals(end) || xValue.equals(begin)
-              || yValue.equals(begin);
+      return xValue == end || yValue == end || xValue == begin || yValue == begin;
   }
-  
-  private boolean checkPairContainsNonEmittingNode(Node<MutablePair<Node<Character>, Node<Character>>> n1,
+
+  private boolean checkPairContainsNonEmittingNode(
+          Node<MutablePair<Node<Character>, Node<Character>>> n1,
           Node<MutablePair<Node<Character>, Node<Character>>> n2) {
     return checkIsNonEmittingNode(n1) || checkIsNonEmittingNode(n2);
   }
 
-  
 }

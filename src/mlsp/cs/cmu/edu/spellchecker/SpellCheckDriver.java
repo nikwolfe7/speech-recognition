@@ -43,34 +43,34 @@ public class SpellCheckDriver {
   }
 
   private static List<String> fillDictionary2(List<String> dictionary) {
-    // dictionary.add("abc");
-    // dictionary.add("a");
-    for (int i = 0; i < 10; i++) {
+//    // dictionary.add("abc");
+//    // dictionary.add("a");
+//    for (int i = 0; i < 10; i++) {
       dictionary.add("pohnae");
-      dictionary.add("was");
-      dictionary.add("a");
-      dictionary.add("dim-witted");
-      dictionary.add("man");
-      dictionary.add("but");
-      dictionary.add("his");
-      dictionary.add("wife");
-      dictionary.add(",");
-      dictionary.add("mohnae");
-      dictionary.add(",");
-      dictionary.add("was");
-      dictionary.add("very");
-      dictionary.add("smart");
-      dictionary.add("zudda");
-      dictionary.add("woodsman");
-      dictionary.add("tac");
-      dictionary.add("skime");
-      dictionary.add("time");
-      dictionary.add("off");
-      dictionary.add("it");
-      dictionary.add("the");
-      dictionary.add("of");
-      dictionary.add(".");
-    }
+//      dictionary.add("was");
+//      dictionary.add("a");
+//      dictionary.add("dim-witted");
+//      dictionary.add("man");
+//      dictionary.add("but");
+//      dictionary.add("his");
+//      dictionary.add("wife");
+//      dictionary.add(",");
+//      dictionary.add("mohnae");
+//      dictionary.add(",");
+//      dictionary.add("was");
+//      dictionary.add("very");
+//      dictionary.add("smart");
+//      dictionary.add("zudda");
+//      dictionary.add("woodsman");
+//      dictionary.add("tac");
+//      dictionary.add("skime");
+//      dictionary.add("time");
+//      dictionary.add("off");
+//      dictionary.add("it");
+//      dictionary.add("the");
+//      dictionary.add("of");
+//      dictionary.add(".");
+//    }
     return dictionary;
   }
 
@@ -85,29 +85,29 @@ public class SpellCheckDriver {
   }
 
   private static List<String> fillInput2(List<String> input) {
-    // input.add("123");
-    for (int i = 0; i < 10; i++) {
+//    // input.add("123");
+//    for (int i = 0; i < 10; i++) {
       input.add("fpohnae");
-      input.add("was");
-      input.add("a");
-      input.add("diwitted");
-      input.add("man");
-      input.add("but");
-      input.add("his");
-      input.add("wdfe");
-      input.add(",");
-      input.add("mohnaje");
-      input.add(",");
-      input.add("was");
-      input.add("vey");
-      input.add("smrxt");
-      input.add(".");
-      input.add("it");
-      input.add("was");
-      input.add("the");
-      input.add("tkime");
-      input.add("of");
-    }
+//      input.add("was");
+//      input.add("a");
+//      input.add("diwitted");
+//      input.add("man");
+//      input.add("but");
+//      input.add("his");
+//      input.add("wdfe");
+//      input.add(",");
+//      input.add("mohnaje");
+//      input.add(",");
+//      input.add("was");
+//      input.add("vey");
+//      input.add("smrxt");
+//      input.add(".");
+//      input.add("it");
+//      input.add("was");
+//      input.add("the");
+//      input.add("tkime");
+//      input.add("of");
+//    }
     return input;
   }
 
