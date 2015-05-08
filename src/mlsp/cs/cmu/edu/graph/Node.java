@@ -101,6 +101,7 @@ public abstract class Node<N> implements Cloneable {
     edge.setNodePredecessor(null);
     if(edge.getNodeSuccessor() != null)
       edge.getNodeSuccessor().removeIncomingEdge(edge);
+    refreshSuccessors();
     return outgoingEdges.remove(edge);
   }
 
@@ -115,7 +116,27 @@ public abstract class Node<N> implements Cloneable {
     edge.setNodeSuccessor(null);
     if(edge.getNodePredecessor() != null)
       edge.getNodePredecessor().removeOutgoingEdge(edge);
+    refreshPredecessors();
     return incomingEdges.remove(edge);
+  }
+  
+  @SuppressWarnings("unchecked")
+  public void refreshPredecessors() {
+    List<Node<N>> pred = new LinkedList<Node<N>>();
+    for(Edge<?> e : getIncomingEdges()) {
+      pred.add((Node<N>) e.getNodePredecessor());
+    }
+    this.predecessors = pred;
+  }
+  
+  @SuppressWarnings("unchecked")
+  public void refreshSuccessors() {
+    List<Node<N>> succ = new LinkedList<Node<N>>();
+    for(Edge<?> e : getOutgoingEdges()) {
+      if(e.getNodeSuccessor() != null)
+        succ.add((Node<N>) e.getNodeSuccessor());
+    }
+    this.successors = succ;
   }
 
   public N getValue() {

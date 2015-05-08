@@ -10,9 +10,9 @@ public class Graph<N, E> {
   private List<Node<N>> graphNodes;
 
   private Node<N> headNode;
-  
+
   private Node<N> tailNode;
-  
+
   public void destroy() {
     getEdges().clear();
     getNodes().clear();
@@ -30,7 +30,7 @@ public class Graph<N, E> {
   public void setHeadNode(Node<N> head) {
     this.headNode = head;
   }
-  
+
   public Node<N> getTailNode() {
     return tailNode;
   }
@@ -55,35 +55,43 @@ public class Graph<N, E> {
   public List<Node<N>> getNodes() {
     return graphNodes;
   }
-  
+
   public List<Edge<E>> getEdges() {
     return graphEdges;
   }
-  
+
   public void remove(Node<N> node) {
     getNodes().remove(node);
   }
-  
-//  @Override
-//  public String toString() {
-//    StringBuilder sb = new StringBuilder();
-//    for (Node<N> node : getNodes()) {
-//      sb.append("\nN=" + node.getValue().toString() + ",cost=" + node.getCost() + " id="
-//              + node.hashCode());
-//      if (node.getBackPointer() != null) {
-//        sb.append(" <<Ptr=" + node.getNodeFromBackPointer().getValue().toString() + " id="
-//                + node.getNodeFromBackPointer().hashCode());
-//      }
-//      sb.append(" \n");
-//      for (Edge<?> edge : node.getOutgoingEdges()) {
-//        sb.append("OUT:|------" + edge.toString() + "\n");
-//      }
-//      sb.append(" \n");
-//      for (Edge<?> edge : node.getIncomingEdges()) {
-//        sb.append("IN: |------" + edge.toString() + "\n");
-//      }
-//    }
-//    sb.append("\nTail: " + getTailNode().hashCode());
-//    return sb.toString();
-//  }
+
+  public String printGraph() {
+    StringBuilder sb = new StringBuilder();
+    for (Node<N> node : getNodes()) {
+      sb.append("\nN=" + node.getValue().toString() + ",cost=" + node.getCost() + " id="
+              + node.hashCode());
+      if (node.getBackPointer() != null) {
+        sb.append(" <<Ptr=" + node.getNodeFromBackPointer().getValue().toString() + " id="
+                + node.getNodeFromBackPointer().hashCode());
+      }
+      sb.append(" \n");
+      for (Edge<?> edge : node.getOutgoingEdges()) {
+        sb.append("OUT:|------" + edge.toString() + "\n");
+      }
+      sb.append(" \n");
+      for (Edge<?> edge : node.getIncomingEdges()) {
+        sb.append("IN: |------" + edge.toString() + "\n");
+      }
+    }
+    sb.append("\nTail: " + getTailNode().hashCode());
+    return sb.toString();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (Node<N> n : getNodes()) {
+      sb.append(n.toString() + "\n");
+    }
+    return sb.toString();
+  }
 }

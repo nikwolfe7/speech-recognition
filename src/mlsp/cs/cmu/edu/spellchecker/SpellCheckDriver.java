@@ -14,6 +14,7 @@ import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.Edge;
 import mlsp.cs.cmu.edu.graph.Graph;
 import mlsp.cs.cmu.edu.graph.GraphFactory;
+import mlsp.cs.cmu.edu.graph.LexTreeFactory;
 
 public class SpellCheckDriver {
 
@@ -47,9 +48,12 @@ public class SpellCheckDriver {
 //    // dictionary.add("a");
 //    for (int i = 0; i < 10; i++) {
       dictionary.add("pohnae");
-//      dictionary.add("was");
-//      dictionary.add("a");
-//      dictionary.add("dim-witted");
+      dictionary.add("was");
+      dictionary.add("a");
+      dictionary.add("dim-witted");
+      dictionary.add("potus");
+      dictionary.add("diminish");
+      dictionary.add("alpha");
 //      dictionary.add("man");
 //      dictionary.add("but");
 //      dictionary.add("his");
@@ -88,9 +92,9 @@ public class SpellCheckDriver {
 //    // input.add("123");
 //    for (int i = 0; i < 10; i++) {
       input.add("fpohnae");
-//      input.add("was");
-//      input.add("a");
-//      input.add("diwitted");
+      input.add("was");
+      input.add("a");
+      input.add("diwitted");
 //      input.add("man");
 //      input.add("but");
 //      input.add("his");
@@ -126,17 +130,19 @@ public class SpellCheckDriver {
   private static void doStuff() throws FileNotFoundException {
     List<String> dictionary = new ArrayList<String>();
     List<String> input = new ArrayList<String>();
-     dictionary = fillDictionary1(dictionary);
-     input = fillInput1(input);
-//    dictionary = fillDictionary2(dictionary);
-//    input = fillInput2(input);
+//     dictionary = fillDictionary1(dictionary);
+//     input = fillInput1(input);
+    dictionary = fillDictionary2(dictionary);
+    input = fillInput2(input);
 
-    GraphFactory<Character, String> factory = new StringGraphFactory(
-            dictionary.toArray(new String[dictionary.size()]));
+    GraphFactory<Character, String> factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character, String> G1 = factory.buildGraph();
+    factory = new LexTreeFactory<Character, String>(G1);
+    G1 = factory.buildGraph(); // Lex tree graph!
+    
     System.out.println("Dictionary Graph: Done building graph!");
     // printGraph(G1);
-
+    
     List<Graph<Character, String>> words = new ArrayList<Graph<Character, String>>();
     for (String s : input) {
       factory = new StringGraphFactory(s);

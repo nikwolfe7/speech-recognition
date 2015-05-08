@@ -58,6 +58,8 @@ public class CharNode extends Node<Character> {
       s += "HEAD";
     else if (getValue() == CharacterConstants.END_CHARACTER.getValue())
       s += "TAIL";
+    else 
+      s = getValue().toString();
     return s;
   }
 

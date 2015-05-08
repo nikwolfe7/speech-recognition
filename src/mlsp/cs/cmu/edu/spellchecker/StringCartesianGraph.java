@@ -1,12 +1,9 @@
 package mlsp.cs.cmu.edu.spellchecker;
 
-import org.apache.commons.lang3.tuple.MutablePair;
-
 import mlsp.cs.cmu.edu.graph.CartesianGraph;
 import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.CartesianNodeFactory;
 import mlsp.cs.cmu.edu.graph.Edge;
-import mlsp.cs.cmu.edu.graph.Node;
 
 /**
  * @author nwolfe
