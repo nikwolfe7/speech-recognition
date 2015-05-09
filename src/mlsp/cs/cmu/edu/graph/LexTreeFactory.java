@@ -10,7 +10,8 @@ public class LexTreeFactory<N, E> implements GraphFactory<N, E> {
 
   @Override
   public Graph<N, E> buildGraph() {
-    return new LexTree<N, E>(lexTree);
+    lexTree = new LexTree<N, E>(lexTree);
+    return lexTree;
   }
 
 }

@@ -44,16 +44,18 @@ public class SpellCheckDriver {
   }
 
   private static List<String> fillDictionary2(List<String> dictionary) {
-//    // dictionary.add("abc");
-//    // dictionary.add("a");
+    // dictionary.add("abc");
+    // dictionary.add("a");
 //    for (int i = 0; i < 10; i++) {
-      dictionary.add("pohnae");
-      dictionary.add("was");
-      dictionary.add("a");
-      dictionary.add("dim-witted");
-      dictionary.add("potus");
-      dictionary.add("diminish");
-      dictionary.add("alpha");
+    dictionary.add("markov");
+    dictionary.add("marksman");
+//      dictionary.add("pohnae");
+//      dictionary.add("was");
+//      dictionary.add("a");
+//      dictionary.add("dim-witted");
+//      dictionary.add("potus");
+//      dictionary.add("diminish");
+//      dictionary.add("alpha");
 //      dictionary.add("man");
 //      dictionary.add("but");
 //      dictionary.add("his");
@@ -89,12 +91,13 @@ public class SpellCheckDriver {
   }
 
   private static List<String> fillInput2(List<String> input) {
-//    // input.add("123");
+    // input.add("123");
 //    for (int i = 0; i < 10; i++) {
-      input.add("fpohnae");
-      input.add("was");
-      input.add("a");
-      input.add("diwitted");
+    input.add("marksman");
+//      input.add("fpohnae");
+//      input.add("was");
+//      input.add("a");
+//      input.add("diwitted");
 //      input.add("man");
 //      input.add("but");
 //      input.add("his");

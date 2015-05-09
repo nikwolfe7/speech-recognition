@@ -21,7 +21,7 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
     G.addNode(tail); // tie the tail back to the head. 
     G.setTailNode(tail);
 //    G.addEdge(new Edge<String>(tail, G.getHead()));
-    Node<Character> currNode = G.getHead();
+    Node<Character> currNode = G.getHeadNode();
     for (String stringGraph : processList) {
       for (Character c : stringGraph.toCharArray()) {
         Node<Character> newNode = new CharNode(c);
@@ -36,7 +36,7 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
       Edge<String> lastEdge = new Edge<String>(currNode, tail);
       lastEdge.setValue(stringGraph);
       G.addEdge(lastEdge);
-      currNode = G.getHead(); // reset curr node
+      currNode = G.getHeadNode(); // reset curr node
     }
     return G;
   }

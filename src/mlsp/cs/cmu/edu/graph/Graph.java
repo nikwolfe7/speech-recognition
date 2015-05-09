@@ -48,7 +48,7 @@ public class Graph<N, E> {
     graphEdges.add(edge);
   }
 
-  public Node<N> getHead() {
+  public Node<N> getHeadNode() {
     return headNode;
   }
 

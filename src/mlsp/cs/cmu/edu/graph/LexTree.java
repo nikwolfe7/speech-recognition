@@ -9,16 +9,12 @@ import java.util.Map;
 public class LexTree<N, E> extends Graph<N, E> {
 
   public LexTree(Graph<N,E> graph) {
-    super(graph.getHead());
+    super(graph.getHeadNode());
     setTailNode(graph.getTailNode());
-    System.out.println("TAIL:" + getTailNode());
-    for (Node<N> node : getNodes())
-      buildLexTree(node);
-    System.out.print(printGraph());
+    buildLexTree(getHeadNode());
   }
 
   private void buildLexTree(Node<N> node) {
-    System.out.println("TAIL:" + getTailNode());
     Map<N, List<Node<N>>> map = new HashMap<N, List<Node<N>>>();
     for (Node<N> n : node.getSuccessors()) {
       if (map.containsKey(n.getValue())) {
@@ -37,11 +33,14 @@ public class LexTree<N, E> extends Graph<N, E> {
         iter.remove();
       }
     }
+    for(Node<N> n : node.getSuccessors()) {
+      if(n != node)
+        buildLexTree(n);
+    }
   }
 
   @SuppressWarnings("unchecked")
   private void mergeNodes(Node<N> n1, Node<N> n2) {
-    System.out.println("TAIL:" + getTailNode());
     for (Edge<?> e : n2.getOutgoingEdges()) {
       if(!(e.getNodePredecessor() == e.getNodeSuccessor()))
         e.setNodePredecessor(n1);
