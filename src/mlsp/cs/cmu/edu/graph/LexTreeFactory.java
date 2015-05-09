@@ -1,17 +1,22 @@
 package mlsp.cs.cmu.edu.graph;
 
-public class LexTreeFactory<N, E> implements GraphFactory<N, E> {
+import mlsp.cs.cmu.edu.spellchecker.StringGraphFactory;
 
-  Graph<N, E> lexTree;
+public class LexTreeFactory implements GraphFactory<Character, String> {
+
+  Graph<Character, String> lexTree;
   
-  public LexTreeFactory(Graph<N,E> graph) {
+  public LexTreeFactory(String... processList) {
+    lexTree = new StringGraphFactory(processList).buildGraph();
+  }
+  
+  public LexTreeFactory(Graph<Character, String> graph) {
     this.lexTree = graph;
   }
 
   @Override
-  public Graph<N, E> buildGraph() {
-    lexTree = new LexTree<N, E>(lexTree);
-    return lexTree;
+  public Graph<Character, String> buildGraph() {
+    return new LexTree<Character, String>(lexTree);
   }
 
 }
