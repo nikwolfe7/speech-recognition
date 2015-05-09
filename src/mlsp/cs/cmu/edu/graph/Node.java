@@ -164,7 +164,9 @@ public abstract class Node<N> implements Cloneable {
     return incomingEdges;
   }
 
-  public abstract String toString();
+  public String toString() {
+    return "" + getValue();
+  }
 
   public Edge<?> getBackPointer() {
     return backPointer;

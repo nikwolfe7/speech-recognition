@@ -1,6 +1,5 @@
 package mlsp.cs.cmu.edu.spellchecker;
 
-import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.DistanceCalculator;
 import mlsp.cs.cmu.edu.graph.Node;
 
@@ -11,6 +10,12 @@ public class CharacterCartesianNodeDistanceStrategy implements
 
   private static CharacterCartesianNodeDistanceStrategy singleton = null;
 
+  private final double INFINITY = Double.MAX_VALUE;
+
+  private final char begin = CharacterConstants.BEGIN_CHARACTER.getValue();
+
+  private final char end = CharacterConstants.END_CHARACTER.getValue();
+
   private CharacterCartesianNodeDistanceStrategy() {
   }
 
@@ -20,59 +25,41 @@ public class CharacterCartesianNodeDistanceStrategy implements
     }
     return singleton;
   }
-
+  
+  private boolean isEdge(char x, char y) {
+    return (x != y) && (x == begin || x == end || y == begin || y == end);
+  }
+  
   @Override
   public double getDifference(Node<MutablePair<Node<Character>, Node<Character>>> n1,
           Node<MutablePair<Node<Character>, Node<Character>>> n2) {
-    double INFINITY = 1e100;
-    Character xToValue, yToValue, xFromValue, yFromValue;
+    char xToValue, yToValue, xFromValue, yFromValue;
     xFromValue = n1.getValue().getLeft().getValue();
     yFromValue = n1.getValue().getRight().getValue();
     xToValue = n2.getValue().getLeft().getValue();
     yToValue = n2.getValue().getRight().getValue();
-    if (n1 == n2) {
+    /**
+     * Self-transition
+     */
+    if (n1 == n2)
       return INFINITY;
-    } else if (xToValue.equals(yToValue)) {
-      if (!checkIsNonEmittingNode(n1))
+    else {
+      /**
+       * Edge case: return infinity
+       */
+      if(isEdge(xFromValue, yFromValue) || (isEdge(xToValue, yToValue))) 
+        return INFINITY;
+      /**
+       * Destination node matches
+       */
+      if (yToValue == xToValue)
         return 0;
-      else
-        return INFINITY;
-    } else if (xFromValue.equals(yFromValue)) {
-      if (!checkIsNonEmittingNode(n2)) {
-        if (xToValue.equals(yToValue))
-          return 0;
-        else
-          return 1;
-      } else {
-        return INFINITY;
-      }
-    } else if (xFromValue.equals(xToValue) || yFromValue.equals(yToValue)) {
-      if (checkPairContainsNonEmittingNode(n1, n2))
-        return INFINITY;
+      /**
+       * Something else
+       */
       else
         return 1;
-    } else if (checkPairContainsNonEmittingNode(n1, n2)) {
-      return INFINITY;
-    } else {
-      return 1;
     }
-  }
 
-  private boolean checkIsNonEmittingNode(Node<MutablePair<Node<Character>, Node<Character>>> node) {
-    char xValue = node.getValue().getLeft().getValue();
-    char yValue = node.getValue().getRight().getValue();
-    char end = CharacterConstants.END_CHARACTER.getValue();
-    char begin = CharacterConstants.BEGIN_CHARACTER.getValue();
-    if ((xValue == yValue) && ((xValue == end) || (xValue == begin)))
-      return false;
-    else
-      return xValue == end || yValue == end || xValue == begin || yValue == begin;
   }
-
-  private boolean checkPairContainsNonEmittingNode(
-          Node<MutablePair<Node<Character>, Node<Character>>> n1,
-          Node<MutablePair<Node<Character>, Node<Character>>> n2) {
-    return checkIsNonEmittingNode(n1) || checkIsNonEmittingNode(n2);
-  }
-
 }

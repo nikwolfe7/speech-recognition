@@ -18,9 +18,9 @@ public class StringGraphFactory implements GraphFactory<Character, String> {
     Node<Character> head = new CharNode(CharacterConstants.BEGIN_CHARACTER.getValue());
     Node<Character> tail = new CharNode(CharacterConstants.END_CHARACTER.getValue());
     Graph<Character, String> G = new Graph<Character, String>(head);
-    G.addNode(tail); // tie the tail back to the head. 
+    G.addNode(tail); // tie the tail back to the head.
     G.setTailNode(tail);
-//    G.addEdge(new Edge<String>(tail, G.getHead()));
+    // G.addEdge(new Edge<String>(tail, G.getHead()));
     Node<Character> currNode = G.getHeadNode();
     for (String stringGraph : processList) {
       for (Character c : stringGraph.toCharArray()) {

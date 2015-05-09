@@ -64,8 +64,7 @@ public abstract class CartesianNode<N> extends Node<MutablePair<Node<N>, Node<N>
 
   @Override
   public String toString() {
-    String s = "(" + getValue().getLeft().getValue() + "," + getValue().getRight().getValue()
-            + ") id=" + hashCode();
+    String s = "(" + getValue().getLeft().toString() + "," + getValue().getRight().toString() + ") id=" + hashCode();
     if (getCost() != null)
       s += " cost=" + getCost();
     return s;

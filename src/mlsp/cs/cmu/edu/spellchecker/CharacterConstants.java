@@ -2,7 +2,8 @@ package mlsp.cs.cmu.edu.spellchecker;
 
 public enum CharacterConstants {
 
-  BEGIN_CHARACTER((char) Character.MAX_LOW_SURROGATE), END_CHARACTER((char) Character.MAX_HIGH_SURROGATE);
+  BEGIN_CHARACTER((char) Character.MAX_LOW_SURROGATE), 
+  END_CHARACTER((char) Character.MAX_HIGH_SURROGATE);
 
   private final Character charValue;
 

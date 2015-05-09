@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,6 +22,20 @@ public class SpellCheckDriver {
   private static long startTime;
 
   private static long endTime;
+
+  private static HashMap<String, String> translation;
+
+  public static void main(String[] args) throws FileNotFoundException {
+    long numRuns = 1;
+    long runTotal = 0;
+    long counter = numRuns;
+    while ((counter--) > 0) {
+      startTimer();
+      doStuff();
+      runTotal += stopTimer();
+    }
+    System.out.println("Avg runtime: " + (runTotal / numRuns) + "ms");
+  }
 
   private static void startTimer() {
     startTime = System.nanoTime();
@@ -47,35 +62,50 @@ public class SpellCheckDriver {
     // dictionary.add("abc");
     // dictionary.add("a");
     // for (int i = 0; i < 10; i++) {
-    dictionary.add("markov");
-    dictionary.add("marksman");
-    dictionary.add("pohnae");
-    dictionary.add("was");
-    dictionary.add("a");
-    dictionary.add("dim-witted");
-    dictionary.add("potus");
-    dictionary.add("diminish");
-    dictionary.add("alpha");
-    dictionary.add("man");
-    dictionary.add("but");
-    dictionary.add("his");
-    dictionary.add("wife");
-    dictionary.add(",");
-    dictionary.add("mohnae");
-    dictionary.add(",");
-    dictionary.add("was");
-    dictionary.add("very");
-    dictionary.add("smart");
-    dictionary.add("zudda");
-    dictionary.add("woodsman");
-    dictionary.add("tac");
-    dictionary.add("skime");
-    dictionary.add("time");
-    dictionary.add("off");
-    dictionary.add("it");
-    dictionary.add("the");
-    dictionary.add("of");
-    dictionary.add(".");
+      dictionary.add("of");
+      dictionary.add("off");
+//    dictionary.add("okyena");
+//    dictionary.add("wobeye");
+//    dictionary.add("den");
+//    dictionary.add("ese");
+//    dictionary.add("se");
+//    dictionary.add("wofre");
+//    dictionary.add("wadamfo");
+//    dictionary.add("fefeefe");
+//    dictionary.add("we");
+//    dictionary.add("can");
+//    dictionary.add("also");
+//    dictionary.add("speak");
+//    dictionary.add("english");
+//    dictionary.add("anaa");
+//    dictionary.add("markov");
+//    dictionary.add("marksman");
+//    dictionary.add("pohnae");
+//    dictionary.add("pohnae");
+//    dictionary.add("a");
+//    dictionary.add("dim-witted");
+//    dictionary.add("potus");
+//    dictionary.add("diminish");
+//    dictionary.add("alpha");
+//    dictionary.add("man");
+//    dictionary.add("but");
+//    dictionary.add("his");
+//    dictionary.add("wife");
+//    dictionary.add("mohnae");
+//    dictionary.add(",");
+//    dictionary.add("was");
+//    dictionary.add("very");
+//    dictionary.add("smart");
+//    dictionary.add("zudda");
+//    dictionary.add("woodsman");
+//    dictionary.add("tac");
+//    dictionary.add("skime");
+//    dictionary.add("time");
+//    dictionary.add("off");
+//    dictionary.add("it");
+//    dictionary.add("the");
+//    dictionary.add("of");
+//    dictionary.add(".");
     // }
     return dictionary;
   }
@@ -93,57 +123,60 @@ public class SpellCheckDriver {
   private static List<String> fillInput2(List<String> input) {
     // input.add("123");
     // for (int i = 0; i < 10; i++) {
-    input.add("marksman");
-    input.add("fpohnae");
-    input.add("was");
-    input.add("a");
-    input.add("diwitted");
-    input.add("man");
-    input.add("but");
-    input.add("his");
-    input.add("wdfe");
-    input.add(",");
-    input.add("mohnaje");
-    input.add(",");
-    input.add("was");
-    input.add("vey");
-    input.add("smrxt");
-    input.add(".");
-    input.add("it");
-    input.add("was");
-    input.add("the");
-    input.add("tkime");
-    input.add("of");
+      input.add("of");
+//    input.add("marksman");
+//    input.add("fpohnae");
+//    input.add("was");
+//    input.add("a");
+//    input.add("diwitted");
+//    input.add("man");
+//    input.add("but");
+//    input.add("his");
+//    input.add("wdfe");
+//    input.add(",");
+//    input.add("mohnaje");
+//    input.add(",");
+//    input.add("was");
+//    input.add("vey");
+//    input.add("smrxt");
+//    input.add(".");
+//    input.add("it");
+//    input.add("was");
+//    input.add("the");
+//    input.add("tkime");
+//    input.add("of");
+//    input.add(")kyna");
+//    input.add("wobey3");
+//    input.add("d3n");
+//    input.add("es3");
+//    input.add("se");
+//    input.add("wofre");
+//    input.add("wadamf))");
+//    input.add("fefeefe");
+//    input.add("we");
+//    input.add("can");
+//    input.add("also");
+//    input.add("spak");
+//    input.add("englsh");
+//    input.add("anaaaa");
     // }
     return input;
-  }
-
-  public static void main(String[] args) throws FileNotFoundException {
-    long numRuns = 3;
-    long runTotal = 0;
-    long counter = numRuns;
-    while ((counter--) > 0) {
-      startTimer();
-      doStuff();
-      runTotal += stopTimer();
-    }
-    System.out.println("Avg runtime: " + (runTotal / numRuns) + "ms");
   }
 
   private static void doStuff() throws FileNotFoundException {
     List<String> dictionary = new ArrayList<String>();
     List<String> input = new ArrayList<String>();
-    dictionary = fillDictionary1(dictionary);
-    input = fillInput1(input);
-    // dictionary = fillDictionary2(dictionary);
-    // input = fillInput2(input);
+//     dictionary = fillDictionary1(dictionary);
+//     input = fillInput1(input);
+    dictionary = fillDictionary2(dictionary);
+    input = fillInput2(input);
 
     GraphFactory<Character, String> factory;
-//    factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
+//     factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
     factory = new LexTreeFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character, String> G1 = factory.buildGraph();
     System.out.println("Dictionary Graph: Done building graph!");
-    
+
     List<Graph<Character, String>> words = new ArrayList<Graph<Character, String>>();
     for (String s : input) {
       factory = new StringGraphFactory(s);
@@ -160,7 +193,10 @@ public class SpellCheckDriver {
       List<Edge<?>> x = n.getIncomingEdges();
       String word = product.getTailNode().getBackPointer().getValue().toString();
       checkedList.add(word);
-      System.out.println("Word: " + word);
+      if (getTranslation().containsKey(word))
+        System.out.println("Word: " + getTranslation().get(word));
+      else
+        System.out.println("Word: " + word);
     }
     printAccuracy(checkedList);
   }
@@ -189,4 +225,23 @@ public class SpellCheckDriver {
     System.out.println(graph.toString());
   }
 
+  private static HashMap<String, String> getTranslation() {
+    translation = new HashMap<String, String>();
+    translation.put("we", "we");
+    translation.put("can", "can");
+    translation.put("also", "also");
+    translation.put("speak", "speak");
+    translation.put("english", "english");
+    translation.put("anaa", "anaa");
+    translation.put("okyena", "ɔkyena");
+    translation.put("wobeye", "wobɛyɛ");
+    translation.put("den", "dɛn");
+    translation.put("ese", "ɛsɛ");
+    translation.put("se", "sɛ");
+    translation.put("wofre", "wofrɛ");
+    translation.put("wadamfo", "w'adamfo");
+    translation.put("fefeefe", "fɛfɛɛfɛ");
+    return translation;
+  }
+  
 }
