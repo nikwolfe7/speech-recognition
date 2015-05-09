@@ -124,7 +124,8 @@ public abstract class Node<N> implements Cloneable {
   public void refreshPredecessors() {
     List<Node<N>> pred = new LinkedList<Node<N>>();
     for(Edge<?> e : getIncomingEdges()) {
-      pred.add((Node<N>) e.getNodePredecessor());
+      if(e.getNodePredecessor() != null)
+        pred.add((Node<N>) e.getNodePredecessor());
     }
     this.predecessors = pred;
   }

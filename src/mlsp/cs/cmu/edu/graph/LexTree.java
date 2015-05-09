@@ -8,9 +8,10 @@ import java.util.Map;
 
 public class LexTree<N, E> extends Graph<N, E> {
 
-  public LexTree(Graph<N,E> graph) {
+  public LexTree(Graph<N, E> graph) {
     super(graph.getHeadNode());
     setTailNode(graph.getTailNode());
+    addNode(graph.getTailNode());
     buildLexTree(getHeadNode());
   }
 
@@ -33,21 +34,24 @@ public class LexTree<N, E> extends Graph<N, E> {
         iter.remove();
       }
     }
-    for(Node<N> n : node.getSuccessors()) {
-      if(n != node)
+    for (Node<N> n : node.getSuccessors()) {
+      if (n != node && n != getTailNode()) {
+        addNode(n);
         buildLexTree(n);
+      }
     }
   }
 
   @SuppressWarnings("unchecked")
   private void mergeNodes(Node<N> n1, Node<N> n2) {
     for (Edge<?> e : n2.getOutgoingEdges()) {
-      if(!(e.getNodePredecessor() == e.getNodeSuccessor()))
+      if (!(e.getNodePredecessor() == e.getNodeSuccessor()))
         e.setNodePredecessor(n1);
     }
     for (Edge<?> e : n2.getIncomingEdges()) {
       Node<N> parent = (Node<N>) e.getNodePredecessor();
-      parent.removeOutgoingEdge(e);
+      if(n2 != getTailNode())
+        parent.removeOutgoingEdge(e);
     }
     n2.destroy();
   }

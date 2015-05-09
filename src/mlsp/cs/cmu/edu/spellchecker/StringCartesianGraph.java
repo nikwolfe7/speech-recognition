@@ -29,14 +29,14 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
     // push the weight out to the node...
     Double pFromCost = pFrom.getCost();
     if (pFromCost == null) {
-      if (checkIsNonEmittingNode(pFrom)) {
-        if (pFrom.getValue().getLeft().getValue().equals(pFrom.getValue().getRight().getValue()))
-          pFrom.setCost(0.0);
-        else
-          pFrom.setCost(INFINITY);
-      } else {
-        pFrom.setCost(1.0);
-      }
+      // if (checkIsNonEmittingNode(pFrom)) {
+      // if (pFrom.getValue().getLeft().getValue().equals(pFrom.getValue().getRight().getValue()))
+      // pFrom.setCost(0.0);
+      // else
+      // pFrom.setCost(INFINITY);
+      // } else {
+      pFrom.setCost(0.0);
+      // }
     }
     double nodeCost = edge.getWeight() + pFrom.getCost();
     Double pToCost = pTo.getCost();

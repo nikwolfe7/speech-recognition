@@ -16,6 +16,7 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
     initialize();
   }
 
+  @SuppressWarnings("unchecked")
   public void buildGraph(Graph<N, E> G1, Graph<N, E> G2) {
     tearDown();
     CartesianNode<N> headNode = getCartesianNodeImpl(G1.getHeadNode(), G2.getHeadNode());
@@ -26,7 +27,7 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
     addNode(tailNode);
     indexMapping.put(G1.getHeadNode(), G2.getHeadNode(), headNode);
     indexMapping.put(G1.getTailNode(), G2.getTailNode(), tailNode);
-    
+
     // for each node n1 in G1:
     for (Node<N> n1 : G1.getNodes()) {
       // for each node n2 in successors of (n1):
@@ -34,7 +35,7 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
         // for each node n3 in G2:
         for (Node<N> n3 : G2.getNodes()) {
           // for each node n4 in successors of (n3):
-          for (Node<N> n4 : n3.getSuccessors()) { 
+          for (Node<N> n4 : n3.getSuccessors()) {
             // add edge n1,n3 --> n2,n4
             CartesianNode<N> n1n3, n2n4;
             // n1 is the
@@ -43,12 +44,18 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
             Edge<E> edge = getEdgeValueAndSetWeights(n1n3, n2n4);
             pushNodeCosts(n1n3, n2n4, edge);
             addEdge(edge);
+            if (n2n4 == getTailNode()) {
+              for (Edge<?> e : n1.getOutgoingEdges()) {
+                if (e.getValue() != null) {
+                  edge.setValue((E) e.getValue());
+                }
+              }
+            }
           }
         }
-        //prune(n1);
+        // prune(n1);
       }
     }
-    System.out.println("Done building cartesian graph!");
   }
 
   private CartesianNode<N> getCartesianNode(Node<N> n1, Node<N> n2) {
@@ -77,7 +84,7 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
     double weight = pFrom.getDistance(pTo);
     return (Edge<E>) factory.getNewEdge(pFrom, pTo, weight);
   }
-  
+
   private void recycleNode(CartesianNode<N> node) {
     factory.recycleEdges(node.getOutgoingEdges());
     factory.recycleNode(node);
@@ -85,7 +92,7 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
 
   // tear down
   private void tearDown() {
-    for (CartesianNode<N> node : indexMapping.values()) 
+    for (CartesianNode<N> node : indexMapping.values())
       recycleNode(node);
     indexMapping.clear();
     destroy();

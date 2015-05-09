@@ -90,7 +90,7 @@ public class Graph<N, E> {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     for (Node<N> n : getNodes()) {
-      sb.append(n.toString() + "\n");
+      sb.append(n.toString() + " ");
     }
     return sb.toString();
   }
