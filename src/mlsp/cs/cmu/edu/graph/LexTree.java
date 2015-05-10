@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,48 +12,50 @@ public class LexTree<N, E> extends Graph<N, E> {
   public LexTree(Graph<N, E> graph) {
     super(graph.getHeadNode());
     setTailNode(graph.getTailNode());
-    addNode(graph.getTailNode());
-    buildLexTree(getHeadNode());
+    buildTree(getHeadNode());
+    System.out.println(printGraph());
   }
 
-  private void buildLexTree(Node<N> node) {
+  private void buildTree(Node<N> head) {
+    ListIterator<Node<N>> nodeIter = head.getSuccessors().listIterator();
     Map<N, List<Node<N>>> map = new HashMap<N, List<Node<N>>>();
-    for (Node<N> n : node.getSuccessors()) {
-      if (map.containsKey(n.getValue())) {
-        map.get(n.getValue()).add(n);
-      } else {
-        map.put(n.getValue(), new LinkedList<Node<N>>());
-        map.get(n.getValue()).add(n);
+    while (nodeIter.hasNext()) {
+      Node<N> node = nodeIter.next();
+      if(!map.containsKey(node.getValue())) 
+        map.put(node.getValue(), new LinkedList<Node<N>>());
+      map.get(node.getValue()).add(node);
+    }
+    for(N key : map.keySet()) {
+      nodeIter = map.get(key).listIterator();
+      Node<N> first = nodeIter.next();
+      while(nodeIter.hasNext()) {
+        Node<N> second = nodeIter.next();
+        mergeNodes(first, second, head);
       }
     }
-    for (N key : map.keySet()) {
-      ListIterator<Node<N>> iter = map.get(key).listIterator();
-      Node<N> n1 = iter.next();
-      while (iter.hasNext()) {
-        Node<N> n2 = iter.next();
-        mergeNodes(n1, n2);
-        iter.remove();
-      }
-    }
-    for (Node<N> n : node.getSuccessors()) {
-      if (n != node && n != getTailNode()) {
-        addNode(n);
-        buildLexTree(n);
+    nodeIter = head.getSuccessors().listIterator();
+    while(nodeIter.hasNext()) {
+      Node<N> node = nodeIter.next();
+      if(node != head && node != getTailNode()) {
+        addNode(node);
+        buildTree(node);
       }
     }
   }
 
   @SuppressWarnings("unchecked")
-  private void mergeNodes(Node<N> n1, Node<N> n2) {
-    for (Edge<?> e : n2.getOutgoingEdges()) {
-      if (!(e.getNodePredecessor() == e.getNodeSuccessor()))
+  private void mergeNodes(Node<N> n1, Node<N> n2, Node<N> parent) {
+    ListIterator<Edge<?>> edgeIter = n2.getOutgoingEdges().listIterator();
+    while (edgeIter.hasNext()) {
+      Edge<?> e = edgeIter.next();
+      Node<N> successor = (Node<N>) e.getNodeSuccessor();
+      if (successor != n2)
         e.setNodePredecessor(n1);
+      edgeIter.remove();
     }
-    for (Edge<?> e : n2.getIncomingEdges()) {
-      Node<N> parent = (Node<N>) e.getNodePredecessor();
-      if(n2 != getTailNode())
-        parent.removeOutgoingEdge(e);
-    }
+    n1.refreshAll();
     n2.destroy();
+    parent.refreshSuccessors();
   }
+
 }

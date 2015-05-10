@@ -45,8 +45,8 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
             pushNodeCosts(n1n3, n2n4, edge);
             addEdge(edge);
             if (n2n4 == getTailNode()) {
-              for (Edge<?> e : n1.getIncomingEdges()) {
-                if (edge.getValue() == null && e.getValue() != null) {
+              for (Edge<?> e : n1.getOutgoingEdges()) {
+                if (e.getValue() != null) {
                   edge.setValue((E) e.getValue());
                 }
               }

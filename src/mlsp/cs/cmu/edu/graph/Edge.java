@@ -9,7 +9,7 @@ public class Edge<E> implements Cloneable {
   private Node<?> nodeSuccessor;
 
   private Node<?> nodePredecessor;
-  
+
   public void destroy() {
     setValue(null);
     setWeight(0.0);
@@ -26,7 +26,7 @@ public class Edge<E> implements Cloneable {
     setAdjacentNodes(from, to);
     this.weight = weight;
   }
-  
+
   public void setAdjacentNodes(Node<?> from, Node<?> to) {
     this.nodePredecessor = from;
     this.nodeSuccessor = to;
@@ -36,16 +36,14 @@ public class Edge<E> implements Cloneable {
 
   public void setNodeSuccessor(Node<?> nodeSuccessor) {
     this.nodeSuccessor = nodeSuccessor;
-    if(nodePredecessor != null && nodeSuccessor != null) {
+    if (nodeSuccessor != null)
       nodeSuccessor.addIncomingEdge(this);
-    }
   }
 
   public void setNodePredecessor(Node<?> nodePredecessor) {
     this.nodePredecessor = nodePredecessor;
-    if(nodeSuccessor != null && nodePredecessor != null) {
+    if (nodePredecessor != null)
       nodePredecessor.addOutgoingEdge(this);
-    }
   }
 
   public E getValue() {
@@ -74,9 +72,10 @@ public class Edge<E> implements Cloneable {
 
   @Override
   public String toString() {
-    return " " + getNodePredecessor().getValue().toString() + " id=" + getNodePredecessor().hashCode() +
-            " --> (v=" + getValue() + ",w=" + getWeight() + 
-            ") --> " + getNodeSuccessor().getValue().toString() + " id=" + getNodeSuccessor().hashCode();
+    return " " + getNodePredecessor().getValue().toString() + " id="
+            + getNodePredecessor().hashCode() + " --> (v=" + getValue() + ",w=" + getWeight()
+            + ") --> " + getNodeSuccessor().getValue().toString() + " id="
+            + getNodeSuccessor().hashCode();
   }
 
   @Override

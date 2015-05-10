@@ -2,6 +2,7 @@ package mlsp.cs.cmu.edu.graph;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public abstract class Node<N> implements Cloneable {
 
@@ -16,17 +17,25 @@ public abstract class Node<N> implements Cloneable {
   private List<Node<N>> successors = new LinkedList<Node<N>>();
 
   private List<Node<N>> predecessors = new LinkedList<Node<N>>();
-  
+
   private Edge<?> backPointer;
-  
+
   public void destroy() {
     setValue(null);
     setCost(null);
-    getIncomingEdges().clear();
-    getOutgoingEdges().clear();
-    getSuccessors().clear();
-    getPredecessors().clear();
     setBackPointer(null);
+    ListIterator<Edge<?>> edgeIter = getIncomingEdges().listIterator();
+    while (edgeIter.hasNext()) {
+      edgeIter.next().destroy();
+      edgeIter.remove();
+    }
+    edgeIter = getOutgoingEdges().listIterator();
+    while (edgeIter.hasNext()) {
+      edgeIter.next().destroy();
+      edgeIter.remove();
+    }
+    refreshSuccessors();
+    refreshPredecessors();
   }
 
   public Node(N value) {
@@ -46,7 +55,7 @@ public abstract class Node<N> implements Cloneable {
   public List<Node<N>> getPredecessors() {
     return predecessors;
   }
-  
+
   /**
    * Get the nodes at the other ends of our edges...
    * 
@@ -73,7 +82,7 @@ public abstract class Node<N> implements Cloneable {
   public void addOutgoingEdge(Edge<?> edge) {
     if (edge.getNodePredecessor() == this) {
       outgoingEdges.add(edge);
-      if(edge.getNodeSuccessor() != null)
+      if (edge.getNodeSuccessor() != null)
         successors.add(retrieveSuccessorFromEdge(edge));
     } else {
       throw new RuntimeException("Attempted to add outgoing edge which does not come from me!");
@@ -83,7 +92,7 @@ public abstract class Node<N> implements Cloneable {
   public void addIncomingEdge(Edge<?> edge) {
     if (edge.getNodeSuccessor() == this) { // only if you're pointing to me.
       incomingEdges.add(edge);
-      if(edge.getNodePredecessor() != null)
+      if (edge.getNodePredecessor() != null)
         predecessors.add(retrievePredecessorFromEdge(edge));
     } else {
       throw new RuntimeException("Attempted to add an incoming edge which does not point to me!");
@@ -91,51 +100,58 @@ public abstract class Node<N> implements Cloneable {
   }
 
   /**
-   * Discouraged unless the edge is already fully connected. 
-   * Otherwise, use setAdjacentNodes
+   * Discouraged unless the edge is already fully connected. Otherwise, use setAdjacentNodes
    * 
    * @param edge
    * @return
    */
-  public boolean removeOutgoingEdge(Edge<?> edge) {
+  public void removeOutgoingEdge(Edge<?> edge) {
     edge.setNodePredecessor(null);
-    if(edge.getNodeSuccessor() != null)
-      edge.getNodeSuccessor().removeIncomingEdge(edge);
+    outgoingEdges.remove(edge);
     refreshSuccessors();
-    return outgoingEdges.remove(edge);
   }
 
   /**
-   * Discouraged unless the edge is already fully connected. 
-   * Otherwise, use setAdjacentNodes
+   * Discouraged unless the edge is already fully connected. Otherwise, use setAdjacentNodes
    * 
    * @param edge
    * @return
    */
-  public boolean removeIncomingEdge(Edge<?> edge) {
+  public void removeIncomingEdge(Edge<?> edge) {
     edge.setNodeSuccessor(null);
-    if(edge.getNodePredecessor() != null)
-      edge.getNodePredecessor().removeOutgoingEdge(edge);
+    incomingEdges.remove(edge);
     refreshPredecessors();
-    return incomingEdges.remove(edge);
   }
-  
+
+  public void refreshAll() {
+    refreshPredecessors();
+    refreshSuccessors();
+  }
+
   @SuppressWarnings("unchecked")
   public void refreshPredecessors() {
     List<Node<N>> pred = new LinkedList<Node<N>>();
-    for(Edge<?> e : getIncomingEdges()) {
-      if(e.getNodePredecessor() != null)
+    ListIterator<Edge<?>> edgeIter = getIncomingEdges().listIterator();
+    while (edgeIter.hasNext()) {
+      Edge<?> e = edgeIter.next();
+      if (e.getNodePredecessor() != null)
         pred.add((Node<N>) e.getNodePredecessor());
+      else
+        edgeIter.remove();
     }
     this.predecessors = pred;
   }
-  
+
   @SuppressWarnings("unchecked")
   public void refreshSuccessors() {
     List<Node<N>> succ = new LinkedList<Node<N>>();
-    for(Edge<?> e : getOutgoingEdges()) {
-      if(e.getNodeSuccessor() != null)
+    ListIterator<Edge<?>> edgeIter = getOutgoingEdges().listIterator();
+    while (edgeIter.hasNext()) {
+      Edge<?> e = edgeIter.next();
+      if (e.getNodeSuccessor() != null)
         succ.add((Node<N>) e.getNodeSuccessor());
+      else
+        edgeIter.remove();
     }
     this.successors = succ;
   }
@@ -171,18 +187,18 @@ public abstract class Node<N> implements Cloneable {
   public Edge<?> getBackPointer() {
     return backPointer;
   }
-  
+
   @SuppressWarnings("unchecked")
   public Node<N> getNodeFromBackPointer() {
-    if(getBackPointer() != null) {
+    if (getBackPointer() != null) {
       Node<?> node = getBackPointer().getNodePredecessor();
-      if(node.getClass().isAssignableFrom(this.getClass())) {
+      if (node.getClass().isAssignableFrom(this.getClass())) {
         return (Node<N>) node;
-      } 
+      }
     }
     return null;
   }
-  
+
   public void setBackPointer(Edge<?> backPointer) {
     this.backPointer = backPointer;
   }
@@ -191,5 +207,5 @@ public abstract class Node<N> implements Cloneable {
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
-  
+
 }
