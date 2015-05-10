@@ -123,7 +123,7 @@ public class SpellCheckDriver {
   private static List<String> fillInput2(List<String> input) {
     // input.add("123");
     // for (int i = 0; i < 10; i++) {
-      input.add("of");
+      input.add("uf");
 //    input.add("marksman");
 //    input.add("fpohnae");
 //    input.add("was");
