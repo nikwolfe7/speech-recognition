@@ -12,8 +12,11 @@ public class LexTree<N, E> extends Graph<N, E> {
   public LexTree(Graph<N, E> graph) {
     super(graph.getHeadNode());
     setTailNode(graph.getTailNode());
+    ListIterator<Node<N>> nodeIter = getNodes().listIterator();
     buildTree(getHeadNode());
-    System.out.println(printGraph());
+//    while(nodeIter.hasNext()) {
+//      buildTree(nodeIter.next());
+//    }
   }
 
   private void buildTree(Node<N> head) {
@@ -21,24 +24,17 @@ public class LexTree<N, E> extends Graph<N, E> {
     Map<N, List<Node<N>>> map = new HashMap<N, List<Node<N>>>();
     while (nodeIter.hasNext()) {
       Node<N> node = nodeIter.next();
-      if(!map.containsKey(node.getValue())) 
+      if (!map.containsKey(node.getValue()))
         map.put(node.getValue(), new LinkedList<Node<N>>());
       map.get(node.getValue()).add(node);
     }
-    for(N key : map.keySet()) {
+    for (N key : map.keySet()) {
       nodeIter = map.get(key).listIterator();
       Node<N> first = nodeIter.next();
-      while(nodeIter.hasNext()) {
+      while (nodeIter.hasNext()) {
         Node<N> second = nodeIter.next();
         mergeNodes(first, second, head);
-      }
-    }
-    nodeIter = head.getSuccessors().listIterator();
-    while(nodeIter.hasNext()) {
-      Node<N> node = nodeIter.next();
-      if(node != head && node != getTailNode()) {
-        addNode(node);
-        buildTree(node);
+        buildTree(first);
       }
     }
   }
