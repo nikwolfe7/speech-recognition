@@ -34,7 +34,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
         pFrom.setCost(0.0);
     }
     double pathCost = edge.getWeight() + pFrom.getCost();
-    if (pTo.getCost() == null || pTo.getCost() > pathCost) {
+    if (pTo.getCost() == null || pTo.getCost() >= pathCost) {
       pTo.setCost(pathCost);
       pTo.setBackPointer(edge);
     }

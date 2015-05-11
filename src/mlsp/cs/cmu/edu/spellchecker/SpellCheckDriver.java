@@ -172,8 +172,8 @@ public class SpellCheckDriver {
 //    input = fillInput2(input);
 
     GraphFactory<Character, String> factory;
-//     factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
-    factory = new LexTreeFactory(dictionary.toArray(new String[dictionary.size()]));
+     factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
+//    factory = new LexTreeFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character, String> G1 = factory.buildGraph();
     System.out.println("Dictionary Graph: Done building graph!");
 
