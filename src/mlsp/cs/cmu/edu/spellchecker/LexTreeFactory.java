@@ -9,9 +9,9 @@ import mlsp.cs.cmu.edu.graph.Node;
 
 public class LexTreeFactory implements GraphFactory<Character, String> {
 
-  Graph<Character, String> lexTree;
-
-  String[] processList;
+  private String[] processList;
+  
+  private boolean CONTINUOUS = true;
 
   public LexTreeFactory(String... processList) {
     this.processList = processList;
@@ -22,8 +22,18 @@ public class LexTreeFactory implements GraphFactory<Character, String> {
     Node<Character> head = new CharNode(CharacterConstants.BEGIN_CHARACTER.getValue());
     Node<Character> tail = new CharNode(CharacterConstants.END_CHARACTER.getValue());
     Graph<Character, String> G = new Graph<Character, String>(head);
+    /**
+     * 
+     */
+    if(CONTINUOUS) {
+      Edge<String> loopback = new Edge<String>(tail, head);
+      G.addEdge(loopback);
+    }
     G.addNode(tail); // tie the tail back to the head.
     G.setTailNode(tail);
+    /**
+     * 
+     */
     Node<Character> currNode = G.getHeadNode();
     MutablePair<Integer, Node<Character>> pair;
     for (String stringGraph : processList) {
