@@ -17,7 +17,7 @@ public class DriverWavInput {
     
     /*Sampler takes a Sampleable object, such as a recording device or stored WAV file*/
     /* For testing only */
-    Sampleable storedWavFile = new ReadDummyWave("./testwav/omgwav.wav");
+    Sampleable storedWavFile = new ReadDummyWave("./testwav/forecariah_susu.wav");
     Sampler sampler = new Sampler(storedWavFile);
     
     /*Segmenter finds speech segments using a sampler*/

@@ -19,8 +19,8 @@ public class LabelMaker {
       int count = 1;
       FileWriter fw = new FileWriter(file);
       for (Segment seg : segments) {
-        String line = seg.getStartFrameTimestamp() + "\t" + seg.getEndFrameTimestamp()
-                + "\tsegment-" + count++ + "\n";
+        String line = seg.getStartFrameTimestamp() + "\t" + seg.getEndFrameTimestamp() + "\n";
+               // + "\tsegment-" + count++ + "\n";
         fw.write(line);
       }
       fw.close();
