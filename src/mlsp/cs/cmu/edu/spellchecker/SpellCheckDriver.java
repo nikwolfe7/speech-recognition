@@ -181,7 +181,8 @@ public class SpellCheckDriver {
 
     List<Graph<Character, String>> words = new ArrayList<Graph<Character, String>>();
     for (String s : input) {
-      factory = new ContinuousStringGraphFactory(s);
+      //factory = new ContinuousStringGraphFactory(s);
+      factory = new StringGraphFactory(s);
       Graph<Character, String> G2 = factory.buildGraph();
       words.add(G2);
       // printGraph(G2);

@@ -20,15 +20,14 @@ public class ContinuousStringGraphFactory implements GraphFactory<Character, Str
     Node<Character> head = new CharNode(CharacterConstants.BEGIN_CHARACTER.getValue());
     Node<Character> tail = new CharNode(CharacterConstants.END_CHARACTER.getValue());
     Graph<Character, String> G = new Graph<Character, String>(head);
+    G.addNode(tail); // tie the tail back to the head.
+    G.setTailNode(tail);
     /**
      * 
      */
     if (CONTINUOUS) {
-      Edge<String> loopback = new Edge<String>(tail, head);
-      G.addEdge(loopback);
+      G.addEdge(new Edge<String>(head, head));
     }
-    G.addNode(tail); // tie the tail back to the head.
-    G.setTailNode(tail);
     /**
      * 
      */

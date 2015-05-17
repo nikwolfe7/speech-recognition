@@ -10,8 +10,8 @@ import mlsp.cs.cmu.edu.graph.Node;
 public class LexTreeFactory implements GraphFactory<Character, String> {
 
   private String[] processList;
-  
-  private boolean CONTINUOUS = true;
+
+  private boolean CONTINUOUS = false;
 
   public LexTreeFactory(String... processList) {
     this.processList = processList;
@@ -22,18 +22,9 @@ public class LexTreeFactory implements GraphFactory<Character, String> {
     Node<Character> head = new CharNode(CharacterConstants.BEGIN_CHARACTER.getValue());
     Node<Character> tail = new CharNode(CharacterConstants.END_CHARACTER.getValue());
     Graph<Character, String> G = new Graph<Character, String>(head);
-    /**
-     * 
-     */
-    if(CONTINUOUS) {
-      Edge<String> loopback = new Edge<String>(tail, head);
-      G.addEdge(loopback);
-    }
     G.addNode(tail); // tie the tail back to the head.
     G.setTailNode(tail);
-    /**
-     * 
-     */
+
     Node<Character> currNode = G.getHeadNode();
     MutablePair<Integer, Node<Character>> pair;
     for (String stringGraph : processList) {
@@ -49,7 +40,11 @@ public class LexTreeFactory implements GraphFactory<Character, String> {
         G.addEdge(selfEdge);
       }
       // tail node and tie-in...
-      Edge<String> lastEdge = new Edge<String>(currNode, tail);
+      Edge<String> lastEdge;
+      if (CONTINUOUS)
+        lastEdge = new Edge<String>(currNode, head);
+      else
+        lastEdge = new Edge<String>(currNode, tail);
       lastEdge.setValue(stringGraph);
       G.addEdge(lastEdge);
       currNode = G.getHeadNode(); // reset curr node
