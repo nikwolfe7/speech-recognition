@@ -52,9 +52,11 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
               }
             }
           }
+          
         }
-        // prune(n1);
+        prune(n1);   
       }
+     
     }
   }
 
@@ -102,14 +104,14 @@ public abstract class CartesianGraph<N, E> extends Graph<MutablePair<Node<N>, No
     Set<Node<N>> colValues = indexMapping.yKeyset(column);
     for (Node<N> node : colValues) {
       CartesianNode<N> cartNode = getCartesianNode(column, node);
-      if (!acceptOrRejectNode(cartNode)) {
+      if (!acceptOrRejectNode(cartNode, colValues)) {
 
       }
     }
   }
 
   // defer pruning decision to subclasses
-  protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode);
+  protected abstract boolean acceptOrRejectNode(CartesianNode<N> cartNode, Set<Node<N>> colValues);
 
   // Gives subclasses a chance to establish initial state if need be
   protected abstract void initialize();

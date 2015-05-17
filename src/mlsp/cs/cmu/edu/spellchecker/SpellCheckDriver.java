@@ -61,6 +61,7 @@ public class SpellCheckDriver {
     // dictionary.add("abc");
     // dictionary.add("a");
     // for (int i = 0; i < 10; i++) {
+//    dictionary.add(" ");
 //    dictionary.add("of");
 //    dictionary.add("off");
 //    dictionary.add("okyena");
@@ -78,17 +79,16 @@ public class SpellCheckDriver {
 //    dictionary.add("english");
 //    dictionary.add("anaa");
 //    dictionary.add("markov");
-    dictionary.add("marksman");
+//    dictionary.add("marksman");
     dictionary.add("pohnae");
     dictionary.add("was");
-    dictionary.add(" ");
 //    dictionary.add("pohnae");
-//    dictionary.add("a");
-//    dictionary.add("dim-witted");
+    dictionary.add("a");
+    dictionary.add("dim-witted");
 //    dictionary.add("potus");
 //    dictionary.add("diminish");
 //    dictionary.add("alpha");
-//    dictionary.add("man");
+    dictionary.add("man");
 //    dictionary.add("but");
 //    dictionary.add("his");
 //    dictionary.add("wife");
@@ -125,13 +125,13 @@ public class SpellCheckDriver {
     // for (int i = 0; i < 10; i++) {
 //    input.add("off");
 //    input.add("uf");
-    input.add("marksmanfpohnaewas");
+//    input.add("marksmanfpohnaewas");
 //    input.add("marksman");
-//    input.add("fpohnae");
-//    input.add("was");
-//    input.add("a");
-//    input.add("diwitted");
-//    input.add("man");
+    input.add("fpohnae");
+    input.add("was");
+    input.add("a");
+    input.add("diwitted");
+    input.add("man");
 //    input.add("but");
 //    input.add("his");
 //    input.add("wdfe");
@@ -174,8 +174,8 @@ public class SpellCheckDriver {
     input = fillInput2(input);
 
     GraphFactory<Character, String> factory;
-//     factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
-    factory = new LexTreeFactory(dictionary.toArray(new String[dictionary.size()]));
+     factory = new StringGraphFactory(dictionary.toArray(new String[dictionary.size()]));
+//    factory = new LexTreeFactory(dictionary.toArray(new String[dictionary.size()]));
     Graph<Character, String> G1 = factory.buildGraph();
     System.out.println("Dictionary Graph: Done building graph!");
 

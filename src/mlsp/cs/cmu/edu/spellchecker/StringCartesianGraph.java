@@ -1,9 +1,12 @@
 package mlsp.cs.cmu.edu.spellchecker;
 
+import java.util.Set;
+
 import mlsp.cs.cmu.edu.graph.CartesianGraph;
 import mlsp.cs.cmu.edu.graph.CartesianNode;
 import mlsp.cs.cmu.edu.graph.CartesianNodeFactory;
 import mlsp.cs.cmu.edu.graph.Edge;
+import mlsp.cs.cmu.edu.graph.Node;
 
 /**
  * @author nwolfe
@@ -20,11 +23,12 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   public StringCartesianGraph(CartesianNodeFactory<Character> nodeFactory) {
     super(nodeFactory);
   }
-
+  
   @Override
-  protected boolean acceptOrRejectNode(CartesianNode<Character> cartNode) {
-    // TODO Auto-generated method stub
-    return false;
+  protected boolean acceptOrRejectNode(CartesianNode<Character> cartNode,
+          Set<Node<Character>> colValues) {
+    System.out.println(cartNode.getCost());
+    return true;
   }
 
   @Override
@@ -43,5 +47,7 @@ public class StringCartesianGraph extends CartesianGraph<Character, String> {
   @Override
   protected void initialize() {
   }
+
+  
 
 }
